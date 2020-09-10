@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.kz-sidebar {
+  svg.active {
+    @apply fill-white;
+  }
+}
+
+.text-title {
+  @apply text-5xl;
+  @apply font-bold;
+}
+
+.text-heading-1 {
+  @apply text-4xl;
+  @apply font-bold;
+}
+
+.text-heading-2 {
+  @apply text-3xl;
+  @apply font-bold;
+}
+
+.text-headline {
+  @apply text-lg;
+  @apply font-semibold;
+}
+
+.text-body {
+  @apply text-base;
+}
+
+.text-caption {
+  @apply text-xs;
+  @apply font-bold;
+}
