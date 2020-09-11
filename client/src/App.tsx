@@ -1,12 +1,22 @@
 import React from "react";
 import "./App.scss";
 import { Sidebar } from "./shared/components";
-import { Sends } from "./pages";
+import { Sends, Keys } from "./pages";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
-      <Sends />
+      <Router>
+        <Switch>
+          <Route exact path="/sends">
+            <Sends />
+          </Route>
+          <Route exact path="/keys">
+            <Keys />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }

@@ -3,8 +3,12 @@ import "./Sidebar.scss";
 import * as Unicons from "@iconscout/react-unicons";
 import classNames from "classnames";
 import { Assets } from "../../../constants";
+import { useHistory, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
+  const history = useHistory();
+  const location = useLocation();
+
   return (
     <div className="kz-sidebar h-screen py-4 ml-4 w-12 fixed">
       <div className="w-full flex-col bg-primary h-full rounded-tr-xl rounded-bl-xl flex text-center justify-between py-4">
@@ -17,20 +21,20 @@ const Sidebar = () => {
         </figure>
         <div className="flex items-center justify-center flex-col">
           <Unicons.UilDiary
-            className={classNames(
-              "fill-secondary",
-              "cursor-pointer",
-              "mb-8",
-
-              {
-                active: false,
-              }
-            )}
+            className={classNames("fill-secondary", "cursor-pointer", "mb-8", {
+              active: location.pathname === "/sends",
+            })}
+            onClick={() => {
+              history.push("/sends");
+            }}
           />
           <Unicons.UilKeySkeleton
             className={classNames("fill-secondary", "mb-0", "cursor-pointer", {
-              active: true,
+              active: location.pathname === "/keys",
             })}
+            onClick={() => {
+              history.push("/keys");
+            }}
           />
         </div>
         <div className="flex items-center justify-center flex-col">
