@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./Sidebar.scss";
 import * as Unicons from "@iconscout/react-unicons";
 import classNames from "classnames";
