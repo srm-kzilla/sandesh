@@ -1,3 +1,3 @@
-import { SearchStore } from "./SearchStore";
+import OverlayStore from "./OverlayStore";
 
-export { SearchStore };
+export { OverlayStore };

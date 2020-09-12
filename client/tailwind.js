@@ -240,15 +240,18 @@ module.exports = {
       full: "100%",
       ...breakpoints(theme("screens")),
     }),
-    minHeight: {
+    minHeight: (theme) => ({
       0: "0",
+      ...theme("spacing"),
       full: "100%",
       screen: "100vh",
-    },
-    minWidth: {
+    }),
+    minWidth: (theme) => ({
       0: "0",
+      ...theme("spacing"),
       full: "100%",
-    },
+      screen: "100vw",
+    }),
     objectPosition: {
       bottom: "bottom",
       center: "center",
@@ -332,6 +335,7 @@ module.exports = {
       "11/12": "91.666667%",
       full: "100%",
       screen: "100vw",
+      "screen-1/2": "50vw",
     }),
     zIndex: {
       auto: "auto",
@@ -482,6 +486,8 @@ module.exports = {
       "-1/2": "-50%",
       "1/2": "50%",
       full: "100%",
+      9999: "9999px",
+      "-9999": "-9999px",
     }),
     skew: {
       "-12": "-12deg",
@@ -600,7 +606,7 @@ module.exports = {
     fontSmoothing: ["responsive"],
     fontVariantNumeric: ["responsive"],
     fontStyle: ["responsive"],
-    fontWeight: ["responsive", "hover", "focus"],
+    fontWeight: ["responsive", "hover", "focus", "important"],
     height: ["responsive"],
     inset: ["responsive"],
     justifyContent: ["responsive"],
@@ -610,7 +616,7 @@ module.exports = {
     lineHeight: ["responsive"],
     listStylePosition: ["responsive"],
     listStyleType: ["responsive"],
-    margin: ["responsive"],
+    margin: ["responsive", "important"],
     maxHeight: ["responsive"],
     maxWidth: ["responsive"],
     minHeight: ["responsive"],
@@ -661,7 +667,7 @@ module.exports = {
     transformOrigin: ["responsive"],
     scale: ["responsive", "hover", "focus"],
     rotate: ["responsive", "hover", "focus"],
-    translate: ["responsive", "hover", "focus"],
+    translate: ["responsive", "hover", "focus", "important"],
     skew: ["responsive", "hover", "focus"],
     transitionProperty: ["responsive"],
     transitionTimingFunction: ["responsive"],

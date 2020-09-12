@@ -28,6 +28,14 @@ const Sidebar = () => {
               history.push("/sends");
             }}
           />
+          <Unicons.UilPodium
+            className={classNames("fill-secondary", "mb-8", "cursor-pointer", {
+              active: location.pathname === "/podium",
+            })}
+            onClick={() => {
+              history.push("/podium");
+            }}
+          />
           <Unicons.UilKeySkeleton
             className={classNames("fill-secondary", "mb-0", "cursor-pointer", {
               active: location.pathname === "/keys",

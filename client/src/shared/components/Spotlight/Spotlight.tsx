@@ -9,8 +9,7 @@ import "./Spotlight.scss";
 import * as Unicons from "@iconscout/react-unicons";
 import classNames from "classnames";
 import { HotKeys } from "react-hotkeys";
-import { v4 as uuid } from "uuid";
-import SearchStore from "../../stores/SearchStore";
+import SearchStore from "../../stores/OverlayStore";
 import { observer } from "mobx-react";
 
 const Spotlight = () => {

@@ -3,7 +3,7 @@ import "./Sends.scss";
 import { Sidebar, Pill, Spotlight, TableView } from "../../shared/components";
 import * as Unicons from "@iconscout/react-unicons";
 import { HotKeys } from "react-hotkeys";
-import SearchStore from "../../shared/stores/SearchStore";
+import { OverlayStore } from "../../shared/stores";
 import { observer } from "mobx-react";
 import { sentenceCase } from "change-case";
 
@@ -20,14 +20,14 @@ const Sends = () => {
   };
 
   const handleSlashPressed = React.useCallback(() => {
-    searchStore.setSpotlight(!searchStore.spotlight);
+    overlayStore.setSpotlight(!overlayStore.spotlight);
   }, []);
 
   const handlers = {
     SLASH: handleSlashPressed,
   };
 
-  const searchStore = useContext(SearchStore);
+  const overlayStore = useContext(OverlayStore);
 
   const [isCompact, setIsCompact] = useState(false);
 
@@ -149,7 +149,7 @@ const Sends = () => {
                   className="uppercase"
                   icon={<Unicons.UilSearch />}
                   onClick={() => {
-                    searchStore.setSpotlight(!searchStore.spotlight);
+                    overlayStore.setSpotlight(!overlayStore.spotlight);
                   }}
                 />
               </div>

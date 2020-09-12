@@ -40,3 +40,59 @@
 div.kz-circle-button {
   animation-duration: 5s;
 }
+
+label.switch {
+  @apply bg-secondary;
+
+  height: 0.5rem;
+  width: 1.8rem;
+  position: relative;
+  display: inline-block;
+  border-radius: 0.25rem;
+
+  input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  .slider {
+    position: absolute;
+    top: 50%;
+    transform: translateX(-0.2rem) translateY(-50%);
+    left: 0;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 1rem;
+    transition: all 0.2s ease-out;
+    @apply bg-primary;
+  }
+
+  input:checked + .slider {
+    transform: translateX(1rem) translateY(-50%);
+  }
+}
+
+.loader {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+
+  width: 2rem;
+  .line {
+    position: absolute;
+    top: 50%;
+    width: 2rem;
+    height: 2px;
+    animation: spin 1.5s infinite ease;
+
+    &:nth-of-type(2) {
+      animation-delay: 0.1s;
+    }
+    &:nth-of-type(3) {
+      animation-delay: 0.2s;
+    }
+    &:nth-of-type(4) {
+      animation-delay: 0.3s;
+    }
+  }
+}
