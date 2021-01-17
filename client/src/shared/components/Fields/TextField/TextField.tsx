@@ -16,7 +16,7 @@ const TextField = (props: Props) => {
   return (
     <div
       className={classNames(
-        "kz-text-field",
+        "kz-text-field ",
         "flex",
         "flex-col",
         props.containerClassName
@@ -35,7 +35,7 @@ const TextField = (props: Props) => {
           "outline-none",
           "border-solid",
           "border-altGray",
-          "rounded-md",
+          "rounded-md bg-darkGray",
           props.className
         )}
         value={props.value}

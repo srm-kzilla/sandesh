@@ -1,19 +1,25 @@
+const colors = require("tailwindcss/colors");
+
 module.exports = {
   purge: [],
   target: "relaxed",
   prefix: "",
   important: false,
   separator: ":",
+  darkMode: "class",
   theme: {
     screens: {
       sm: "640px",
       md: "768px",
-      lg: "1024px",
+      // lg: "1024px",
       xl: "1280px",
     },
     colors: {
       transparent: "transparent",
       current: "currentColor",
+
+      gray: colors.coolGray,
+      blue: colors.lightBlue,
 
       black: "#000",
       white: "#fff",
@@ -21,7 +27,12 @@ module.exports = {
       primary: "#1E77F0",
       secondary: "#BEC4D8",
       tertiary: "#F9AA28",
-      altGray: "#F2F2F2",
+      altGray: "#D3D3D3",
+
+      //dark mode colors
+      darkGray: "#121212",
+      lighterGray: "#292929",
+      darkFont: "#DBDBDB",
     },
     spacing: {
       px: "1px",
@@ -43,6 +54,8 @@ module.exports = {
       48: "12rem",
       56: "14rem",
       64: "16rem",
+      80: "22rem",
+      half: "50%",
     },
     backgroundColor: (theme) => theme("colors"),
     backgroundPosition: {
@@ -56,6 +69,7 @@ module.exports = {
       "right-top": "right top",
       top: "top",
     },
+    backgroundOpacity: ["active"],
     backgroundSize: {
       auto: "auto",
       cover: "cover",
@@ -112,6 +126,18 @@ module.exports = {
     divideColor: (theme) => theme("borderColor"),
     divideOpacity: (theme) => theme("borderOpacity"),
     divideWidth: (theme) => theme("borderWidth"),
+    theme: {
+      darkSelector: ".dark",
+    },
+    extend: {
+      gridTemplateColumns: {
+        // Simple 16 column grid
+        21: "repeat(21, minmax(0, 1fr))",
+      },
+      fontSize: {
+        tiny: "0.5rem",
+      },
+    },
     fill: (theme) => theme("colors"),
     flex: {
       1: "1 1 0%",
@@ -181,6 +207,7 @@ module.exports = {
       ...theme("spacing"),
       full: "100%",
       screen: "100vh",
+      "75-vh": "75vh",
     }),
     inset: {
       0: "0",
@@ -335,6 +362,7 @@ module.exports = {
       "11/12": "91.666667%",
       full: "100%",
       screen: "100vw",
+      "75-vw": "75vw",
       "screen-1/2": "50vw",
     }),
     zIndex: {
@@ -345,6 +373,8 @@ module.exports = {
       30: "30",
       40: "40",
       50: "50",
+      "-2": "-2",
+      "-10": "-10",
     },
     gap: (theme) => theme("spacing"),
     gridTemplateColumns: {
@@ -501,6 +531,7 @@ module.exports = {
     transitionProperty: {
       none: "none",
       all: "all",
+      display: "display",
       default:
         "background-color, border-color, color, fill, stroke, opacity, box-shadow, transform",
       colors: "background-color, border-color, color, fill, stroke",
@@ -571,7 +602,7 @@ module.exports = {
     appearance: ["responsive"],
     backgroundAttachment: ["responsive"],
     backgroundClip: ["responsive"],
-    backgroundColor: ["responsive", "hover", "focus", "important"],
+    backgroundColor: ["dark", "responsive", "hover", "focus", "important"],
     backgroundImage: ["responsive"],
     gradientColorStops: ["responsive", "hover", "focus"],
     backgroundOpacity: ["responsive", "hover", "focus"],
@@ -640,9 +671,9 @@ module.exports = {
     space: ["responsive"],
     stroke: ["responsive"],
     strokeWidth: ["responsive"],
-    tableLayout: ["responsive"],
+    tableLayout: ["dark", "responsive"],
     textAlign: ["responsive"],
-    textColor: ["responsive", "hover", "focus", "important"],
+    textColor: ["dark", "responsive", "hover", "focus", "important"],
     textOpacity: ["responsive", "hover", "focus"],
     textDecoration: ["responsive", "hover", "focus"],
     textTransform: ["responsive"],
@@ -676,5 +707,9 @@ module.exports = {
     animation: ["responsive"],
   },
   corePlugins: {},
-  plugins: [require("tailwindcss-important")()],
+  plugins: [
+    require("tailwindcss-important")(),
+    require("tailwindcss-dark-mode")(),
+    "animation",
+  ],
 };

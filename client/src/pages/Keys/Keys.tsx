@@ -14,6 +14,7 @@ import { sentenceCase } from "change-case";
 import { v4 as uuid } from "uuid";
 import { OverlayStore } from "../../shared/stores";
 import { TextField, TextArea, Button } from "../../shared/components/Fields";
+import TopBar from "../../shared/components/TopBar/TopBar";
 
 const keyMap = {
   SLASH: ["/"],
@@ -34,32 +35,31 @@ const Keys = () => {
   ];
 
   const renderStructure = (item: any) => [
-    <p className="flex items-center">{sentenceCase(item.name)}</p>,
-    <div>
+    <p className="flex items-center p-4 md:p-0">{sentenceCase(item.name)}</p>,
+    <div className="p-4 md:p-0 w-75-vw md:w-full">
       <p>••••••••••••••••</p>
       <p className="text-caption mt-1 overflow-hidden transition-all duration-500 ease-in-out">
         {item.subject}
       </p>
     </div>,
-    <p>Edit</p>,
+    <p className="p-4 md:p-0">Edit</p>,
   ];
 
   return (
-    <div className="kz-keys">
-      <Sidebar />
+    <div className="h-screen kz-keys">
       <Spotlight />
-      <div className="kz-container">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <h1 className="text-title">Keys</h1>
-          </div>
-          <div>
-            <CircleButton
-              icon={<Unicons.UilPlus size={14} className="fill-primary" />}
-              onClick={() => {
-                overlayStore.setDrawer(true);
-              }}
-            />
+      <div className="kz-container flex flex-wrap justify-between">
+        <div className="flex w-full items-center justify-between md:flex-row flex-col">
+          <TopBar page="Keys" />
+          <div className="flex items-center justify-between">
+            <div>
+              <CircleButton
+                icon={<Unicons.UilPlus size={14} className="fill-primary" />}
+                onClick={() => {
+                  overlayStore.setDrawer(true);
+                }}
+              />
+            </div>
           </div>
         </div>
 

@@ -15,12 +15,12 @@ const Drawer = (props: Props) => {
   return overlayStore.drawer ? (
     <div
       className={classNames(
-        "kz-drawer",
+        "kz-drawer ",
         "h-screen",
         "absolute",
         "inset-0",
         "bg-secondary",
-        "bg-opacity-50",
+        "bg-opacity-50 dark:bg-lighterGray dark:text-darkFont",
         "flex",
         props.containerClassName
       )}
@@ -39,7 +39,7 @@ const Drawer = (props: Props) => {
           "bg-white",
           "shadow-xl",
           "p-12",
-          "overflow-auto",
+          "overflow-auto dark:bg-darkGray",
           props.className
         )}
         onClick={(e) => {
