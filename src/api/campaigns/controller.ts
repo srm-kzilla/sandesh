@@ -38,3 +38,18 @@ export const updateCampaign = async (body: any) => {
     throw Error('Unable to update campaign. Error - ' + error.message);
   }
 };
+
+export const deleteCampaign = async (property: string) => {
+  try {
+    const databaseResponse = await (await database())
+      .collection('campaign')
+      .findOne({ $or: [{ title: property }, { _id: new ObjectId(property) }] });
+    if (databaseResponse === null) throw Error('Could not find campaign with the given id');
+    await (await database())
+      .collection('campaign')
+      .deleteOne({ $or: [{ title: property }, { _id: new ObjectId(property) }] });
+  } catch (error) {
+    LoggerInstance.error(error);
+    throw Error('Unable to delete campaign. Error - ' + error.message);
+  }
+};
