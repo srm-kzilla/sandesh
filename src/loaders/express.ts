@@ -35,6 +35,9 @@ export default ({ app }: { app: express.Application }): void => {
   // Middleware that transforms the raw string of req.body into json
   app.use(bodyParser.json());
 
+  // Middleware that transforms the formdata into json
+  app.use(bodyParser.urlencoded({ extended: true }));
+
   // Load API routes
   app.use(config.api.prefix, routes());
 };

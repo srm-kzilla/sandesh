@@ -14,11 +14,11 @@ export const fetchCampaigns = async () => {
 export const createCampaign = async (body: any) => {
   try {
     const newCampaign: Campaign = { ...body };
-    const databaseResponse = await (await database()).collection('compaign').findOne({ title: newCampaign.title });
-    if (databaseResponse !== undefined) throw 'Existing campaign with same title';
+    const databaseResponse = await (await database()).collection('campaign').findOne({ title: newCampaign.title });
+    if (databaseResponse !== null) throw Error('Existing campaign with same title');
     await (await database()).collection('campaign').insertOne(newCampaign);
   } catch (error) {
     LoggerInstance.error(error);
-    throw Error('Unable to create a new campaign');
+    throw Error('Unable to create a new campaign. Error - ' + error.message);
   }
 };
