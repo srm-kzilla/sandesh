@@ -1,9 +1,10 @@
 import { Router } from 'express';
+import { campaignRouteHandler } from './campaigns/router';
 
 export default (): Router => {
   const app = Router();
 
-  //TODO: add routes here...
+  app.use("/campaign", campaignRouteHandler())
 
   return app;
 };
