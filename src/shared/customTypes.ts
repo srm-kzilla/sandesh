@@ -14,3 +14,11 @@ export type CustomMail = {
   fromAddress: string; // The address of the sender
   toAddress: string; // The address of the receiver
 };
+
+export type MailingList = {
+  name: string; // Name of the mailing list
+  createdOn: string; // Date and time of creation
+  createdBy: string; // Username of the creator
+  lastUpdatedOn: string; // Date and time of last update
+  receivers: { email: string; name?: string }[]; // List of receivers in this list
+};
