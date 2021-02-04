@@ -14,10 +14,9 @@ export const fetchCampaigns = async () => {
 
 export const createCampaign = async (body: any) => {
   try {
-    const newCampaign: Campaign = { ...body };
-    const databaseResponse = await (await database()).collection('campaign').findOne({ title: newCampaign.title });
+    const databaseResponse = await (await database()).collection('campaign').findOne({ title: body.title });
     if (databaseResponse !== null) throw Error('Existing campaign with same title');
-    await (await database()).collection('campaign').insertOne(newCampaign);
+    await (await database()).collection('campaign').insertOne(body);
   } catch (error) {
     LoggerInstance.error(error);
     throw Error('Unable to create a new campaign. Error - ' + error.message);
@@ -44,7 +43,7 @@ export const deleteCampaign = async (property: string) => {
     const databaseResponse = await (await database())
       .collection('campaign')
       .findOne({ $or: [{ title: property }, { _id: new ObjectId(property) }] });
-    if (databaseResponse === null) throw Error('Could not find campaign with the given id');
+    if (databaseResponse === null) throw Error('Could not find campaign with the given property');
     await (await database())
       .collection('campaign')
       .deleteOne({ $or: [{ title: property }, { _id: new ObjectId(property) }] });
