@@ -22,13 +22,10 @@ export const createUser=async (body: Userinfo)=>{
 export const  authUser=async (body: Logininfo)=>{
     try{
         const databaseResponse = await (await database()).collection('user').findOne({ email: body.email });
-        console.log(databaseResponse);
-        console.log("HII")
         if(databaseResponse===null) throw Error('User does not exists')
         const check = await bcrypt.compare(body.password, databaseResponse.password);
         if(!check) throw Error("Password doesn't match")
-        const id=databaseResponse._id
-        const accessToken=jwt.sign({_id:JSON.stringify(id)},config.jwtSecret)
+        const accessToken=jwt.sign(JSON.stringify(databaseResponse),config.jwtSecret)
         return accessToken;
     }catch(error){
         LoggerInstance.error(error);

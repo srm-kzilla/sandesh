@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { campaignRouteHandler } from './campaigns/router';
-import { authRouteHandler } from './signup/router'
+import { authRouteHandler } from './Auth/router'
 export default (): Router => {
   const app = Router();
 
