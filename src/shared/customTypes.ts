@@ -15,19 +15,12 @@ export type CustomMail = {
   toAddress: string; // The address of the receiver
 };
 
-export type loginInfo={
+export type Logininfo={
   email: string;
   password: string
 };
 
-export type signUpInfo={
-  name: string;
-  email: string;
-  password: string;
-  confirmPass: string;
-};
-
-export type userInfo={
+export type Userinfo={
   name: string;
   email: string;
   password: string;
