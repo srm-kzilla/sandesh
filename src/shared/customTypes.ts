@@ -14,3 +14,14 @@ export type CustomMail = {
   fromAddress: string; // The address of the sender
   toAddress: string; // The address of the receiver
 };
+
+export type Logininfo={
+  email: string;
+  password: string
+};
+
+export type Userinfo={
+  name: string;
+  email: string;
+  password: string;
+};
