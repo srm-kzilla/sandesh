@@ -1,3 +1,5 @@
+import { type } from 'os';
+
 export type Campaign = {
   title: string; // Title of the campaign
   createdOn: string; // Date and time of creation
@@ -15,13 +17,20 @@ export type CustomMail = {
   toAddress: string; // The address of the receiver
 };
 
-export type Logininfo={
-  email: string;
-  password: string
-};
+export type UserDomain = 'Technical' | 'Sponsorship' | 'Editorial' | 'Events' | 'Core';
+export type UserDesigation =
+  | 'Executive Board'
+  | 'CTO'
+  | 'CFO'
+  | 'Editor-in-chief'
+  | 'Lead'
+  | 'Associate Lead'
+  | 'Member';
 
-export type Userinfo={
-  name: string;
-  email: string;
-  password: string;
+export type User = {
+  name: string; // Full name of the user
+  domain: UserDomain; // Domain of the user
+  designation: UserDesigation; // Designation of the user
+  email: string; // Email of the user
+  password: string; // Hashed password
 };
