@@ -1,6 +1,6 @@
 import database from '../../loaders/database';
 import LoggerInstance from '../../loaders/logger';
-import { Userinfo, Logininfo } from '../../shared/customTypes';
+import { Userinfo } from '../../shared/customTypes';
 import config from '../../config';
 import { compare, hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -18,16 +18,15 @@ export const createUser = async (body: Userinfo) => {
   }
 };
 
-export const authUser = async (body: Logininfo) => {
+export const userLogin = async (email: string, password: string) => {
   try {
-    const databaseResponse = await (await database()).collection('user').findOne({ email: body.email });
+    const databaseResponse = await (await database()).collection('user').findOne({ email: email });
     if (databaseResponse === null) throw Error('User does not exist');
-    const check = await compare(body.password, databaseResponse.password);
-    if (!check) throw Error("Password doesn't match");
+    if (!(await compare(password, databaseResponse.password))) throw Error("Password doesn't match");
     const accessToken = jwt.sign(JSON.stringify(databaseResponse), config.jwtSecret);
     return accessToken;
   } catch (error) {
     LoggerInstance.error(error);
-    throw { code: 500, message: error.message };
+    throw { code: 403, message: 'User is not authorized' };
   }
 };

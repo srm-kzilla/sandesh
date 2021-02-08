@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { createUser, authUser } from './controller';
+import { createUser, userLogin } from './controller';
 const app = Router();
 
 export const authRouteHandler = () => {
@@ -10,7 +10,8 @@ export const authRouteHandler = () => {
 
 const loginHandler = async (req: Request, res: Response) => {
   try {
-    const jwt = await authUser(req.body);
+    const { email, password } = req.body;
+    const jwt = await userLogin(email, password);
     res.json({ success: true, token: jwt });
   } catch (error) {
     res.json({ success: false, message: error.message });
