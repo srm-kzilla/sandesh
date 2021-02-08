@@ -2,13 +2,13 @@ import { Request, Response, Router } from 'express';
 import { createUser, userLogin } from './controller';
 const app = Router();
 
-export const authRouteHandler = () => {
-  app.post('/login', loginHandler);
-  app.post('/signup', signUpHandler);
+export const userRouteHandler = () => {
+  app.post('/login', userLoginHandler);
+  app.post('/register', userRegisterHandler);
   return app;
 };
 
-const loginHandler = async (req: Request, res: Response) => {
+const userLoginHandler = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     const jwt = await userLogin(email, password);
@@ -18,10 +18,11 @@ const loginHandler = async (req: Request, res: Response) => {
   }
 };
 
-const signUpHandler = async (req: Request, res: Response) => {
+const userRegisterHandler = async (req: Request, res: Response) => {
   try {
-    await createUser(req.body);
-    res.json({ success: true, message: 'User Successfully created' });
+    const { name, domain, designation, email, password } = req.body;
+    await createUser(name, domain, designation, email, password);
+    res.json({ success: true, message: 'User successfully created' });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
