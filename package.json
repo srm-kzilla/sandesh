@@ -8,6 +8,7 @@
     "dev": "tsc-watch --onSuccess 'node ./build/index.js'"
   },
   "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
     "@types/express": "^4.17.8",
     "@types/mongodb": "^3.5.31",
     "@types/node": "^14.14.5",
