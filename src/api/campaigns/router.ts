@@ -3,20 +3,24 @@ import * as yup from 'yup';
 import { requestValidation } from '../../shared/middlewares/validationMiddleware';
 import { createCampaign, deleteCampaign, fetchCampaigns, updateCampaign } from './controller';
 
-const createCampaignSchema = new yup.ObjectSchema({
+const campaignSchema = {
   title: yup.string().required().trim(),
   mailingList: yup.string().required().trim(),
   startFrom: yup.string().required().trim(),
   endAt: yup.string().required().trim(),
   isolatedEmails: yup.array().of(yup.string()).notRequired(),
-});
+};
+
+const createCampaignSchema = new yup.ObjectSchema(campaignSchema);
+const updateCampaignSchema = new yup.ObjectSchema({ ...campaignSchema, id: yup.string().required().trim() });
+const deleteCampaignSchema = new yup.ObjectSchema({ property: yup.string().required().trim() });
 
 const app = Router();
 export const campaignRouteHandler = () => {
   app.get('/', fetchCampaignsHandler);
   app.post('/', requestValidation('body', createCampaignSchema), createCampaignHandler);
-  app.put('/', updateCampaignHandler);
-  app.delete('/', deleteCampaignHandler);
+  app.put('/', requestValidation('body', updateCampaignSchema), updateCampaignHandler);
+  app.delete('/', requestValidation('body', deleteCampaignSchema), deleteCampaignHandler);
   return app;
 };
 const fetchCampaignsHandler = async (req: Request, res: Response) => {
