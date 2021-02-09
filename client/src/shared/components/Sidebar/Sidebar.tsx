@@ -12,7 +12,7 @@ const Sidebar = () => {
   const location = useLocation();
 
   return (
-    <div className="kz-sidebar h-screen py-4 ml-4 w-12 fixed ">
+    <div className="kz-sidebar h-75-vh lg:h-screen py-4 ml-4 w-12 fixed ">
       <div className="w-full flex-col bg-primary h-full rounded-tr-xl rounded-bl-xl flex text-center justify-between py-4">
         <figure>
           <img
@@ -54,6 +54,7 @@ const Sidebar = () => {
               active: location.pathname === "/keys",
             })}
             onClick={() => {
+              localStorage.setItem("theme", colorTheme);
               setTheme(colorTheme);
             }}
           />

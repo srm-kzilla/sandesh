@@ -4,7 +4,7 @@ import Spotlight from "./Spotlight/Spotlight";
 import TableView from "./TableView/TableView";
 import CircleButton from "./CircleButton/CircleButton";
 import Drawer from "./Drawer/Drawer";
-import Bottombar from "./ Bottombar/Bottombar";
+import Footer from "./Footer/Footer";
 import TopBar from "./TopBar/TopBar";
 
 export {
@@ -14,6 +14,6 @@ export {
   TableView,
   CircleButton,
   Drawer,
-  Bottombar,
+  Footer,
   TopBar,
 };

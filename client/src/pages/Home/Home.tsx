@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import homeMail from "../../assets/images/home_mail.svg";
 import map from "../../assets/images/map.svg";
 
-import { Pill, Bottombar } from "../../shared/components/";
+import { Pill, Footer } from "../../shared/components/";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <>
       <div className="kz-container grid grid-rows-4 grid-cols-1 md:grid-rows-2 md:grid-cols-2 md:gap-x-16 md:gap-y-0 gap-y-16 justify-items-center items-center p-8 md:p-16 text-xl">
-        <div className="md:h-75-vh col-span-1 flex flex-col justify-center">
+        <div className="md:h-screen col-span-1 flex flex-col justify-center">
           <div className="flex">
             <div className="w-2 h-12 mr-2 bg-tertiary "></div>
             <h1 className="text-primary text-title">
@@ -34,7 +34,7 @@ export default function Home() {
           />
         </div>
         <img className="col-span-1" alt="man-working" src={homeMail} />
-        <div className="flex flex-col w-full flex-wrap col-span-1 w-full p-3">
+        <div className="flex flex-col flex-wrap col-span-1 w-full p-3">
           <div className="flex">
             <div className="w-2 h-12 mr-2 bg-tertiary "></div>
             <h1 className="w-full text-primary text-title ">Let's Connect</h1>
@@ -69,7 +69,7 @@ export default function Home() {
         </div>
         <img className="p-2 md:ml-16" src={map} alt="map" />
       </div>
-      <Bottombar />
+      <Footer />
     </>
   );
 }
