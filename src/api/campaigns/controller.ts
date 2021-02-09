@@ -15,6 +15,7 @@ export const fetchCampaigns = async () => {
 
 export const createCampaign = async (body: any) => {
   try {
+    // To Do get createdBy property from logged in user
     const newCampaign: Campaign = { ...body };
     newCampaign.createdOn = getCurrentDateTime();
     const databaseResponse = await (await database()).collection('campaign').findOne({ title: newCampaign.title });

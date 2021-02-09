@@ -1,10 +1,20 @@
 import { Request, Response, Router } from 'express';
+import * as yup from 'yup';
+import { requestValidation } from '../../shared/middlewares/validationMiddleware';
 import { createCampaign, deleteCampaign, fetchCampaigns, updateCampaign } from './controller';
+
+const createCampaignSchema = new yup.ObjectSchema({
+  title: yup.string().required().trim(),
+  mailingList: yup.string().required().trim(),
+  startFrom: yup.string().required().trim(),
+  endAt: yup.string().required().trim(),
+  isolatedEmails: yup.array().of(yup.string()).notRequired(),
+});
 
 const app = Router();
 export const campaignRouteHandler = () => {
   app.get('/', fetchCampaignsHandler);
-  app.post('/', createCampaignHandler);
+  app.post('/', requestValidation('body', createCampaignSchema), createCampaignHandler);
   app.put('/', updateCampaignHandler);
   app.delete('/', deleteCampaignHandler);
   return app;
