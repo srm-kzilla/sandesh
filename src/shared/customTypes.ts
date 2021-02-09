@@ -1,5 +1,3 @@
-import { type } from 'os';
-
 export type Campaign = {
   title: string; // Title of the campaign
   createdOn: string; // Date and time of creation

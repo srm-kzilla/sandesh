@@ -2,6 +2,7 @@ import { ObjectId } from 'mongodb';
 import database from '../../loaders/database';
 import LoggerInstance from '../../loaders/logger';
 import { Campaign } from '../../shared/customTypes';
+import { getCurrentDateTime } from '../../shared/utilities';
 
 export const fetchCampaigns = async () => {
   try {
@@ -14,7 +15,9 @@ export const fetchCampaigns = async () => {
 
 export const createCampaign = async (body: any) => {
   try {
+    // To Do get createdBy property from logged in user
     const newCampaign: Campaign = { ...body };
+    newCampaign.createdOn = getCurrentDateTime();
     const databaseResponse = await (await database()).collection('campaign').findOne({ title: newCampaign.title });
     if (databaseResponse !== null) throw Error('Existing campaign with same title');
     await (await database()).collection('campaign').insertOne(newCampaign);
