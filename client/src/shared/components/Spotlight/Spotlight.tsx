@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  useContext,
-  useEffect,
-  useCallback,
-} from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import "./Spotlight.scss";
 import * as Unicons from "@iconscout/react-unicons";
 import classNames from "classnames";
@@ -62,12 +56,12 @@ const Spotlight = () => {
   return searchStore.spotlight ? (
     <HotKeys keyMap={keyMap} handlers={handlers}>
       <div
-        className="kz-spotlight shadow-xl rounded-xl absolute top-1/2 left-1/2 bg-white transform -translate-x-1/2 -translate-y-1/2 p-2 py-6 flex flex-col "
+        className="kz-spotlight shadow-xl rounded-xl absolute top-1/2 left-1/2 bg-white transform -translate-x-1/2 -translate-y-1/2 p-2 py-6 flex flex-col dark:bg-darkGray "
         ref={hotKeys}
       >
         <input
           type="text"
-          className="bg-altGray h-10 rounded-md w-full px-3 outline-none flex-grow flex-shrink-0"
+          className="bg-altGray h-10 rounded-md w-full px-3 outline-none flex-grow flex-shrink-0 dark:bg-lighterGray"
           placeholder="Search for email addresses, campaigns, tags..."
           onKeyUp={(e) => {
             if (e.key === "ArrowUp") handlers.UP();
@@ -82,13 +76,11 @@ const Spotlight = () => {
         <hr className="my-3 text-altGray" />
         <small className="text-caption uppercase">recent searches</small>
         <div className="overflow-y-scroll flex-grow">
-          <div className="overflow-y-scroll flex-grow">
-            {items.map((item, idx) => {
-              return (
-                <SpotlightItem key={idx} item={item} active={idx === index} />
-              );
-            })}
-          </div>
+          {items.map((item, idx) => {
+            return (
+              <SpotlightItem key={idx} item={item} active={idx === index} />
+            );
+          })}
         </div>
       </div>
     </HotKeys>

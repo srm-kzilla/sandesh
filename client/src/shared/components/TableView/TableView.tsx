@@ -1,6 +1,7 @@
 import React from "react";
 import "./TableView.scss";
 import classNames from "classnames";
+import TableRow from "../TableRow/TableRow";
 
 interface Props {
   labels: string[];
@@ -11,8 +12,8 @@ interface Props {
 }
 const TableView = (props: Props) => {
   return (
-    <table className="table-auto w-full mt-4 kz-table-view">
-      <thead>
+    <table className="table-auto h-full w-full mt-4 kz-table-view dark:bg-darkGray">
+      <thead className="md:table-header-group hidden w-full">
         <tr className="text-left">
           {props.labels?.map((label, index) => {
             return (
@@ -23,29 +24,16 @@ const TableView = (props: Props) => {
           })}
         </tr>
       </thead>
-      <tbody>
+      <tbody className="flex flex-col items-center md:table-row-group dark:bg-darkGray">
         {props.items.map((item, index) => {
           return (
-            <React.Fragment key={index}>
-              <tr
-                className={classNames("my-4", {
-                  "cursor-pointer": props.onClick,
-                })}
-                onClick={() => {
-                  props.onClick &&
-                    props.onClick(props._id ? item[props._id] : index);
-                }}
-              >
-                {props.structure(item).map((element, idx) => {
-                  return (
-                    <td key={idx} className="my-4 bg-altGray px-4 py-4">
-                      {element}
-                    </td>
-                  );
-                })}
-              </tr>
-              <tr className="h-4"></tr>
-            </React.Fragment>
+            <TableRow
+              key={index}
+              item={item}
+              index={index}
+              structure={props.structure}
+              toShow={item.toShow}
+            />
           );
         })}
       </tbody>

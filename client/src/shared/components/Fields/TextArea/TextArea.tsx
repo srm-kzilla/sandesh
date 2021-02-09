@@ -16,7 +16,7 @@ const TextArea = (props: Props) => {
   return (
     <div
       className={classNames(
-        "kz-text-area",
+        "kz-text-area dark:bg-darkGray dark:text-darkFont",
         "flex",
         "flex-col",
         props.containerClassName
@@ -36,7 +36,7 @@ const TextArea = (props: Props) => {
           "border-solid",
           "border-altGray",
           "rounded-md",
-          "resize-none",
+          "resize-none bg-darkGray",
           props.className
         )}
         rows={3}
