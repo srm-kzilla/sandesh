@@ -12,8 +12,8 @@ const CircleButton = (props: Props) => {
       className={classNames("relative", { "cursor-pointer": props.onClick })}
       onClick={props.onClick}
     >
-      <div className="kz-circle-button animate-spin top-0 left-0 w-12 h-12 border border-primary rounded-full flex items-center justify-center border-dashed">
-        <div className="kz-circle-button animate-spin w-8 h-8 border border-secondary rounded-full flex items-center justify-center border-dashed"></div>
+      <div className="kz-circle-button animate-spin top-0 left-0 w-12 h-12 border-2 border-primary rounded-full flex items-center justify-center border-dashed">
+        <div className="kz-circle-button animate-spin w-8 h-8 border-2 border-secondary rounded-full flex items-center justify-center border-dashed"></div>
       </div>
       <p className="absolute -translate-x-1/2 transform -translate-y-1/2 top-1/2 left-1/2">
         {props.icon}

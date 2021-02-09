@@ -11,11 +11,12 @@ interface Props {
 }
 const Pill = (props: Props) => {
   return (
-    <a
+    <button
       className={classNames(
-        "kz-pill text-caption py-1 px-1 rounded uppercase bg-tertiary transition duration-100 ease-out",
+        "kz-pill text-caption rounded-md uppercase  transition duration-100 ease-out p-2",
         {
-          "!bg-primary !text-white": props.theme === "active",
+          "!bg-tertiary !text-darkGray": props.theme !== "active",
+          "!bg-primary !text-darkFont": props.theme === "active",
           "cursor-pointer": props.onClick !== undefined,
           "flex items-center justify-center": props.icon,
         },
@@ -25,7 +26,7 @@ const Pill = (props: Props) => {
     >
       {props.icon}
       <span className={classNames({ "ml-2": props.icon })}>{props.label}</span>
-    </a>
+    </button>
   );
 };
 
