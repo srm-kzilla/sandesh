@@ -1,28 +1,38 @@
-import React, { useState } from "react";
-import "./App.scss";
-import { Sidebar } from "./shared/components";
-import { Home, Sends, Keys } from "./pages";
+import React, { useContext } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { HomePage, KeysPage, SendsPage } from "./pages";
+
+import { AuthContext } from "./store/authContext";
 
 function App() {
-  const [login, setLogin] = useState(true);
+  const { isAuth, signOut, login } = useContext(AuthContext);
+  
   return (
-    <div className="App w-full dark:bg-darkGray dark:text-darkFont">
+    <>
+      <button onClick={signOut}>Sign out</button>
+      <button
+        onClick={() => {
+          login("YOOOOOOOOOOOOO");
+        }}
+      >
+        Log In
+      </button>
+
+      {JSON.stringify(isAuth)}
       <Router>
-        {login ? <Sidebar /> : ""}
         <Switch>
           <Route exact path="/">
-            <Home />
+            <HomePage />
           </Route>
           <Route exact path="/sends">
-            <Sends />
+            <SendsPage />
           </Route>
           <Route exact path="/keys">
-            <Keys />
+            <KeysPage />
           </Route>
         </Switch>
       </Router>
-    </div>
+    </>
   );
 }
 
