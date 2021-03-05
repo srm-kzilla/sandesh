@@ -20,6 +20,7 @@
     "typescript": "^4.0.5"
   },
   "dependencies": {
+    "aws-sdk": "^2.857.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -29,7 +30,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.2",
     "winston": "^3.3.3",
-    "yup": "^0.32.8"
+    "yup": "^0.32.9"
   },
   "author": "SRMKZILLA <technical@srmkzilla.net>",
   "license": "MIT"
