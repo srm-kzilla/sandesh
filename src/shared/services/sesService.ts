@@ -1,10 +1,7 @@
 import {SESV2} from 'aws-sdk'
-const configSES = {
-    accessKeyId: process.env.AWS_SES_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SES_SECRET_ACCESS_KEY,
-    region: process.env.AWS_SES_REGION
-};
-const ses=new SESV2(configSES);
+import Config from '../../config/index'
+
+const ses=new SESV2(Config.sesConfig);
 
 
 export const sendMail=async (email: string,subject: string,body: string)=>{
