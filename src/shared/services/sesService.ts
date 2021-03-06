@@ -1,43 +1,39 @@
-import AWS from 'aws-sdk'
-
-
+import {SESV2} from 'aws-sdk'
 const configSES = {
     accessKeyId: process.env.AWS_SES_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SES_SECRET_ACCESS_KEY,
     region: process.env.AWS_SES_REGION
 };
-
+const ses=new SESV2(configSES);
 
 
 export const sendMail=async (email: string,subject: string,body: string)=>{
-    try{
         const Params={
-            Source: 'abc@gmail.com',
-            Destination: {
-              ToAddresses: [
-                email
-              ]
-            },
-            ReplyToAddresses: [
-              'abc@gmail.com',
-            ],
-            Message: {
-              Body: {
+          Content: { 
+            Simple: {
+              Body: { 
                 Html: {
-                  Charset: "UTF-8",
-                  Data: body
+                  Data: body, 
+                  Charset: 'Utf-8'
                 }
               },
-              Subject: {
-                Charset: 'UTF-8',
-                Data: subject
+              Subject: { 
+                Data: subject, 
+                Charset: 'utf-8'
               }
-            }
-        } 
-        await new AWS.SES(configSES).sendEmail(Params).promise()
-    }catch(err){
-         throw(err)
-    }
+            },
+          },
+          Destination: {
+            ToAddresses: [
+              email
+            ]
+          },
+          FromEmailAddress: 'devesh.teotia12@gmail.com',
+          ReplyToAddresses: [
+           'devesh.teotia12@gmail.com'
+          ]
+        }
+      await ses.sendEmail(Params).promise();
 }
 
   
