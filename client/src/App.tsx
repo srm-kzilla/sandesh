@@ -1,24 +1,9 @@
-import React, { useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { HomePage, KeysPage, SendsPage } from './pages';
 
-import { AuthContext } from './store/authContext';
-
 function App() {
-  const { isAuth, signOut, login } = useContext(AuthContext);
-
   return (
     <>
-      <button onClick={signOut}>Sign out</button>
-      <button
-        onClick={() => {
-          login('jwt token');
-        }}
-      >
-        Log In
-      </button>
-
-      {JSON.stringify(isAuth)}
       <Router>
         <Switch>
           <Route exact path="/">

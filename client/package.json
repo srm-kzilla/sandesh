@@ -9,6 +9,7 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.6.3",
     "autoprefixer": "10.x",
+    "axios": "^0.21.1",
     "cross-env": "7.x",
     "formik": "^2.2.6",
     "npm-run-all": "4.x",

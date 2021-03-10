@@ -1,0 +1,22 @@
+.modal input,
+.modal select {
+  margin: 1rem auto;
+  padding: 1rem;
+  font-size: 1.05rem;
+  width: 20rem;
+  border-radius: 0.5rem;
+  background-color: lightgrey;
+
+  outline: none;
+}
+.mode-dark input,
+.mode-dark select {
+  background: #1d1d1d;
+}
+
+@media (max-width: 1000px) {
+  .modal input,
+  .modal select {
+    width: 75vw;
+  }
+}
