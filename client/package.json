@@ -1,38 +1,43 @@
 {
-  "name": "client",
+  "name": "sandesh-client",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3001",
   "dependencies": {
-    "@iconscout/react-unicons": "^1.1.5",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "@types/jest": "^24.0.0",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
-    "autoprefixer": "^9",
-    "change-case": "^4.1.1",
-    "classnames": "^2.2.6",
-    "mobx": "^5.15.6",
-    "mobx-react": "^6.3.0",
-    "node-sass": "^4.14.1",
-    "postcss": "^7",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-hotkeys": "^2.0.0",
+    "@iconscout/react-unicons": "^1.1.6",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.6.3",
+    "autoprefixer": "10.x",
+    "cross-env": "7.x",
+    "formik": "^2.2.6",
+    "npm-run-all": "4.x",
+    "postcss": "8.x",
+    "postcss-cli": "8.x",
+    "postcss-preset-env": "6.x",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3",
-    "tailwindcss": "^2.0.1-compat",
-    "typescript": "~3.7.2",
-    "uuid": "^8.3.0"
+    "react-scripts": "4.0.2",
+    "tailwindcss": "2.x",
+    "typescript": "4.x"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.25",
+    "@types/react": "^17.0.1",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-router-dom": "^5.1.7"
   },
   "scripts": {
-    "start": "yarn run build:css && react-scripts start",
-    "build": "yarn run build:css && react-scripts build",
+    "start": "run-p watch:tailwindcsss react-scripts:start",
+    "build": "run-s build:tailwindcsss react-scripts:build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:css": "postcss src/_tailwind.scss -o src/index.scss"
+    "build:tailwindcsss": "cross-env NODE_ENV=production postcss src/styles/tailwind.css -o src/styles/index.css",
+    "watch:tailwindcsss": "cross-env NODE_ENV=development postcss src/styles/tailwind.css -o src/styles/index.css --watch",
+    "react-scripts:start": "react-scripts start",
+    "react-scripts:build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -48,13 +53,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/classnames": "^2.2.10",
-    "@types/react-router-dom": "^5.1.5",
-    "@types/uuid": "^8.3.0",
-    "postcss-cli": "^7.1.2",
-    "tailwindcss-dark-mode": "^1.1.7",
-    "tailwindcss-important": "^1.0.0"
   }
 }

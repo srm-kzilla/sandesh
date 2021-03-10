@@ -1,0 +1,43 @@
+@tailwind base;
+
+/* Your own custom base styles */
+
+/* Start purging... */
+@tailwind components;
+/* Stop purging. */
+
+/* Your own custom component styles */
+
+/* Start purging... */
+@tailwind utilities;
+/* Stop purging. */
+
+/* Your own custom utilities */
+@layer base {
+  @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;300;400;600;700;800;900&display=swap");
+  * {
+    font-family: "Nunito Sans", sans-serif;
+  }
+}
+
+@layer utilities {
+  .logo {
+    font-size: 3rem;
+    @apply font-black;
+  }
+  .text-title {
+    font-size: 2.2rem;
+    @apply font-extrabold;
+  }
+  .actionBtn {
+    @apply select-none;
+    @apply border-primary border-2;
+    @apply text-primary;
+    @apply uppercase;
+    @apply rounded-md;
+    @apply font-semibold;
+    @apply px-4 py-1;
+    @apply focus:outline-none;
+    @apply transition-colors hover:bg-primary hover:text-white;
+  }
+}
