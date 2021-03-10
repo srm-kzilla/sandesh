@@ -1,23 +1,36 @@
-import * as CryptoJS from 'crypto-js';
+import * as crypto from 'crypto';
 import LoggerInstance from '../../loaders/logger';
+import { Decipher } from '../customTypes';
 
-const key = CryptoJS.enc.Hex.parse(process.env.API_ENCRYPTION_KEY);
-const iv = CryptoJS.enc.Hex.parse(process.env.API_ENCRYPTION_IV);
+const algorithm = 'aes-256-ctr';
+const secretKey = process.env.ENCRYPTION_KEY;
+const iv = crypto.randomBytes(16);
 
-export const encryptData = (dataToBeEncrypted: string): string => {
+export const encryptData = (dataToBeEncrypted: string): Decipher => {
   try {
-    return CryptoJS.AES.encrypt(dataToBeEncrypted, key, { iv: iv }).toString();
+    const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
+
+    const encrypted = Buffer.concat([cipher.update(dataToBeEncrypted), cipher.final()]);
+
+    return {
+      iv: iv.toString('hex'),
+      content: encrypted.toString('hex'),
+    };
   } catch (error) {
     LoggerInstance.error(error);
-    throw Error('Encryption error');
+    throw Error('encryption error-' + error);
   }
 };
 
-export const decryptData = (dataToBeDecrypted: string): string => {
+export const decryptData = (dataToBeDecrypted: Decipher): string => {
   try {
-    return CryptoJS.AES.decrypt(dataToBeDecrypted, key, { iv: iv }).toString(CryptoJS.enc.Utf8);
+    const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(dataToBeDecrypted.iv, 'hex'));
+
+    const decrpyted = Buffer.concat([decipher.update(Buffer.from(dataToBeDecrypted.content, 'hex')), decipher.final()]);
+
+    return decrpyted.toString();
   } catch (error) {
     LoggerInstance.error(error);
-    throw Error('Encryption error');
+    throw Error('encryption error');
   }
 };

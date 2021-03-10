@@ -8,7 +8,7 @@ export default (): Router => {
 
   app.use('/campaign', campaignRouteHandler());
   app.use('/user', userRouteHandler());
-  app.use('/apiKey', apiKeyRouteHandler());
+  app.use('/key', apiKeyRouteHandler());
 
   return app;
 };

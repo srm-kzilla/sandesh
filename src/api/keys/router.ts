@@ -1,10 +1,12 @@
 import { Request, Response, Router } from 'express';
-import { generateKey, resetKey, fetchKeys, deleteKey } from './controller';
+import { generateKey, resetKey, toggleKey, fetchKeys, deleteKey } from './controller';
+import { requestValidation } from '../../shared/middlewares/validationMiddleware';
+import { keySchema } from './schema';
 
 const getAllKeysHandler = async (req: Request, res: Response) => {
   try {
     const result = await fetchKeys();
-    res.status(200).json({ data: result });
+    res.json({ success: true, data: result });
   } catch (error) {
     res.status(error.code).send({ success: false, message: error.message });
   }
@@ -12,8 +14,18 @@ const getAllKeysHandler = async (req: Request, res: Response) => {
 
 const generateKeyHandler = async (req: Request, res: Response) => {
   try {
-    const apiKey = await generateKey();
-    res.status(200).json({ data: apiKey });
+    const user = req.body.user;
+    const apiKey = await generateKey(user);
+    res.json({ success: true, data: apiKey });
+  } catch (error) {
+    res.status(error.code).send({ success: false, message: error.message });
+  }
+};
+
+const toggleKeyHandler = async (req: Request, res: Response) => {
+  try {
+    await toggleKey(req.body.user, req.body.isEnabled);
+    res.json({ success: true, message: 'toggled key' });
   } catch (error) {
     res.status(error.code).send({ success: false, message: error.message });
   }
@@ -21,32 +33,28 @@ const generateKeyHandler = async (req: Request, res: Response) => {
 
 const resetKeyHandler = async (req: Request, res: Response) => {
   try {
-    const _id = req.params.id;
-    await resetKey(_id);
-    res.json({ success: true, message: 'user updated' });
+    const newKey = await resetKey(req.body.user);
+    res.json({ success: true, message: 'reset key', data: newKey });
   } catch (error) {
-    if (error.code) return res.status(error.code).send({ success: false, message: error.message });
-    res.status(500).json({ success: false, message: error.message });
+    res.status(error.code).send({ success: false, message: error.message });
   }
 };
 
 const deleteKeyHandler = async (req: Request, res: Response) => {
   try {
-    const _id = req.params.id;
-    await deleteKey(_id);
+    const user = req.body;
+    await deleteKey(user);
     res.json({ success: true, message: 'key deleted' });
   } catch (error) {
-    if (error.code) {
-      return res.status(error.code).send({ success: false, message: error.message });
-    }
-    res.status(500).json({ success: false, message: error.message });
+    res.status(error.code).send({ success: false, message: error.message });
   }
 };
 const app = Router();
-export const apiKeyRouteHandler = () => {
+export const apiKeyRouteHandler = (): Router => {
   app.get('/', getAllKeysHandler);
-  app.patch('/:_id', resetKeyHandler);
-  app.post('/', generateKeyHandler);
-  app.delete('/:_id', deleteKeyHandler);
+  app.patch('/toggle', requestValidation('body', keySchema), toggleKeyHandler);
+  app.patch('/reset', requestValidation('body', keySchema), resetKeyHandler);
+  app.post('/', requestValidation('body', keySchema), generateKeyHandler);
+  app.delete('/', deleteKeyHandler);
   return app;
 };

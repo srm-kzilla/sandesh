@@ -5,7 +5,7 @@
     "start": "node build/index.js",
     "build": "tsc",
     "lint": "eslint . --ext .ts",
-    "dev": "tsc-watch --onSuccess 'node ./build/index.js'"
+    "dev": "tsc-watch --onSuccess \"node ./build/index.js\""
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
