@@ -1,18 +1,18 @@
-import React, { useContext } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { HomePage, KeysPage, SendsPage } from "./pages";
+import React, { useContext } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { HomePage, KeysPage, SendsPage } from './pages';
 
-import { AuthContext } from "./store/authContext";
+import { AuthContext } from './store/authContext';
 
 function App() {
   const { isAuth, signOut, login } = useContext(AuthContext);
-  
+
   return (
     <>
       <button onClick={signOut}>Sign out</button>
       <button
         onClick={() => {
-          login("YOOOOOOOOOOOOO");
+          login('jwt token');
         }}
       >
         Log In

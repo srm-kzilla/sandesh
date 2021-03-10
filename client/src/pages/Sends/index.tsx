@@ -1,7 +1,7 @@
-import React from "react";
-import { Layout } from "../../components";
+import React from 'react';
+import { Layout } from '../../components';
 
-const Sends = (props?: any) => {
+const Sends = () => {
   return (
     <Layout>
       <header className="my-4">

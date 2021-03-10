@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Home from './Hero';
 import AuthModal from './AuthModal';
 
-const HomePage = (props?: any) => {
+const HomePage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleHideModal = () => {
@@ -16,7 +16,7 @@ const HomePage = (props?: any) => {
   return (
     <>
       <Home showModal={handleHideModal} />
-      <AuthModal hideModal={handleHideModal} />
+      {isModalVisible && <AuthModal hideModal={handleHideModal} />}
     </>
   );
 };

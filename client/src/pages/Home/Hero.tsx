@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from 'react-router-dom';
 
-import { HeroArt, FooterGraphic } from "../../assets/icons";
-import * as Unicons from "@iconscout/react-unicons";
+import { HeroArt, FooterGraphic } from '../../assets/icons';
+import * as Unicons from '@iconscout/react-unicons';
 
 export interface HomeProps {
   showModal: () => void;
@@ -23,22 +23,15 @@ const Home = ({ showModal }: HomeProps) => {
             The One Place to store your mails
           </h1>
           <div className="mb-4">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+            ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+            nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+            anim id est laborum.
           </div>
-          <button
-            className="actionBtn"
-            onClick={() => {
-              history.push("/sends");
-            }}
-          >
-            Explore Dashboard
-          </button>
+          <Link to="/sends">
+            <button className="actionBtn">Explore Dashboard</button>
+          </Link>
         </article>
         <HeroArt className=" w-72 h-auto md:min-w-xs my-8 md:w-2/5 md:ml-8" />
       </section>
@@ -96,19 +89,17 @@ const Home = ({ showModal }: HomeProps) => {
         <FooterGraphic className="w-full" />
         <Unicons.UilLinkedinAlt
           className="text-white cursor-pointer absolute top-10 transform -translate-x-1/2 transition-transform hover:-translate-y-1"
-          style={{ left: "calc(50% - 3.75rem)" }}
+          style={{ left: 'calc(50% - 3.75rem)' }}
         />
         <Unicons.UilFacebookF className="text-white cursor-pointer absolute top-6 left-2/4 transform -translate-x-1/2 transition-transform hover:-translate-y-1" />
         <Unicons.UilInstagram
           className="text-white cursor-pointer absolute top-10 transform -translate-x-1/2 transition-transform hover:-translate-y-1"
-          style={{ left: "calc(50% + 3.75rem)" }}
+          style={{ left: 'calc(50% + 3.75rem)' }}
         />
         <section className="bg-primary pt-16 xxs:pt-10 xs:8 px-8">
           <div className="max-w-5xl mx-auto flex flex-wrap">
             <article className="flex flex-col flex-1 text-white mr-4 mb-4">
-              <h2 className="text-tertiary font-extrabold whitespace-nowrap">
-                More About Us
-              </h2>
+              <h2 className="text-tertiary font-extrabold whitespace-nowrap">More About Us</h2>
               <a className="cursor-pointer text-sm">Everything</a>
               <a className="cursor-pointer text-sm">SRMKZILLA</a>
               <a className="cursor-pointer text-sm">Events</a>
@@ -116,29 +107,22 @@ const Home = ({ showModal }: HomeProps) => {
               <a className="cursor-pointer text-sm">Us from last year</a>
             </article>
             <article className="flex flex-col flex-1 text-white mr-4 mb-4">
-              <h2 className="text-tertiary font-extrabold whitespace-nowrap">
-                Related Information
-              </h2>
+              <h2 className="text-tertiary font-extrabold whitespace-nowrap">Related Information</h2>
               <a className="cursor-pointer text-sm">Privacy</a>
               <a className="cursor-pointer text-sm">Helpdesk</a>
             </article>
             <article className="flex flex-col flex-1 text-white mr-4 mb-4">
-              <h2 className="text-tertiary font-extrabold whitespace-nowrap">
-                Workshops
-              </h2>
+              <h2 className="text-tertiary font-extrabold whitespace-nowrap">Workshops</h2>
               <a className="cursor-pointer text-sm">Hacktoberfest’20</a>
               <a className="cursor-pointer text-sm">Recruitments’20</a>
               <a className="cursor-pointer text-sm">Unlocking Linkedin</a>
             </article>
             <article className="flex flex-col md:max-w-xs text-white mr-4 mb-4">
-              <h2 className="text-tertiary font-extrabold whitespace-nowrap">
-                Community
-              </h2>
+              <h2 className="text-tertiary font-extrabold whitespace-nowrap">Community</h2>
               <span className="text-sm">
-                SRMKZILLA is proud to be an equal opportunity workplace. We are
-                committed to equal volunteering opportunity regardless of race,
-                color, ancestry, religion, sex, national origin, sexual
-                orientation, age, citizenship, disability or gender identity.
+                SRMKZILLA is proud to be an equal opportunity workplace. We are committed to equal volunteering
+                opportunity regardless of race, color, ancestry, religion, sex, national origin, sexual orientation,
+                age, citizenship, disability or gender identity.
               </span>
             </article>
           </div>
