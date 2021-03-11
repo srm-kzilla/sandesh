@@ -23,7 +23,7 @@ const generateKeyHandler = async (req: Request, res: Response) => {
 
 const toggleKeyHandler = async (req: Request, res: Response) => {
   try {
-    await toggleKey(req.body.user, req.body.isEnabled);
+    await toggleKey(req.body._id, req.body.isEnabled);
     res.json({ success: true, message: 'toggled key' });
   } catch (error) {
     res.status(error.code).send({ success: false, message: error.message });
@@ -32,7 +32,7 @@ const toggleKeyHandler = async (req: Request, res: Response) => {
 
 const resetKeyHandler = async (req: Request, res: Response) => {
   try {
-    const newKey = await resetKey(req.body.user);
+    const newKey = await resetKey(req.body._id);
     res.json({ success: true, message: 'reset key', data: newKey });
   } catch (error) {
     res.status(error.code).send({ success: false, message: error.message });
@@ -41,7 +41,7 @@ const resetKeyHandler = async (req: Request, res: Response) => {
 
 const deleteKeyHandler = async (req: Request, res: Response) => {
   try {
-    await deleteKey(req.body.user);
+    await deleteKey(req.body._id);
     res.json({ success: true, message: 'key deleted' });
   } catch (error) {
     res.status(error.code).send({ success: false, message: error.message });
@@ -50,8 +50,8 @@ const deleteKeyHandler = async (req: Request, res: Response) => {
 const app = Router();
 export const apiKeyRouteHandler = (): Router => {
   app.get('/', getAllKeysHandler);
-  app.patch('/toggle', requestValidation('body', keySchema), toggleKeyHandler);
-  app.patch('/reset', requestValidation('body', keySchema), resetKeyHandler);
+  app.patch('/toggle', toggleKeyHandler);
+  app.patch('/reset', resetKeyHandler);
   app.post('/', requestValidation('body', keySchema), generateKeyHandler);
   app.delete('/', deleteKeyHandler);
   return app;
