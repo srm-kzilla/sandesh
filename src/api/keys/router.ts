@@ -14,8 +14,7 @@ const getAllKeysHandler = async (req: Request, res: Response) => {
 
 const generateKeyHandler = async (req: Request, res: Response) => {
   try {
-    const user = req.body.user;
-    const apiKey = await generateKey(user);
+    const apiKey = await generateKey(req.body.user);
     res.json({ success: true, data: apiKey });
   } catch (error) {
     res.status(error.code).send({ success: false, message: error.message });
@@ -42,8 +41,7 @@ const resetKeyHandler = async (req: Request, res: Response) => {
 
 const deleteKeyHandler = async (req: Request, res: Response) => {
   try {
-    const user = req.body;
-    await deleteKey(user);
+    await deleteKey(req.body.user);
     res.json({ success: true, message: 'key deleted' });
   } catch (error) {
     res.status(error.code).send({ success: false, message: error.message });

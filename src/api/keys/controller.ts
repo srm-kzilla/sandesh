@@ -12,6 +12,8 @@ const nanoid = customAlphabet(urlAlphabet, 16);
 
 export const generateKey = async (user: string): Promise<string> => {
   try {
+    const foundUser = await (await database()).collection('keys').findOne({ user });
+    if (foundUser) throw Error('User already exists');
     const keyString = await nanoid();
 
     const newKey: Key = {
@@ -24,6 +26,7 @@ export const generateKey = async (user: string): Promise<string> => {
     return keyString;
   } catch (error) {
     LoggerInstance.error(error);
+    if (error.message === 'User already exists') throw { code: 409, message: 'User already exists ' };
     throw Error('Error-' + error.message);
   }
 };
@@ -51,11 +54,11 @@ export const resetKey = async (user: string): Promise<string> => {
 
 export const fetchKeys = async (): Promise<string[][]> => {
   try {
-    const allInfo = await (await database())
+    const allKeys = await (await database())
       .collection('keys')
       .find({}, { projection: { _id: 0 } })
       .toArray();
-    return allInfo.map(decryptKey);
+    return allKeys.map(decryptKey);
   } catch (error) {
     LoggerInstance.error(error);
     throw Error('Error-' + error.message);
@@ -63,10 +66,12 @@ export const fetchKeys = async (): Promise<string[][]> => {
 };
 export const deleteKey = async (user: string): Promise<void> => {
   try {
-    const key = await (await database()).collection('keys').findOneAndDelete({ user });
-    if (!key) throw { code: 404, message: 'key does not exist, thus cannot be deleted' };
+    const key = await (await database()).collection('keys').findOne({ user });
+    if (!key) throw Error('Key does not exist');
+    await (await database()).collection('keys').findOneAndDelete({ user });
   } catch (error) {
     LoggerInstance.error(error);
+    if (error.message === 'Key does not exist') throw { code: 404, message: 'Key does not exist' };
     throw Error('Error-' + error.message);
   }
 };
