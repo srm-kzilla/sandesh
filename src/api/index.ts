@@ -5,7 +5,6 @@ import { apiKeyRouteHandler } from './keys/router';
 
 export default (): Router => {
   const app = Router();
-
   app.use('/campaign', campaignRouteHandler());
   app.use('/user', userRouteHandler());
   app.use('/key', apiKeyRouteHandler());
