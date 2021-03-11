@@ -6,8 +6,7 @@ import * as Unicons from '@iconscout/react-unicons';
 import { AuthContext } from '../../store/authContext';
 
 const Home = () => {
-  const [registerModal, setRegisterModal] = useState(false);
-  const [loginModal, setLoginModal] = useState(false);
+  const [authModal, setAuthModal] = useState('hidden');
   const { isAuth, signOut } = useContext(AuthContext);
   return (
     // TODO CHANGE TO FLEX
@@ -40,18 +39,14 @@ const Home = () => {
             <button
               className="actionBtn"
               onClick={() => {
-                setLoginModal(true);
+                setAuthModal('login');
               }}
             >
               Let Me in
             </button>
           )}
-          {registerModal ? (
-            <Register showModal={registerModal} setShowModal={setRegisterModal} otherToggle={setLoginModal} />
-          ) : null}
-          {loginModal ? (
-            <Login showModal={loginModal} setShowModal={setLoginModal} otherToggle={setRegisterModal} />
-          ) : null}
+          {authModal === 'register' ? <Register showModal={authModal} setShowModal={setAuthModal} /> : null}
+          {authModal === 'login' ? <Login showModal={authModal} setShowModal={setAuthModal} /> : null}
         </article>
         <HeroArt className=" w-72 h-auto md:min-w-xs my-8 md:w-2/5 md:ml-8" />
       </section>

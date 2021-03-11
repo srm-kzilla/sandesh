@@ -14,9 +14,9 @@
 
 /* Your own custom utilities */
 @layer base {
-  @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;300;400;600;700;800;900&display=swap");
+  @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;300;400;600;700;800;900&display=swap');
   * {
-    font-family: "Nunito Sans", sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
   }
 }
 
@@ -39,5 +39,15 @@
     @apply px-4 py-1;
     @apply focus:outline-none;
     @apply transition-colors hover:bg-primary hover:text-white;
+  }
+  .modal input,
+  .modal select {
+    @apply mx-auto my-1;
+    @apply p-4;
+    @apply text-base;
+    @apply w-80;
+    @apply rounded-lg;
+    @apply bg-gray-300;
+    @apply outline-none;
   }
 }

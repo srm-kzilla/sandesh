@@ -1,14 +1,17 @@
 import { Formik, Field, Form, FormikTouched, FormikErrors } from 'formik';
 import React, { useContext, useEffect, useState } from 'react';
-import { usePost } from '../../../hooks/usePost';
-import './Modal.css';
 import * as yup from 'yup';
 import { AuthContext } from '../../../store/authContext';
+import { postCode } from '../../../utils/api';
+import { useHistory } from 'react-router-dom';
 
 interface LoginProps {
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  showModal: boolean;
-  otherToggle: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowModal: React.Dispatch<React.SetStateAction<string>>;
+  showModal: 'hidden' | 'login' | 'register';
+}
+interface ResponseType {
+  data?: { success: boolean; message: string };
+  token?: string;
 }
 
 const handleError = (
@@ -27,28 +30,30 @@ const handleError = (
   }
 };
 
-export const Login = ({ setShowModal, otherToggle }: LoginProps) => {
+export const Login = ({ setShowModal }: LoginProps) => {
   const { login } = useContext(AuthContext);
-  const [data, setData] = useState({});
-  const [url, setUrl] = useState('');
-  const { response, loading } = usePost(url, data);
+  const history = useHistory();
   const validationSchema = yup.object({
     email: yup.string().email().required(),
     password: yup.string().required().min(3),
   });
+  const [apiResponse, setApiResponse] = useState<ResponseType | undefined>();
+
   useEffect(() => {
-    if (response.success) {
-      login(response.token as string);
-      setShowModal(false);
+    if (apiResponse?.data?.success) {
+      login(apiResponse.token as string);
+      setShowModal('hidden');
+      history.push('/sends');
     }
-  }, [response, login, setShowModal]);
+  }, [apiResponse, login, setShowModal]);
+
   return (
     <div className="modal">
       <div className="bg-transparent fixed inset-0 flex justify-center z-50">
         <div className="z-50 relative dark:bg-darkGray my-auto bg-white min-h-80 rounded-xl p-4 mx-4 overflow-y-auto max-h-screen w-max">
           <div className="flex justify-between">
             <h3 className="text-3xl font-semibold">Login</h3>
-            <span className="cursor-pointer outline-none focus:outline-none" onClick={() => setShowModal(false)}>
+            <span className="cursor-pointer outline-none focus:outline-none" onClick={() => setShowModal('hidden')}>
               ×
             </span>
           </div>
@@ -57,13 +62,10 @@ export const Login = ({ setShowModal, otherToggle }: LoginProps) => {
             <Formik
               initialValues={{ email: '', password: '' }}
               validationSchema={validationSchema}
-              onSubmit={(data, { setSubmitting }) => {
+              onSubmit={async (data, { setSubmitting }) => {
                 setSubmitting(true);
-                setUrl('http://localhost:4000/api/user/login');
-                setData(data);
-                if (response.success) {
-                  setShowModal(false);
-                }
+                const result = await postCode('login', data);
+                setApiResponse(result);
                 setSubmitting(false);
               }}
             >
@@ -75,19 +77,18 @@ export const Login = ({ setShowModal, otherToggle }: LoginProps) => {
                     <Field placeholder="Password" type="password" name="password" />
                     {handleError('password', errors, touched)}
                     <button disabled={isSubmitting} type="submit" className="actionBtn">
-                      {loading ? 'Loading' : 'Submit'}
+                      Submit
                     </button>
                     <span
                       className="cursor-pointer m-auto"
                       onClick={() => {
-                        otherToggle(true);
-                        setShowModal(false);
+                        setShowModal('register');
                       }}
                     >
                       Not registered? register
                     </span>
-                    {!response.success ? (
-                      <span className="m-auto capitalize text-red-500">{response.message}</span>
+                    {!apiResponse?.data?.success ? (
+                      <span className="m-auto capitalize text-red-500">{apiResponse?.data?.message}</span>
                     ) : null}
                   </Form>
                 );

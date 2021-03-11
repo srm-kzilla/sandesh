@@ -1,7 +1,10 @@
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { useContext } from 'react';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { HomePage, KeysPage, SendsPage } from './pages';
+import { AuthContext } from './store/authContext';
 
 function App() {
+  const { isAuth } = useContext(AuthContext);
   return (
     <>
       <Router>
@@ -10,10 +13,10 @@ function App() {
             <HomePage />
           </Route>
           <Route exact path="/sends">
-            <SendsPage />
+            {isAuth ? <SendsPage /> : <Redirect to="/" />}
           </Route>
           <Route exact path="/keys">
-            <KeysPage />
+            {isAuth ? <KeysPage /> : <Redirect to="/" />}
           </Route>
         </Switch>
       </Router>

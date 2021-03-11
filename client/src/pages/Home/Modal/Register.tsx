@@ -1,13 +1,17 @@
 import { Formik, Field, Form, FormikTouched, FormikErrors } from 'formik';
-import React, { useEffect, useState } from 'react';
-import { usePost } from '../../../hooks/usePost';
-import './Modal.css';
+import React, { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import * as yup from 'yup';
+import { AuthContext } from '../../../store/authContext';
+import { postCode } from '../../../utils/api';
 
 interface RegisterProps {
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  showModal: boolean;
-  otherToggle: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowModal: React.Dispatch<React.SetStateAction<string>>;
+  showModal: 'hidden' | 'login' | 'register';
+}
+interface ResponseType {
+  data?: { success: boolean; message: string };
+  token?: string;
 }
 
 const handleError = (
@@ -32,31 +36,35 @@ const handleError = (
   }
 };
 
-export const Register = ({ setShowModal, otherToggle }: RegisterProps) => {
-  const [data, setData] = useState({});
-
-  const [url, setUrl] = useState('');
-  const { response, loading } = usePost(url, data);
+export const Register = ({ setShowModal }: RegisterProps) => {
+  const { login } = useContext(AuthContext);
+  const history = useHistory();
   const validationSchema = yup.object({
     name: yup.string().required(),
     email: yup.string().email().required(),
     password: yup.string().required().min(3),
     designation: yup
       .string()
-      .oneOf(['Executive Board ', 'CTO', 'CFO', 'Editor-in-cheif', 'Lead', 'Associate Lead', 'Member'])
+      .oneOf(['Executive Board', 'CTO', 'CFO', 'Editor-in-cheif', 'Lead', 'Associate Lead', 'Member'])
       .required(),
     domain: yup.string().oneOf(['Technical', 'Sponsorship', 'Editorial', 'Events', 'Core']).required(),
   });
+  const [apiResponse, setApiResponse] = useState<ResponseType | undefined>();
+
   useEffect(() => {
-    if (response.success) setShowModal(false);
-  }, [response, setShowModal]);
+    if (apiResponse?.data?.success) {
+      login(apiResponse.token as string);
+      setShowModal('hidden');
+      history.push('/sends');
+    }
+  }, [apiResponse, login, setShowModal]);
   return (
     <div className="modal">
       <div className="bg-transparent fixed inset-0 flex justify-center z-50">
         <div className="z-50 relative dark:bg-darkGray my-auto bg-white min-h-80 rounded-xl p-4 mx-4 overflow-y-auto max-h-screen w-max">
           <div className="flex justify-between">
             <h3 className="text-3xl font-semibold">Register</h3>
-            <span className="cursor-pointer outline-none focus:outline-none" onClick={() => setShowModal(false)}>
+            <span className="cursor-pointer outline-none focus:outline-none" onClick={() => setShowModal('hidden')}>
               ×
             </span>
           </div>
@@ -64,11 +72,12 @@ export const Register = ({ setShowModal, otherToggle }: RegisterProps) => {
             <Formik
               initialValues={{ name: '', email: '', password: '', domain: '', designation: '' }}
               validationSchema={validationSchema}
-              onSubmit={(data, { setSubmitting }) => {
-                setSubmitting(true);
-                setUrl('http://localhost:4000/api/user/register');
-                setData(data);
-
+              onSubmit={async (data, { setSubmitting }) => {
+                const result: ResponseType = await postCode('register', data);
+                if (result.data?.success) {
+                  const loginResult = await postCode('login', data);
+                  setApiResponse(loginResult);
+                }
                 setSubmitting(false);
               }}
             >
@@ -91,9 +100,8 @@ export const Register = ({ setShowModal, otherToggle }: RegisterProps) => {
                     </select>
                     {handleError('domain', errors, touched)}
                     <select name="designation" onChange={handleChange}>
-                      <option value=" ">--SELECT--</option>
+                      <option value=" "> --SELECT--</option>
                       <option value="Executive Board">Executive Board</option>
-                      <option value="asf">asf</option>
                       <option value="CTO">CTO</option>
                       <option value="CFO">CFO</option>
                       <option value="Editor-in-chief">Editor-in-chief</option>
@@ -103,19 +111,18 @@ export const Register = ({ setShowModal, otherToggle }: RegisterProps) => {
                     </select>
                     {handleError('designation', errors, touched)}
                     <button disabled={isSubmitting} type="submit" className="actionBtn">
-                      {loading ? 'Loading' : 'Submit'}
+                      Submit
                     </button>
                     <span
                       className="cursor-pointer m-auto"
                       onClick={() => {
-                        otherToggle(true);
-                        setShowModal(false);
+                        setShowModal('login');
                       }}
                     >
                       Already registred? Login
                     </span>
-                    {!response.success ? (
-                      <span className="m-auto capitalize text-red-500">{response.message}</span>
+                    {!apiResponse?.data?.success ? (
+                      <span className="m-auto capitalize text-red-500">{apiResponse?.data?.message}</span>
                     ) : (
                       ''
                     )}
