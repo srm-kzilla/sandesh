@@ -2,10 +2,12 @@ import database from '../../loaders/database';
 import LoggerInstance from '../../loaders/logger';
 import { customAlphabet, urlAlphabet } from 'nanoid';
 import { decryptData, encryptData } from '../../shared/services/encryptionService';
-import { Key } from '../../shared/customTypes';
+import { ObjectId } from 'bson';
+import { KeyWithDecipher } from '../../shared/customTypes';
+import { Key } from './schema';
 
-function decryptKey(info) {
-  return [info._id, info.user, decryptData(info.key), info.isEnabled];
+function decryptKey(keys) {
+  return { _id: keys._id, user: keys.user, key: decryptData(keys.key), isEnabled: keys.isEnabled };
 }
 
 const nanoid = customAlphabet(urlAlphabet, 16);
@@ -16,7 +18,7 @@ export const generateKey = async (user: string): Promise<string> => {
     if (foundUser) throw Error('User already exists');
     const keyString = await nanoid();
 
-    const newKey: Key = {
+    const newKey: KeyWithDecipher = {
       user: user,
       key: encryptData(keyString),
       isEnabled: true,
@@ -26,14 +28,16 @@ export const generateKey = async (user: string): Promise<string> => {
     return keyString;
   } catch (error) {
     LoggerInstance.error(error);
-    if (error.message === 'User already exists') throw { code: 409, message: 'User already exists ' };
+    if (error.message === 'User already exists') throw { code: 409, message: 'User already exists' };
     throw Error('Error-' + error.message);
   }
 };
 
 export const toggleKey = async (_id: string, isEnabled: boolean): Promise<void> => {
   try {
-    await (await database()).collection('keys').updateOne({ _id }, { $set: { isEnabled } });
+    await (await database())
+      .collection('keys')
+      .updateOne({ _id: new ObjectId(_id) }, { $set: { isEnabled: isEnabled } });
   } catch (error) {
     LoggerInstance.error(error);
     throw Error('Error-' + error.message);
@@ -44,7 +48,7 @@ export const resetKey = async (_id: string): Promise<string> => {
   try {
     const newKeyString = await nanoid();
     const key = encryptData(newKeyString);
-    await (await database()).collection('keys').updateOne({ _id }, { $set: { key } });
+    await (await database()).collection('keys').updateOne({ _id: new ObjectId(_id) }, { $set: { key } });
     return newKeyString;
   } catch (error) {
     LoggerInstance.error(error);
@@ -52,7 +56,7 @@ export const resetKey = async (_id: string): Promise<string> => {
   }
 };
 
-export const fetchKeys = async (): Promise<string[][]> => {
+export const fetchKeys = async (): Promise<Key[]> => {
   try {
     const allKeys = await (await database()).collection('keys').find({}).toArray();
     return allKeys.map(decryptKey);
@@ -63,9 +67,9 @@ export const fetchKeys = async (): Promise<string[][]> => {
 };
 export const deleteKey = async (_id: string): Promise<void> => {
   try {
-    const key = await (await database()).collection('keys').findOne({ _id });
+    const key = await (await database()).collection('keys').findOne({ _id: new ObjectId(_id) });
     if (!key) throw Error('Key does not exist');
-    else await (await database()).collection('keys').findOneAndDelete({ _id });
+    else await (await database()).collection('keys').findOneAndDelete({ _id: new ObjectId(_id) });
   } catch (error) {
     LoggerInstance.error(error);
     if (error.message === 'Key does not exist') throw { code: 404, message: 'Key does not exist' };

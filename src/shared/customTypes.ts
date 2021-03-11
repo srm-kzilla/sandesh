@@ -38,7 +38,7 @@ export type Decipher = {
   content: string;
 };
 
-export type Key = {
+export type KeyWithDecipher = {
   user: string;
   key: Decipher;
   isEnabled: boolean;

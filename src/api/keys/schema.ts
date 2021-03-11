@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 export const keySchema = new yup.ObjectSchema({
+  _id: yup.string(),
   user: yup.string().required().trim(),
   key: new yup.ObjectSchema({
     iv: yup.string(),
@@ -7,3 +8,7 @@ export const keySchema = new yup.ObjectSchema({
   }),
   isEnabled: yup.boolean().default(true),
 });
+
+export const toggleKeySchema = new yup.ObjectSchema({ isEnabled: yup.boolean().required() });
+
+export type Key = yup.InferType<typeof keySchema>;
