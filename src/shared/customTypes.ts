@@ -32,3 +32,14 @@ export type User = {
   email: string; // Email of the user
   password: string; // Hashed password
 };
+
+export type Decipher = {
+  iv: string;
+  content: string;
+};
+
+export type KeyWithDecipher = {
+  user: string;
+  key: Decipher;
+  isEnabled: boolean;
+};
