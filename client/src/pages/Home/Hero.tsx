@@ -1,17 +1,13 @@
-import React from 'react';
-
-import { Link, useHistory } from 'react-router-dom';
-
+import React, { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Register, Login } from './Modal';
 import { HeroArt, FooterGraphic } from '../../assets/icons';
 import * as Unicons from '@iconscout/react-unicons';
+import { AuthContext } from '../../store/authContext';
 
-export interface HomeProps {
-  showModal: () => void;
-}
-
-const Home = ({ showModal }: HomeProps) => {
-  const history = useHistory();
-
+const Home = () => {
+  const [authModal, setAuthModal] = useState('hidden');
+  const { isAuth, signOut } = useContext(AuthContext);
   return (
     // TODO CHANGE TO FLEX
     <div className="min-h-screen pt-4 md:pt-0">
@@ -29,9 +25,28 @@ const Home = ({ showModal }: HomeProps) => {
             nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
             anim id est laborum.
           </div>
-          <Link to="/sends">
-            <button className="actionBtn">Explore Dashboard</button>
-          </Link>
+
+          {isAuth ? (
+            <div className="flex">
+              <Link to="/sends">
+                <button className="actionBtn">Explore Dashboard</button>
+              </Link>
+              <button className="actionBtn ml-2" onClick={signOut}>
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <button
+              className="actionBtn"
+              onClick={() => {
+                setAuthModal('login');
+              }}
+            >
+              Let Me in
+            </button>
+          )}
+          {authModal === 'register' ? <Register showModal={authModal} setShowModal={setAuthModal} /> : null}
+          {authModal === 'login' ? <Login showModal={authModal} setShowModal={setAuthModal} /> : null}
         </article>
         <HeroArt className=" w-72 h-auto md:min-w-xs my-8 md:w-2/5 md:ml-8" />
       </section>
@@ -72,6 +87,7 @@ const Home = ({ showModal }: HomeProps) => {
             // allowfullscreen=""
             aria-hidden="false"
             // tabindex="0"
+            title="srm map"
           ></iframe>
           <footer className="flex items-center text-xs xs:text-sm font-normal px-4 py-2">
             <Unicons.UilMapMarker className="mr-2 w-7 h-7 xs:w-8 xs:h-8 text-primary" />
@@ -85,20 +101,20 @@ const Home = ({ showModal }: HomeProps) => {
           </footer>
         </article>
       </section>
-      <footer className="relative">
+      <footer className="relative text-white">
         <FooterGraphic className="w-full" />
         <Unicons.UilLinkedinAlt
-          className="text-white cursor-pointer absolute top-10 transform -translate-x-1/2 transition-transform hover:-translate-y-1"
+          className="cursor-pointer absolute top-10 transform -translate-x-1/2 transition-transform hover:-translate-y-1"
           style={{ left: 'calc(50% - 3.75rem)' }}
         />
-        <Unicons.UilFacebookF className="text-white cursor-pointer absolute top-6 left-2/4 transform -translate-x-1/2 transition-transform hover:-translate-y-1" />
+        <Unicons.UilFacebookF className="cursor-pointer absolute top-6 left-2/4 transform -translate-x-1/2 transition-transform hover:-translate-y-1" />
         <Unicons.UilInstagram
-          className="text-white cursor-pointer absolute top-10 transform -translate-x-1/2 transition-transform hover:-translate-y-1"
+          className="cursor-pointer absolute top-10 transform -translate-x-1/2 transition-transform hover:-translate-y-1"
           style={{ left: 'calc(50% + 3.75rem)' }}
         />
         <section className="bg-primary pt-16 xxs:pt-10 xs:8 px-8">
           <div className="max-w-5xl mx-auto flex flex-wrap">
-            <article className="flex flex-col flex-1 text-white mr-4 mb-4">
+            <article className="flex flex-col flex-1  mr-4 mb-4">
               <h2 className="text-tertiary font-extrabold whitespace-nowrap">More About Us</h2>
               <a className="cursor-pointer text-sm">Everything</a>
               <a className="cursor-pointer text-sm">SRMKZILLA</a>
@@ -106,18 +122,18 @@ const Home = ({ showModal }: HomeProps) => {
               <a className="cursor-pointer text-sm">Blog</a>
               <a className="cursor-pointer text-sm">Us from last year</a>
             </article>
-            <article className="flex flex-col flex-1 text-white mr-4 mb-4">
+            <article className="flex flex-col flex-1 mr-4 mb-4">
               <h2 className="text-tertiary font-extrabold whitespace-nowrap">Related Information</h2>
               <a className="cursor-pointer text-sm">Privacy</a>
               <a className="cursor-pointer text-sm">Helpdesk</a>
             </article>
-            <article className="flex flex-col flex-1 text-white mr-4 mb-4">
+            <article className="flex flex-col flex-1 mr-4 mb-4">
               <h2 className="text-tertiary font-extrabold whitespace-nowrap">Workshops</h2>
               <a className="cursor-pointer text-sm">Hacktoberfest’20</a>
               <a className="cursor-pointer text-sm">Recruitments’20</a>
               <a className="cursor-pointer text-sm">Unlocking Linkedin</a>
             </article>
-            <article className="flex flex-col md:max-w-xs text-white mr-4 mb-4">
+            <article className="flex flex-col md:max-w-xs mr-4 mb-4">
               <h2 className="text-tertiary font-extrabold whitespace-nowrap">Community</h2>
               <span className="text-sm">
                 SRMKZILLA is proud to be an equal opportunity workplace. We are committed to equal volunteering
@@ -127,9 +143,7 @@ const Home = ({ showModal }: HomeProps) => {
             </article>
           </div>
         </section>
-        <section className="bg-primary px-4 text-center text-white py-1">
-          With your crazy friends on the SRMKZILLA team
-        </section>
+        <section className="bg-primary px-4 text-center py-1">With your crazy friends on the SRMKZILLA team</section>
       </footer>
     </div>
   );
