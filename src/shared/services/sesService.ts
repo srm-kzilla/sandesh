@@ -5,7 +5,7 @@ import Config from '../../config/index'
 const SES=new SESV2(Config.sesConfig);
 
 
-export const sendMail=async (email: string,subject: string,body: string,senderEmail: string)=>{
+export const sendMail=async (email: Array<string>,subject: string,body: string,senderEmail: string)=>{
         const Params={
           Content: { 
             Simple: {
@@ -27,7 +27,7 @@ export const sendMail=async (email: string,subject: string,body: string,senderEm
           },
           Destination: {
             ToAddresses: [
-              email
+              ...email
             ]
           },
           FromEmailAddress: `${senderEmail}@srmkzilla.net`,
