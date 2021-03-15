@@ -10,6 +10,10 @@ export const sendMail=async (email: string,subject: string,body: string,senderEm
           Content: { 
             Simple: {
               Body: { 
+                Html: {
+                  Data: body,
+                  Charset: 'Utf-8'
+                },
                 Text: {
                   Data: body, 
                   Charset: 'Utf-8'
