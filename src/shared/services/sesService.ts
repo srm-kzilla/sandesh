@@ -40,7 +40,7 @@ export const sendMail=async (email: Array<string>,subject: string,body: string,s
       }catch(error)
       {
          LoggerInstance.error(error)
-         throw{ code: 403, message: error}
+         throw{ code: 500, message: error}
       }   
 }
 
