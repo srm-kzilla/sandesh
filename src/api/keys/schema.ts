@@ -1,6 +1,5 @@
 import * as yup from 'yup';
 export const keySchema = new yup.ObjectSchema({
-  _id: yup.string(),
   user: yup.string().required().trim(),
   key: new yup.ObjectSchema({
     iv: yup.string(),
