@@ -9,6 +9,7 @@ const campaignSchema = {
   startFrom: yup.string().required().trim(),
   endAt: yup.string().required().trim(),
   isolatedEmails: yup.array().of(yup.string()).notRequired(),
+  typeOfCampaign: yup.string().required().oneOf(['single', 'campaign']),
 };
 
 const createCampaignSchema = new yup.ObjectSchema(campaignSchema);
@@ -16,6 +17,7 @@ const updateCampaignSchema = new yup.ObjectSchema({ ...campaignSchema, id: yup.s
 const deleteCampaignSchema = new yup.ObjectSchema({ property: yup.string().required().trim() });
 
 const app = Router();
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const campaignRouteHandler = () => {
   app.get('/', fetchCampaignsHandler);
   app.post('/', requestValidation('body', createCampaignSchema), createCampaignHandler);
