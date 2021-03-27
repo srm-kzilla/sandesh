@@ -17,7 +17,6 @@ const updateCampaignSchema = new yup.ObjectSchema({ ...campaignSchema, id: yup.s
 const deleteCampaignSchema = new yup.ObjectSchema({ property: yup.string().required().trim() });
 
 const app = Router();
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const campaignRouteHandler = () => {
   app.get('/', fetchCampaignsHandler);
   app.post('/', requestValidation('body', createCampaignSchema), createCampaignHandler);
