@@ -9,6 +9,7 @@ const campaignSchema = {
   startFrom: yup.string().required().trim(),
   endAt: yup.string().required().trim(),
   isolatedEmails: yup.array().of(yup.string()).notRequired(),
+  typeOfCampaign: yup.string().required().oneOf(['single', 'multiple']),
 };
 
 const createCampaignSchema = new yup.ObjectSchema(campaignSchema);
