@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-
+import {userDomains,UserDesigations} from '../../shared/constants'
 
 const userSchema = {
     email: yup.string().email().required().trim(),
@@ -14,9 +14,8 @@ export const userRegisterSchema = new yup.ObjectSchema({
     domain: yup
       .string()
       .test('UserDomain', 'Value does not match of type UserDomain', value => {
-        const domainArray = ['Technical', 'Sponsorship', 'Editorial', 'Events', 'Core'];
-        for (let i = 0; i < domainArray.length; i++) {
-          if (value === domainArray[i]) return true;
+        for (let i = 0; i < userDomains.length; i++) {
+          if (value === userDomains[i]) return true;
         }
         return false;
       })
@@ -25,9 +24,8 @@ export const userRegisterSchema = new yup.ObjectSchema({
     designation: yup
       .string()
       .test('UserDesignation', 'Value does not match of type UserDesignation', value => {
-        const domainArray = ['Executive Board', 'CTO', 'CFO', 'Editor-in-chief', 'Lead', 'Associate Lead', 'Member'];
-        for (let i = 0; i < domainArray.length; i++) {
-          if (value === domainArray[i]) return true;
+        for (let i = 0; i < UserDesigations.length; i++) {
+          if (value === UserDesigations[i]) return true;
         }
         return false;
       })

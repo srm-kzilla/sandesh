@@ -3,8 +3,8 @@ import {createCampaignSchema,updateCampaignSchema,deleteCampaignSchema} from './
 import { requestValidation } from '../../shared/middlewares/validationMiddleware';
 import { createCampaign, deleteCampaign, fetchCampaigns, updateCampaign } from './controller';
 
-
 const app = Router();
+
 export const campaignRouteHandler = () => {
   app.get('/', fetchCampaignsHandler);
   app.post('/', requestValidation('body', createCampaignSchema), createCampaignHandler);
