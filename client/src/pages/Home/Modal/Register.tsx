@@ -73,9 +73,9 @@ export const Register = ({ setShowModal }: RegisterProps) => {
               initialValues={{ name: '', email: '', password: '', domain: '', designation: '' }}
               validationSchema={validationSchema}
               onSubmit={async (data, { setSubmitting }) => {
-                const result: ResponseType = await postCode('register', data);
+                const result: ResponseType = await postCode('user/register', data);
                 if (result.data?.success) {
-                  const loginResult = await postCode('login', data);
+                  const loginResult = await postCode('user/login', data);
                   setApiResponse(loginResult);
                 }
                 setSubmitting(false);

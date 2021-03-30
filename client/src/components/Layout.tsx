@@ -1,5 +1,5 @@
-import React from "react";
-import Sidebar from "./Sidebar";
+import React from 'react';
+import Sidebar from './Sidebar';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -7,7 +7,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="min-h-screen pl-32 pr-4 py-4">
+    <div className="min-h-screen md:pl-24 pl-16 pr-4 py-4">
       <Sidebar />
       {children}
     </div>

@@ -40,6 +40,17 @@
     @apply focus:outline-none;
     @apply transition-colors hover:bg-primary hover:text-white;
   }
+
+  .toggleBtn {
+    @apply select-none;
+    @apply border-primary border-2;
+    @apply uppercase;
+    @apply rounded-md;
+    @apply font-semibold;
+    @apply px-4 py-1;
+    @apply focus:outline-none;
+    @apply transition-colors hover:bg-primary hover:text-white;
+  }
   .modal input,
   .modal select {
     @apply mx-auto my-1;
@@ -49,5 +60,17 @@
     @apply rounded-lg;
     @apply bg-gray-300;
     @apply outline-none;
+  }
+  td {
+    @apply py-5 px-1 bg-lightGray;
+    @apply break-words;
+  }
+
+  td:first-child {
+    @apply md:rounded-l-2xl;
+    @apply pl-0 md:pl-5;
+  }
+  td:last-child {
+    @apply md:rounded-r-2xl;
   }
 }

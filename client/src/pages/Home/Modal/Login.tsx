@@ -64,7 +64,7 @@ export const Login = ({ setShowModal }: LoginProps) => {
               validationSchema={validationSchema}
               onSubmit={async (data, { setSubmitting }) => {
                 setSubmitting(true);
-                const result = await postCode('login', data);
+                const result = await postCode('user/login', data);
                 setApiResponse(result);
                 setSubmitting(false);
               }}
