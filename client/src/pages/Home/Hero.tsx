@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Register, Login } from './Modal';
-import { HeroArt, FooterGraphic } from '../../assets/icons';
-import * as Unicons from '@iconscout/react-unicons';
+import { HeroArt } from '../../assets/icons';
+// import * as Unicons from '@iconscout/react-unicons';
 import { AuthContext } from '../../store/authContext';
 
 const Home = () => {
-  const [authModal, setAuthModal] = useState('hidden');
+  const [authModal, setAuthModal] = useState<'HIDDEN' | 'REGISTER' | 'LOGIN'>('HIDDEN');
   const { isAuth, signOut } = useContext(AuthContext);
   return (
     // TODO CHANGE TO FLEX
@@ -39,18 +39,18 @@ const Home = () => {
             <button
               className="actionBtn"
               onClick={() => {
-                setAuthModal('login');
+                setAuthModal('LOGIN');
               }}
             >
               Let Me in
             </button>
           )}
-          {authModal === 'register' ? <Register showModal={authModal} setShowModal={setAuthModal} /> : null}
-          {authModal === 'login' ? <Login showModal={authModal} setShowModal={setAuthModal} /> : null}
+          {authModal === 'REGISTER' && <Register showModal={authModal} setShowModal={setAuthModal} />}
+          {authModal === 'LOGIN' && <Login showModal={authModal} setShowModal={setAuthModal} />}
         </article>
         <HeroArt className=" w-72 h-auto md:min-w-xs my-8 md:w-2/5 md:ml-8" />
       </section>
-      <section className="px-8 max-w-6xl mx-auto flex flex-col md:flex-row justify-start md:justify-between items-center mb-14">
+      {/* <section className="px-8 max-w-6xl mx-auto flex flex-col md:flex-row justify-start md:justify-between items-center mb-14">
         <article className="max-w-lg mb-8 md:mb-0 flex-1">
           <h1 className="text-2xl xxs:text-3xl font-extrabold text-darkGray mb-2">
             <div className="h-8 xxs:h-10 w-2 mr-2 -ml-3 -mb-1 bg-tertiary inline-block"></div>
@@ -100,8 +100,8 @@ const Home = () => {
             </span>
           </footer>
         </article>
-      </section>
-      <footer className="relative text-white">
+      </section> */}
+      {/* <footer className="relative text-white">
         <FooterGraphic className="w-full" />
         <Unicons.UilLinkedinAlt
           className="cursor-pointer absolute top-10 transform -translate-x-1/2 transition-transform hover:-translate-y-1"
@@ -144,7 +144,7 @@ const Home = () => {
           </div>
         </section>
         <section className="bg-primary px-4 text-center py-1">With your crazy friends on the SRMKZILLA team</section>
-      </footer>
+      </footer> */}
     </div>
   );
 };
