@@ -108,7 +108,7 @@ export const Login = ({ setShowModal }: LoginProps) => {
                       onClick={() => {
                         setShowModal('REGISTER');
                       }}
-                      className="text-primary font-bold hover:underline"
+                      className="text-primary font-bold hover:underline cursor-pointer"
                     >
                       Register
                     </span>

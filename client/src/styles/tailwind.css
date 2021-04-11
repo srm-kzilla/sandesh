@@ -37,6 +37,7 @@
     @apply rounded-md;
     @apply font-semibold;
     @apply px-4 py-1;
+    @apply w-max;
     @apply focus:outline-none;
     @apply transition-colors hover:bg-primary hover:text-white;
   }
@@ -51,16 +52,27 @@
     @apply focus:outline-none;
     @apply transition-colors hover:bg-primary hover:text-white;
   }
-  .modal input,
-  .modal select {
-    @apply mx-auto my-1;
-    @apply p-4;
-    @apply text-base;
-    @apply w-80;
-    @apply rounded-lg;
-    @apply bg-gray-300;
-    @apply outline-none;
+
+  .selectInput {
+    @apply appearance-none cursor-pointer;
   }
+
+  .selectInput:invalid {
+    @apply text-secondary;
+  }
+
+  .selectInput option {
+    @apply text-black;
+  }
+
+  .selectInput option:disabled {
+    @apply text-gray-500;
+  }
+
+  .selectInput::-ms-expand {
+    @apply hidden;
+  }
+
   td {
     @apply py-5 px-1 bg-lightGray;
     @apply break-words;
