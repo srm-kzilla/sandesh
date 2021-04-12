@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { HomePage, KeysPage, SendsPage } from './pages';
 import { AuthContext } from './store/authContext';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function App() {
   const { isAuth } = useContext(AuthContext);
   return (
@@ -20,6 +23,7 @@ function App() {
           </Route>
         </Switch>
       </Router>
+      <ToastContainer />
     </>
   );
 }

@@ -1,20 +1,31 @@
 import { Formik, Field, Form, FormikTouched, FormikErrors } from 'formik';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useHistory } from 'react-router';
 import * as yup from 'yup';
+
 import { AuthContext } from '../../../store/authContext';
-import { postCode } from '../../../utils/api';
+import { handleRegister } from '../../../utils/api';
+import { Loader } from '../../../components';
+import { ModalPropTypes } from './';
 
 import * as Unicons from '@iconscout/react-unicons';
 
-interface RegisterProps {
-  setShowModal: React.Dispatch<React.SetStateAction<'HIDDEN' | 'REGISTER' | 'LOGIN'>>;
-  showModal: 'HIDDEN' | 'REGISTER' | 'LOGIN';
-}
-interface ResponseType {
-  data?: { success: boolean; message: string };
-  token?: string;
-}
+export const validationSchema = yup.object({
+  name: yup.string().required('Please enter your name'),
+  email: yup.string().email('Please enter a valid email').required('Email is required!'),
+  password: yup.string().required('Password is required!').min(6, 'Password too short!'),
+  designation: yup
+    .string()
+    .oneOf(
+      ['Executive Board', 'CTO', 'CFO', 'Editor-in-chief', 'Lead', 'Associate Lead', 'Member'],
+      'Invalid designation!',
+    )
+    .required('Please select your designation'),
+  domain: yup
+    .string()
+    .oneOf(['Technical', 'Sponsorship', 'Editorial', 'Events', 'Core'], 'Invalid domain!')
+    .required('Please select your domain'),
+});
 
 const handleError = (
   type: 'name' | 'email' | 'password' | 'domain' | 'designation',
@@ -38,35 +49,11 @@ const handleError = (
   }
 };
 
-export const Register = ({ setShowModal }: RegisterProps) => {
+export const Register = ({ setShowModal }: ModalPropTypes) => {
   const { login } = useContext(AuthContext);
   const history = useHistory();
-  const validationSchema = yup.object({
-    name: yup.string().required('Please enter your name'),
-    email: yup.string().email('Please enter a valid email').required('Email is required!'),
-    password: yup.string().required('Password is required!').min(6, 'Password too short!'),
-    designation: yup
-      .string()
-      .oneOf(
-        ['Executive Board', 'CTO', 'CFO', 'Editor-in-cheif', 'Lead', 'Associate Lead', 'Member'],
-        'Invalid designation!',
-      )
-      .required('Please select your designation'),
-    domain: yup
-      .string()
-      .oneOf(['Technical', 'Sponsorship', 'Editorial', 'Events', 'Core'], 'Invalid domain!')
-      .required('Please select your domain'),
-  });
-  const [apiResponse, setApiResponse] = useState<ResponseType | undefined>();
-  const [showPassword, setShowPassword] = useState(false);
 
-  useEffect(() => {
-    if (apiResponse?.data?.success) {
-      login(apiResponse.token as string);
-      setShowModal('HIDDEN');
-      history.push('/sends');
-    }
-  }, [apiResponse, login, setShowModal]);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <>
@@ -80,17 +67,17 @@ export const Register = ({ setShowModal }: RegisterProps) => {
             initialValues={{ name: '', email: '', password: '', domain: '', designation: '' }}
             validationSchema={validationSchema}
             onSubmit={async (data, { setSubmitting }) => {
-              const result: ResponseType = await postCode('user/register', data);
-              if (result.data?.success) {
-                const loginResult = await postCode('user/login', data);
-                setApiResponse(loginResult);
+              const result = await handleRegister(data);
+              if (result.success) {
+                login(result.token as string);
+                history.push('/sends');
               }
               setSubmitting(false);
             }}
           >
             {({ values, errors, touched, handleChange, isSubmitting }) => {
               return (
-                <Form className="pb-6 pt-2 mx-auto flex flex-col w-11/12">
+                <Form className="pb-6 pt-2 mx-auto flex flex-col sm:w-11/12">
                   <Field
                     placeholder="Name"
                     type="input"
@@ -171,7 +158,7 @@ export const Register = ({ setShowModal }: RegisterProps) => {
                   </div>
                   {handleError('designation', errors, touched)}
                   <button disabled={isSubmitting} type="submit" className="actionBtn self-center mt-4">
-                    Submit
+                    {isSubmitting ? <Loader /> : 'Submit'}
                   </button>
                   <footer className="cursor-default text-center mt-2">
                     Already registred?{' '}
@@ -184,11 +171,6 @@ export const Register = ({ setShowModal }: RegisterProps) => {
                       Login
                     </span>
                   </footer>
-                  {!apiResponse?.data?.success ? (
-                    <span className="m-auto capitalize text-red-500">{apiResponse?.data?.message}</span>
-                  ) : (
-                    ''
-                  )}
                 </Form>
               );
             }}

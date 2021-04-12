@@ -1,20 +1,14 @@
 import { Formik, Field, Form, FormikTouched, FormikErrors } from 'formik';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
+
 import { AuthContext } from '../../../store/authContext';
-import { postCode } from '../../../utils/api';
+import { handleLogin } from '../../../utils/api';
+import { Loader } from '../../../components';
+import { ModalPropTypes } from './';
 
 import * as Unicons from '@iconscout/react-unicons';
-
-interface LoginProps {
-  setShowModal: React.Dispatch<React.SetStateAction<'HIDDEN' | 'REGISTER' | 'LOGIN'>>;
-  showModal: 'HIDDEN' | 'REGISTER' | 'LOGIN';
-}
-interface ResponseType {
-  data?: { success: boolean; message: string };
-  token?: string;
-}
 
 const handleError = (
   type: 'email' | 'password',
@@ -32,7 +26,7 @@ const handleError = (
   }
 };
 
-export const Login = ({ setShowModal }: LoginProps) => {
+export const Login = ({ setShowModal }: ModalPropTypes) => {
   const { login } = useContext(AuthContext);
   const history = useHistory();
   const validationSchema = yup.object({
@@ -40,16 +34,7 @@ export const Login = ({ setShowModal }: LoginProps) => {
     password: yup.string().required('Password is required!').min(6, 'Password is atleast 8 characters long!'),
   });
 
-  const [apiResponse, setApiResponse] = useState<ResponseType | undefined>();
   const [showPassword, setShowPassword] = useState(false);
-
-  useEffect(() => {
-    if (apiResponse?.data?.success) {
-      login(apiResponse.token as string);
-      setShowModal('HIDDEN');
-      history.push('/sends');
-    }
-  }, [apiResponse, login, setShowModal]);
 
   return (
     <>
@@ -64,15 +49,17 @@ export const Login = ({ setShowModal }: LoginProps) => {
             initialValues={{ email: '', password: '' }}
             validationSchema={validationSchema}
             onSubmit={async (data, { setSubmitting }) => {
-              setSubmitting(true);
-              const result = await postCode('user/login', data);
-              setApiResponse(result);
+              const result = await handleLogin(data);
+              if (result.success) {
+                login(result.token as string);
+                history.push('/sends');
+              }
               setSubmitting(false);
             }}
           >
             {({ values, errors, touched, handleChange, isSubmitting }) => {
               return (
-                <Form className="pb-6 pt-2 mx-auto flex flex-col w-11/12">
+                <Form className="pb-6 pt-2 mx-auto flex flex-col sm:w-11/12">
                   <Field
                     placeholder="Email"
                     type="email"
@@ -100,7 +87,7 @@ export const Login = ({ setShowModal }: LoginProps) => {
                   </Field>
                   {handleError('password', errors, touched)}
                   <button disabled={isSubmitting} type="submit" className="actionBtn self-center mt-4">
-                    Log In
+                    {isSubmitting ? <Loader /> : 'Log In'}
                   </button>
                   <footer className="cursor-default text-center mt-2">
                     Don't have an account?{' '}
@@ -113,15 +100,13 @@ export const Login = ({ setShowModal }: LoginProps) => {
                       Register
                     </span>
                   </footer>
-                  {!apiResponse?.data?.success ? (
-                    <span className="m-auto capitalize text-red-500">{apiResponse?.data?.message}</span>
-                  ) : null}
                 </Form>
               );
             }}
           </Formik>
         </div>
       </div>
+
       <div className="opacity-75 fixed inset-0 z-30 bg-black"></div>
     </>
   );

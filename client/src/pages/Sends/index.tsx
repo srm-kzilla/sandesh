@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Layout, TableHeading, TableRow } from '../../components';
-import { getCode } from '../../utils/api';
+import { fetchCampaigns } from '../../utils/api';
 import * as Unicons from '@iconscout/react-unicons';
 
 const Sends = () => {
@@ -10,8 +10,8 @@ const Sends = () => {
   const [apiResponse, setApiResponse] = useState([]);
   useEffect(() => {
     const f = async () => {
-      const result: any = await getCode('campaign', {});
-      if (result) setApiResponse(result.data);
+      const result: any = await fetchCampaigns();
+      if (result) setApiResponse(result);
     };
     f();
   }, []);
