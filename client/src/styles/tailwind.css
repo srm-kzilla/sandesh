@@ -58,6 +58,13 @@
     @apply transition-colors hover:bg-primary hover:text-white;
   }
 
+  .textInput {
+    @apply bg-lightGray rounded-xl;
+    @apply w-full placeholder-secondary;
+    @apply px-4 py-3 outline-none;
+    @apply my-2;
+  }
+
   .selectInput {
     @apply appearance-none cursor-pointer;
   }
@@ -67,7 +74,7 @@
   }
 
   .selectInput option {
-    @apply text-black;
+    @apply text-black outline-none;
   }
 
   .selectInput option:disabled {
@@ -76,6 +83,10 @@
 
   .selectInput::-ms-expand {
     @apply hidden;
+  }
+
+  th:first-child {
+    @apply pl-4;
   }
 
   td {

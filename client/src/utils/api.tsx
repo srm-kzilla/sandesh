@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
 export const instance: AxiosInstance = axios.create({
-  baseURL: `/api`,
+  baseURL: `http://localhost:4000/api`,
 });
 
 export const handleRegister = async (payload: {}): Promise<any> => {
@@ -39,6 +39,18 @@ export const handleLogin = async (payload: {}): Promise<any> => {
 export const fetchCampaigns = async (): Promise<any> => {
   try {
     const res = await instance.get('/campaign');
+    if (!res.data.success) {
+      handleError(res.data.message);
+    }
+    return res.data;
+  } catch (err) {
+    handleError('Oops! Something went wrong.');
+    return false;
+  }
+};
+export const postCampaigns = async (payload: {}): Promise<any> => {
+  try {
+    const res = await instance.post('/campaign', payload);
     if (!res.data.success) {
       handleError(res.data.message);
     }

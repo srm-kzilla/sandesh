@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Layout, TableHeading, TableRow } from '../../components';
 import { fetchCampaigns } from '../../utils/api';
+import { CampaignModal } from '../../components';
 import * as Unicons from '@iconscout/react-unicons';
 
 const Sends = () => {
   const headings = ['title', 'mailing List', 'start From', 'end At'];
   const fields = ['title', 'mailingList', 'startFrom', 'endAt'];
-  const [type, setType] = useState<'all' | 'multiple' | 'single'>('multiple');
+  const [type, setType] = useState<'ALL' | 'MULTIPLE' | 'SINGLE'>('ALL');
   const [apiResponse, setApiResponse] = useState([]);
   useEffect(() => {
     const f = async () => {
@@ -23,20 +24,20 @@ const Sends = () => {
         </header>
         <div className="flex max-w-screen-md flex-wrap justify-center">
           <button
-            className={`toggleBtn md:m-4 mx-1 my-2 ` + (type === 'all' ? 'bg-primary text-white' : `text-primary`)}
-            onClick={() => setType('all')}
+            className={`toggleBtn md:m-4 mx-1 my-2 ` + (type === 'ALL' ? 'bg-primary text-white' : `text-primary`)}
+            onClick={() => setType('ALL')}
           >
             All
           </button>
           <button
-            className={`toggleBtn md:m-4 mx-1 my-2 ` + (type === 'multiple' ? 'bg-primary text-white' : `text-primary`)}
-            onClick={() => setType('multiple')}
+            className={`toggleBtn md:m-4 mx-1 my-2 ` + (type === 'MULTIPLE' ? 'bg-primary text-white' : `text-primary`)}
+            onClick={() => setType('MULTIPLE')}
           >
             Campaigns
           </button>
           <button
-            className={`toggleBtn md:m-4 mx-1 my-2 ` + (type === 'single' ? 'bg-primary text-white' : `text-primary`)}
-            onClick={() => setType('single')}
+            className={`toggleBtn md:m-4 mx-1 my-2 ` + (type === 'SINGLE' ? 'bg-primary text-white' : `text-primary`)}
+            onClick={() => setType('SINGLE')}
           >
             Singles
           </button>
@@ -56,6 +57,7 @@ const Sends = () => {
           <TableRow elements={apiResponse} fields={fields} headings={headings} type={type} />
         </tbody>
       </table>
+      <CampaignModal />
     </Layout>
   );
 };

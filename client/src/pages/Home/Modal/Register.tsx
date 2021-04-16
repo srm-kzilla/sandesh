@@ -45,7 +45,7 @@ const handleError = (
   }>,
 ) => {
   if (touched[type] && errors[type]) {
-    return <span className="text-red-500 font-medium text-sm mt-1">{errors[type]}</span>;
+    return <span className="text-red-500 font-medium text-sm ml-2 mb-1">{errors[type]}</span>;
   }
 };
 
@@ -60,7 +60,7 @@ export const Register = ({ setShowModal }: ModalPropTypes) => {
       <div className="bg-transparent fixed inset-0 flex justify-center z-50 py-4">
         <div className="z-50 relative dark:bg-darkGray my-auto bg-white min-h-80 rounded-xl px-6 py-4 mx-4 overflow-y-auto max-h-full  w-full max-w-lg">
           <div className="flex justify-between items-start">
-            <h3 className="text-3xl font-semibold">Register</h3>
+            <h3 className="text-3xl font-semibold mb-4">Register</h3>
             <Unicons.UilTimes className="cursor-pointer" onClick={() => setShowModal('HIDDEN')} />
           </div>
           <Formik
@@ -78,31 +78,21 @@ export const Register = ({ setShowModal }: ModalPropTypes) => {
             {({ values, errors, touched, handleChange, isSubmitting }) => {
               return (
                 <Form className="pb-6 pt-2 mx-auto flex flex-col sm:w-11/12">
-                  <Field
-                    placeholder="Name"
-                    type="input"
-                    name="name"
-                    className="bg-lightGray w-full rounded-xl mt-4 placeholder-secondary px-4 py-3 outline-none"
-                  />
+                  <Field placeholder="Name" type="input" name="name" className="textInput" />
                   {handleError('name', errors, touched)}
-                  <Field
-                    placeholder="Email"
-                    type="email"
-                    name="email"
-                    className="bg-lightGray w-full rounded-xl mt-4 placeholder-secondary px-4 py-3 outline-none"
-                  />
+                  <Field placeholder="Email" type="email" name="email" className="textInput" />
                   {handleError('email', errors, touched)}
                   <Field name="password">
                     {({ field, form, meta }: any) => (
-                      <div className="relative mt-4">
+                      <div className="relative mt-0">
                         <input
                           placeholder="Password"
                           type={showPassword ? 'text' : 'password'}
-                          className="bg-lightGray w-full rounded-xl placeholder-secondary pl-4 pr-12 py-3 outline-none"
+                          className="textInput "
                           {...field}
                         />
                         <span
-                          className="cursor-pointer absolute right-4 top-0 bottom-0 flex items-center"
+                          className="cursor-pointer absolute right-4 top-0 bottom-0 my-auto flex items-center"
                           onClick={() => setShowPassword(!showPassword)}
                         >
                           {showPassword ? <Unicons.UilEye size={20} /> : <Unicons.UilEyeSlash size={20} />}
@@ -111,14 +101,15 @@ export const Register = ({ setShowModal }: ModalPropTypes) => {
                     )}
                   </Field>
                   {handleError('password', errors, touched)}
-                  <div className="relative mt-4">
+                  <div className="relative ">
                     <select
                       name="domain"
                       onChange={handleChange}
+                      defaultValue=""
                       required
-                      className="selectInput bg-lightGray w-full rounded-xl placeholder-secondary px-4 py-3 outline-none"
+                      className="selectInput textInput"
                     >
-                      <option disabled selected value="">
+                      <option disabled value="">
                         Select Your Domain
                       </option>
                       <option value="Technical">Technical</option>
@@ -133,14 +124,15 @@ export const Register = ({ setShowModal }: ModalPropTypes) => {
                     />
                   </div>
                   {handleError('domain', errors, touched)}
-                  <div className="relative mt-4">
+                  <div className="relative">
                     <select
                       name="designation"
                       onChange={handleChange}
                       required
-                      className="selectInput bg-lightGray w-full rounded-xl placeholder-secondary px-4 py-3 outline-none"
+                      defaultValue=""
+                      className="selectInput textInput"
                     >
-                      <option disabled selected value="">
+                      <option disabled value="">
                         Select Your Designation
                       </option>
                       <option value="Executive Board">Executive Board</option>
@@ -157,7 +149,7 @@ export const Register = ({ setShowModal }: ModalPropTypes) => {
                     />
                   </div>
                   {handleError('designation', errors, touched)}
-                  <button disabled={isSubmitting} type="submit" className="actionBtn self-center mt-4">
+                  <button disabled={isSubmitting} type="submit" className="actionBtn self-center mt-2">
                     {isSubmitting ? <Loader /> : 'Submit'}
                   </button>
                   <footer className="cursor-default text-center mt-2">
