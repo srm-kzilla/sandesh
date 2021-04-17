@@ -13,22 +13,12 @@ export const userRegisterSchema = new yup.ObjectSchema({
     name: yup.string().required().trim(),
     domain: yup
       .string()
-      .test('UserDomain', 'Value does not match of type UserDomain', value => {
-        for (let i = 0; i < userDomains.length; i++) {
-          if (value === userDomains[i]) return true;
-        }
-        return false;
-      })
+      .oneOf([...userDomains])
       .required()
       .trim(),
     designation: yup
       .string()
-      .test('UserDesignation', 'Value does not match of type UserDesignation', value => {
-        for (let i = 0; i < userDesignations.length; i++) {
-          if (value === userDesignations[i]) return true;
-        }
-        return false;
-      })
+      .oneOf([...userDesignations])
       .required()
       .trim(),
 });
