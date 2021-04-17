@@ -43,3 +43,10 @@ export type KeyWithDecipher = {
   key: Decipher;
   isEnabled: boolean;
 };
+
+export type MailingList={
+  name: string;  // Name to Uniquely Identify the MailingList
+  description: string; //Defines the purpose to define the mailing List
+  emails: Array<string>; // Array of Mails to be put in Mailing List
+  createdOn: string;
+}

@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import {userDomains,UserDesigations} from '../../shared/constants'
+import {userDomains,userDesignations} from '../../shared/constants'
 
 const userSchema = {
     email: yup.string().email().required().trim(),
@@ -24,8 +24,8 @@ export const userRegisterSchema = new yup.ObjectSchema({
     designation: yup
       .string()
       .test('UserDesignation', 'Value does not match of type UserDesignation', value => {
-        for (let i = 0; i < UserDesigations.length; i++) {
-          if (value === UserDesigations[i]) return true;
+        for (let i = 0; i < userDesignations.length; i++) {
+          if (value === userDesignations[i]) return true;
         }
         return false;
       })
