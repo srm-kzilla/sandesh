@@ -4,6 +4,7 @@ import express from 'express';
 import helmet from 'helmet';
 import config from '../config';
 import routes from '../api';
+import { errorHandler, lastRoute } from '../shared/middlewares/errorHandlingMiddleware';
 
 export default ({ app }: { app: express.Application }): void => {
   /**
@@ -40,4 +41,10 @@ export default ({ app }: { app: express.Application }): void => {
 
   // Load API routes
   app.use(config.api.prefix, routes());
+
+  //Error Handling Middleware
+  app.use(errorHandler);
+
+  //Error Handling for Call to Not Defined Endpoints
+  app.use(lastRoute);
 };

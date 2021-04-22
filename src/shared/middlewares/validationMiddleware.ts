@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as yup from 'yup';
+import errorClass from '../error';
 
 type RequestLocation = 'query' | 'body';
 
@@ -17,7 +18,7 @@ export function requestValidation(location: RequestLocation, schema: yup.AnyObje
       await schema.validate(_location);
       next();
     } catch (err) {
-      res.status(500).json({ success: false, message: err.message });
+      next(new errorClass(err.message, 500));
     }
   };
 }

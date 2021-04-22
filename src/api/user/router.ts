@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { requestValidation } from '../../shared/middlewares/validationMiddleware';
 import { createUser, userLogin } from './controller';
-import {userLoginSchema,userRegisterSchema} from './schema'
+import { userLoginSchema, userRegisterSchema } from './schema';
 
 const app = Router();
 export const userRouteHandler = () => {
