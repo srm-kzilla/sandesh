@@ -4,8 +4,9 @@ export type Campaign = {
   createdBy: string; // Username of the creator
   mailingList: string; // Name of the mailing list associated with this campaign
   startFrom: string; // Date and time when the campaign starts
-  endAt: string; // Date and time when the campaign ends
-  isolatedEmails?: string[]; // Array of emails to send mail to (if the emails are not present in the mailing list)
+  scheduled: boolean;
+  subject: string;
+  senderMail: string;
 };
 
 export type CustomMail = {
@@ -44,9 +45,9 @@ export type KeyWithDecipher = {
   isEnabled: boolean;
 };
 
-export type MailingList={
-  name: string;  // Name to Uniquely Identify the MailingList
+export type MailingList = {
+  name: string; // Name to Uniquely Identify the MailingList
   description: string; //Defines the purpose to define the mailing List
   emails: Array<string>; // Array of Mails to be put in Mailing List
   createdOn: string;
-}
+};
