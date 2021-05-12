@@ -31,8 +31,15 @@ const Sidebar = () => {
             size={28}
             className={`${
               location.pathname === '/keys' ? 'text-white' : 'text-secondary'
+            } mb-4 cursor-pointer transition-all transform hover:-translate-y-1`}
+          />
+        </Link>
+        <Link to="/lists">
+          <Unicons.UilEnvelopes
+            size={28}
+            className={`${
+              location.pathname === '/lists' ? 'text-white' : 'text-secondary'
             } cursor-pointer transition-all transform hover:-translate-y-1`}
-            onClick={() => history.push('/keys')}
           />
         </Link>
         <span className="flex-1"></span>

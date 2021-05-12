@@ -39,12 +39,19 @@
     @apply px-4 py-1;
     @apply w-max;
     @apply focus:outline-none;
-    @apply transition-colors hover:bg-primary hover:text-white;
+    @apply transition-colors hover:bg-primary hover:text-white cursor-pointer;
   }
 
   .actionBtn:disabled {
     @apply text-primary;
     @apply bg-white;
+  }
+
+  .textInput {
+    @apply bg-lightGray rounded-xl;
+    @apply w-full placeholder-secondary;
+    @apply px-4 py-3 outline-none;
+    @apply my-2;
   }
 
   .toggleBtn {
@@ -146,5 +153,12 @@
     100% {
       transform: translate(24px, 0);
     }
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }

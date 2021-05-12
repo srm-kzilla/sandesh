@@ -5,26 +5,26 @@ interface TableRowProps {
     mailingList: string;
     startFrom: string;
     endAt: string;
-    typeOfCampaign: 'all' | 'multiple' | 'single';
+    typeOfCampaign: 'ALL' | 'MULTIPLE' | 'SINGLE';
   }[];
   fields: string[];
   headings: string[];
-  type: 'all' | 'multiple' | 'single';
+  type: 'ALL' | 'MULTIPLE' | 'SINGLE';
 }
 const TableRow = ({ elements, fields, headings, type }: TableRowProps) => {
   return (
     <>
       {elements.map((element: any) => {
-        if (type === 'all' || type === element.typeOfCampaign) {
+        if (type === 'ALL' || type === element.typeOfCampaign) {
           return (
             <>
-              <tr className="h-5"></tr>
-              <tr key={element.id} className="grid grid-cols-1 sm:grid-cols-2 md:table-row mx-auto">
+              <tr key={element._id + 'blank'} className="h-5"></tr>
+              <tr key={element._id} className="grid grid-cols-1 sm:grid-cols-2 md:table-row mx-auto">
                 <>
                   {fields.map((field, idx) => {
                     return (
-                      <td>
-                        <span key={element.id} className="capitalize font-bold inline-block md:hidden">
+                      <td key={idx}>
+                        <span key={element._id} className="capitalize font-bold inline-block md:hidden">
                           {headings[idx]}:&nbsp;
                         </span>
                         {element[field]}
