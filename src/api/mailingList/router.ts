@@ -6,7 +6,7 @@ import errorClass from '../../shared/error';
 
 export const mailingListHandler = (): Router => {
   const app = Router();
-  app.post('/create', requestValidation('body', createMailingListSchema), handelCreateMails);
+  app.post('/create', handelCreateMails);
   app.get('/getList', handelGetMails);
   return app;
 };
