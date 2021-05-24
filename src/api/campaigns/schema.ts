@@ -6,8 +6,9 @@ const campaignSchema = {
   startTime: yup.string().required().trim(),
   scheduled: yup.boolean().required(),
   subject: yup.string().required(),
-  senderMail: yup.string().required(),
+  senderMail: yup.string().notRequired(),
   launchStatus: yup.boolean().default(false).notRequired(),
+  fileName: yup.string().required(),
 };
 
 export const createCampaignSchema = new yup.ObjectSchema(campaignSchema);

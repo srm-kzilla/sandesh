@@ -3,7 +3,7 @@ import * as path from 'path';
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../Templates'));
+    cb(null, path.join(__dirname, '../templates'));
   },
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now() + '.html');

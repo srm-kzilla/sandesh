@@ -8,7 +8,8 @@ const app = Router();
 
 export const campaignRouteHandler = () => {
   app.get('/', fetchCampaignsHandler);
-  app.post('/', upload.single('template'), requestValidation('body', createCampaignSchema), createCampaignHandler);
+  app.post('/createCampaign', requestValidation('body', createCampaignSchema), createCampaignHandler);
+  app.post('/uploadTemplate', upload.single('template'), campaignTemplateHandler);
   app.put('/', requestValidation('body', updateCampaignSchema), updateCampaignHandler);
   app.delete('/', requestValidation('body', deleteCampaignSchema), deleteCampaignHandler);
   return app;
@@ -23,7 +24,7 @@ const fetchCampaignsHandler = async (req: Request, res: Response) => {
 
 const createCampaignHandler = async (req: Request, res: Response) => {
   try {
-    await createCampaign(req.body, req.file);
+    await createCampaign(req.body);
     res.json({ success: true, message: 'Campaign was created successfully' });
   } catch (error) {
     res.json({ success: false, message: error.message });
@@ -43,6 +44,14 @@ const deleteCampaignHandler = async (req: Request, res: Response) => {
   try {
     await deleteCampaign(req.body.property as string);
     res.json({ success: true, message: 'Campaign was deleted successfully' });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+const campaignTemplateHandler = async (req: Request, res: Response) => {
+  try {
+    res.json({ success: true, data: req.file.filename });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }

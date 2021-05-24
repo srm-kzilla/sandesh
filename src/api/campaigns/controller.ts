@@ -4,8 +4,8 @@ import LoggerInstance from '../../loaders/logger';
 import { Campaign } from '../../shared/customTypes';
 import { getCurrentDateTime } from '../../shared/utilities';
 import { sendMail } from '../../shared/services/sesService';
-import * as fs from 'fs';
-import * as path from 'path';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export const fetchCampaigns = async () => {
   try {
@@ -16,19 +16,18 @@ export const fetchCampaigns = async () => {
   }
 };
 
-export const createCampaign = async (body: any, file) => {
+export const createCampaign = async (body: any) => {
   try {
-    // To Do get createdBy property from logged in user
     const newCampaign: Campaign = { ...body };
     newCampaign.createdOn = getCurrentDateTime();
     const databaseResponse = await (await database()).collection('campaign').findOne({ title: newCampaign.title });
     if (databaseResponse !== null) throw Error('Existing campaign with same title');
     const mailList = await (await database()).collection('mailingList').findOne({ name: newCampaign.mailingList });
-    const Body = fs.readFileSync(path.join(__dirname, `../../shared/Templates/${file.filename}`), 'utf-8');
+    const Body = readFileSync(join(__dirname, `../../shared/templates/${body.fileName}`), 'utf-8');
     await sendMail(mailList.emails, newCampaign.subject, Body, newCampaign.senderMail);
     await (await database())
       .collection('campaign')
-      .insertOne({ ...newCampaign, launchStatus: true, templateName: file.filename });
+      .insertOne({ ...newCampaign, launchStatus: true, templateName: body.fileName });
   } catch (error) {
     LoggerInstance.error(error);
     throw Error('Unable to create a new campaign. Error - ' + error.message);
