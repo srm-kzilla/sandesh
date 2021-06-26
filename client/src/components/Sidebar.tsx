@@ -8,8 +8,8 @@ const Sidebar = () => {
   const location = useLocation();
 
   return (
-    <nav className="md:ml-4 ml-2 py-4 fixed top-0 bottom-0 left-0">
-      <div className="bg-primary flex flex-col items-center h-full px-1 sm:px-2 py-6 rounded-tr-3xl rounded-bl-3xl">
+    <nav className="md:ml-4 ml-2 py-2 fixed top-0 bottom-0 left-0">
+      <div className="bg-primary flex flex-col items-center h-full px-1 md:px-2 py-6 rounded-tr-3xl rounded-bl-3xl">
         <Link to="/">
           <MailIcon
             className="w-6 sm:w-8 transition-all transform hover:scale-110"

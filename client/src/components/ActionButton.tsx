@@ -13,6 +13,9 @@ interface ActionButtonProps {
 
   //Edit Mailing List
   MailingListData?: any;
+
+  //Id to delete/edit Campaign
+  element?: any;
 }
 
 const ActionButton = (props: ActionButtonProps) => {

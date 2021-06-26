@@ -86,7 +86,12 @@ module.exports = {
       },
     },
   },
-  variants: {},
+  variants: {
+    extend: {
+      margin: ['first'],
+      padding: ['first'],
+    },
+  },
   plugins: [],
   purge: {
     // Filenames to scan for classes

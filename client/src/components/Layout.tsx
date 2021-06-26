@@ -7,7 +7,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="min-h-screen md:pl-24 pl-16 pr-4 py-4">
+    <div className="min-h-screen md:pl-24 pl-14 pr-2 py-4">
       <Sidebar />
       {children}
     </div>

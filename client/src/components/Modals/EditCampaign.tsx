@@ -1,20 +1,11 @@
 import { Formik, Form, Field, FormikErrors, FormikTouched } from 'formik';
 import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
-import { postCampaigns, postFile } from '../../utils/api';
+import { updateCampaign } from '../../utils/api';
 import Loader from '../Loader';
 
 const handleError = (
-  type:
-    | 'title'
-    | 'mailingList'
-    | 'startTime'
-    | 'scheduled'
-    | 'subject'
-    | 'senderMail'
-    | 'launchStatus'
-    | 'fileName'
-    | 'file',
+  type: 'title' | 'mailingList' | 'startTime' | 'scheduled' | 'subject' | 'senderMail' | 'launchStatus' | 'fileName',
   errors: FormikErrors<{
     title: string;
     mailingList: string;
@@ -24,7 +15,6 @@ const handleError = (
     senderMail: string;
     launchStatus: boolean;
     fileName: string;
-    file: string;
   }>,
   touched: FormikTouched<{
     title: string;
@@ -35,7 +25,6 @@ const handleError = (
     senderMail: string;
     launchStatus: boolean;
     fileName: string;
-    file: string;
   }>,
 ) => {
   if (touched[type] && errors[type]) {
@@ -43,7 +32,13 @@ const handleError = (
   }
 };
 
-const CampaignModal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boolean>> }) => {
+const EditCampaign = ({
+  element,
+  setModal,
+}: {
+  element: any;
+  setModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const history = useHistory();
   const validationSchema = yup.object({
     title: yup.string().required().trim(),
@@ -54,40 +49,27 @@ const CampaignModal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAc
     senderMail: yup.string().notRequired(),
     launchStatus: yup.boolean().default(false).notRequired(),
     fileName: yup.string().required(),
-    file: yup.string().required(),
   });
   return (
     <div className=" p-6 flex felx-row mx-auto">
       <Formik
         validationSchema={validationSchema}
-        initialValues={{
-          title: '',
-          mailingList: '',
-          startTime: '',
-          scheduled: false,
-          subject: '',
-          senderMail: '',
-          launchStatus: false,
-          fileName: '',
-          file: '',
-        }}
+        initialValues={element}
         onSubmit={async (data, { setSubmitting }) => {
           setSubmitting(true);
-          // const result = await postCampaigns(data);
-          console.log(data.file);
-
-          const uploadFile = await postFile({ template: data.file });
-          if (uploadFile.success) {
+          data.id = element._id;
+          const result = await updateCampaign(data);
+          if (result.success) {
             history.go(0);
-            setModal(false);
           }
+          setModal(false);
           setSubmitting(false);
         }}
       >
         {({ values, errors, touched, handleChange, isSubmitting }) => {
           return (
             <Form className="pb-6 pt-2 mx-auto flex flex-col w-11/12">
-              <Field placeholder="Title" type="text" name="title" className="textInput" />
+              <Field placeholder="Title" type="text" name="title" className="textInput text-gray-500" disabled={true} />
               {handleError('title', errors, touched)}
 
               <Field placeholder="mailingList" type="text" name="mailingList" className="textInput" />
@@ -117,11 +99,8 @@ const CampaignModal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAc
               <Field placeholder="File Name " type="text" name="fileName" className="textInput" />
               {handleError('fileName', errors, touched)}
 
-              <Field placeholder="File" type="file" name="file" className="textInput" />
-              {handleError('file', errors, touched)}
-
               <button disabled={isSubmitting} type="submit" className="actionBtn self-center mt-3">
-                {isSubmitting ? <Loader /> : 'Create Campaign'}
+                {isSubmitting ? <Loader /> : 'Update Campaign'}
               </button>
             </Form>
           );
@@ -131,4 +110,4 @@ const CampaignModal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAc
   );
 };
 
-export default CampaignModal;
+export default EditCampaign;

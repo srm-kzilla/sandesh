@@ -85,16 +85,16 @@
     @apply hidden;
   }
 
-  td {
+  td.sends-table {
     @apply py-5 px-1 bg-lightGray;
     @apply break-words;
   }
 
-  td:first-child {
-    @apply md:rounded-l-2xl;
-    @apply pl-0 md:pl-5;
+  td.sends-table:first-child {
+    @apply rounded-t-lg md:rounded-tr-none md:rounded-l-2xl md:rounded-bl-none;
+    @apply md:pl-5;
   }
-  td:last-child {
+  td.sends-table:last-child {
     @apply md:rounded-r-2xl;
   }
 

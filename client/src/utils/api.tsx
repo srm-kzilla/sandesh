@@ -51,7 +51,45 @@ export const fetchCampaigns = async (): Promise<any> => {
 
 export const postCampaigns = async (payload: {}): Promise<any> => {
   try {
-    const res = await instance.post('/campaign', payload);
+    const res = await instance.post('/campaign/createCampaign', payload);
+    if (!res.data.success) {
+      handleError(res.data.message);
+    }
+    return res.data;
+  } catch (err) {
+    handleError('Oops! Something went wrong.');
+    return false;
+  }
+};
+
+export const postFile = async (payload: {}): Promise<any> => {
+  try {
+    const res = await instance.post('/campaign/uploadTemplate', payload);
+    if (!res.data.success) {
+      handleError(res.data.message);
+    }
+    return res.data;
+  } catch (err) {
+    handleError('Oops! Something went wrong.');
+    return false;
+  }
+};
+
+export const deleteCampaign = async (payload: {}): Promise<any> => {
+  try {
+    const res = await instance.delete('/campaign', payload);
+    if (!res.data.success) {
+      handleError(res.data.message);
+    }
+    return res.data;
+  } catch (err) {
+    handleError('Oops! Something went wrong.');
+    return false;
+  }
+};
+export const updateCampaign = async (payload: {}): Promise<any> => {
+  try {
+    const res = await instance.put('/campaign', payload);
     if (!res.data.success) {
       handleError(res.data.message);
     }
@@ -104,6 +142,45 @@ export const updateMailingList = async (payload: {}): Promise<any> => {
 export const deleteMailingLists = async (payload: {}): Promise<any> => {
   try {
     const res = await instance.delete('/mailingList/delete', payload);
+    if (!res.data.success) {
+      handleError(res.data.message);
+    }
+    return res.data;
+  } catch (err) {
+    handleError('Oops! Something went wrong.');
+    return false;
+  }
+};
+
+export const fetchKeys = async (): Promise<any> => {
+  try {
+    const res = await instance.get('/key/');
+    if (!res.data.success) {
+      handleError(res.data.message);
+    }
+    return res.data;
+  } catch (err) {
+    handleError('Oops! Something went wrong.');
+    return false;
+  }
+};
+
+export const postKey = async (payload: {}): Promise<any> => {
+  try {
+    const res = await instance.post('/key/', payload);
+    if (!res.data.success) {
+      handleError(res.data.message);
+    }
+    return res.data;
+  } catch (err) {
+    handleError('Oops! Something went wrong.');
+    return false;
+  }
+};
+
+export const deleteKey = async (payload: {}): Promise<any> => {
+  try {
+    const res = await instance.delete(`/key/${payload}`);
     if (!res.data.success) {
       handleError(res.data.message);
     }
