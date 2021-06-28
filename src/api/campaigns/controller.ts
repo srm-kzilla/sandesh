@@ -6,17 +6,19 @@ import { getCurrentDateTime } from '../../shared/utilities';
 import { sendMail } from '../../shared/services/sesService';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { NextFunction } from 'express';
+import errorClass from '../../shared/error';
 
-export const fetchCampaigns = async () => {
+export const fetchCampaigns = async (next: NextFunction) => {
   try {
     return await (await database()).collection('campaign').find({}).toArray();
   } catch (error) {
     LoggerInstance.error(error);
-    throw Error('Failed to get campaign data');
+    next(new errorClass('Error in getting Campaign Data', 501));
   }
 };
 
-export const createCampaign = async (body: any) => {
+export const createCampaign = async (body: any, next: NextFunction) => {
   try {
     const newCampaign: Campaign = { ...body };
     newCampaign.createdOn = getCurrentDateTime();
@@ -30,11 +32,11 @@ export const createCampaign = async (body: any) => {
       .insertOne({ ...newCampaign, launchStatus: true, templateName: body.fileName });
   } catch (error) {
     LoggerInstance.error(error);
-    throw Error('Unable to create a new campaign. Error - ' + error.message);
+    next(new errorClass('Error in Creating Campaign', 501));
   }
 };
 
-export const updateCampaign = async (body: any) => {
+export const updateCampaign = async (body: any, next: NextFunction) => {
   try {
     const { id, ...tembObj } = body;
     const newCampaign: Campaign = tembObj;
@@ -45,11 +47,11 @@ export const updateCampaign = async (body: any) => {
       .replaceOne({ _id: new ObjectId(id) }, { ...newCampaign, _id: new ObjectId(id) });
   } catch (error) {
     LoggerInstance.error(error);
-    throw Error('Unable to update campaign. Error - ' + error.message);
+    next(new errorClass('Error in Updating Campaign', 501));
   }
 };
 
-export const deleteCampaign = async (property: string) => {
+export const deleteCampaign = async (property: string, next: NextFunction) => {
   try {
     const databaseResponse = await (await database())
       .collection('campaign')
@@ -60,6 +62,6 @@ export const deleteCampaign = async (property: string) => {
       .deleteOne({ $or: [{ title: property }, { _id: new ObjectId(property) }] });
   } catch (error) {
     LoggerInstance.error(error);
-    throw Error('Unable to delete campaign. Error - ' + error.message);
+    next(new errorClass('Error in Deleting Campaign', 501));
   }
 };

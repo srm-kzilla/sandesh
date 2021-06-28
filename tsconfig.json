@@ -12,7 +12,8 @@
     "outDir": "./build",
     "allowJs": true,
     "noEmit": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "typeRoots": ["./src/shared/custom_typing", "./node_modules/@types"]
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules", "tests"]

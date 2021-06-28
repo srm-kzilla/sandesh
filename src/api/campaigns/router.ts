@@ -3,56 +3,60 @@ import { createCampaignSchema, updateCampaignSchema, deleteCampaignSchema } from
 import { requestValidation } from '../../shared/middlewares/validationMiddleware';
 import { createCampaign, deleteCampaign, fetchCampaigns, updateCampaign } from './controller';
 import { upload } from '../../shared/middlewares/multerMiddleware';
+import { authMiddleware } from '../../shared/middlewares/authMiddleware';
+import errorClass from '../../shared/error';
+import { NextFunction } from 'connect';
 
 const app = Router();
 
 export const campaignRouteHandler = () => {
-  app.get('/', fetchCampaignsHandler);
-  app.post('/createCampaign', requestValidation('body', createCampaignSchema), createCampaignHandler);
-  app.post('/uploadTemplate', upload.single('template'), campaignTemplateHandler);
-  app.put('/', requestValidation('body', updateCampaignSchema), updateCampaignHandler);
-  app.delete('/', requestValidation('body', deleteCampaignSchema), deleteCampaignHandler);
+  app.get('/', authMiddleware, fetchCampaignsHandler);
+  app.post('/createCampaign', authMiddleware, requestValidation('body', createCampaignSchema), createCampaignHandler);
+  app.post('/uploadTemplate', authMiddleware, upload.single('template'), campaignTemplateHandler);
+  app.put('/', authMiddleware, requestValidation('body', updateCampaignSchema), updateCampaignHandler);
+  app.delete('/', authMiddleware, requestValidation('body', deleteCampaignSchema), deleteCampaignHandler);
   return app;
 };
-const fetchCampaignsHandler = async (req: Request, res: Response) => {
+
+const fetchCampaignsHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await fetchCampaigns());
+    res.json(await fetchCampaigns(next));
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    next(new errorClass(error.message, 401));
   }
 };
 
-const createCampaignHandler = async (req: Request, res: Response) => {
+const createCampaignHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await createCampaign(req.body);
+    await createCampaign(req.body, next);
     res.json({ success: true, message: 'Campaign was created successfully' });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    next(new errorClass(error.message, 401));
   }
 };
 
-const updateCampaignHandler = async (req: Request, res: Response) => {
+const updateCampaignHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await updateCampaign(req.body);
+    await updateCampaign(req.body, next);
     res.json({ success: true, message: 'Campaign was updated successfully' });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    next(new errorClass(error.message, 401));
   }
 };
 
-const deleteCampaignHandler = async (req: Request, res: Response) => {
+const deleteCampaignHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await deleteCampaign(req.body.property as string);
+    await deleteCampaign(req.body.property as string, next);
     res.json({ success: true, message: 'Campaign was deleted successfully' });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    next(new errorClass(error.message, 401));
   }
 };
 
-const campaignTemplateHandler = async (req: Request, res: Response) => {
+const campaignTemplateHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.json({ success: true, data: req.file.filename });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    next(new errorClass(error.message, 401));
   }
 };
