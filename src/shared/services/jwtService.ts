@@ -5,6 +5,6 @@ export const signJwt = async (payload: any, options?: any) => {
   return await sign(payload, process.env.JWT_SECRET, options);
 };
 
-export const verifyJwt = async (token: string) => {
+export const verifyJwt = async (token: string): Promise<any> => {
   return await verify(token, process.env.JWT_SECRET);
 };

@@ -7,3 +7,7 @@ const mailingList = {
 };
 
 export const createMailingListSchema = new yup.ObjectSchema(mailingList);
+
+export const updateMailingListSchema = new yup.ObjectSchema({ ...mailingList, id: yup.string().required().trim() });
+
+export const deleteSchema = new yup.ObjectSchema({ id: yup.string().required().trim() });

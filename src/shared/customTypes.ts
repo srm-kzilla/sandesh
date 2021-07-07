@@ -53,3 +53,9 @@ export type MailingList = {
   emails: Array<string>; // Array of Mails to be put in Mailing List
   createdOn: string;
 };
+
+export type UserPayload = {
+  email: string;
+  name: string;
+  iet: number;
+};
