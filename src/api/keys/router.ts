@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express';
 import { generateKey, resetKey, toggleKey, fetchKeys, deleteKey } from './controller';
 import { requestValidation } from '../../shared/middlewares/validationMiddleware';
 import { keySchema, toggleKeySchema } from './schema';
+import { authMiddleware } from '../../shared/middlewares/authMiddleware';
 
 const getAllKeysHandler = async (req: Request, res: Response) => {
   try {
@@ -49,10 +50,10 @@ const deleteKeyHandler = async (req: Request, res: Response) => {
 };
 const app = Router();
 export const apiKeyRouteHandler = (): Router => {
-  app.get('/', getAllKeysHandler);
-  app.put('/toggle/:id', requestValidation('body', toggleKeySchema), toggleKeyHandler);
-  app.put('/reset/:id', resetKeyHandler);
-  app.post('/', requestValidation('body', keySchema), generateKeyHandler);
-  app.delete('/:id', deleteKeyHandler);
+  app.get('/', authMiddleware, getAllKeysHandler);
+  app.put('/toggle/:id', authMiddleware, requestValidation('body', toggleKeySchema), toggleKeyHandler);
+  app.put('/reset/:id', authMiddleware, resetKeyHandler);
+  app.post('/', authMiddleware, requestValidation('body', keySchema), generateKeyHandler);
+  app.delete('/:id', authMiddleware, deleteKeyHandler);
   return app;
 };

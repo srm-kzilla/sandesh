@@ -3,7 +3,7 @@ import * as yup from 'yup';
 const campaignSchema = {
   title: yup.string().required().trim(),
   mailingList: yup.string().required().trim(),
-  startTime: yup.string().required().trim(),
+  startTime: yup.string().required(),
   scheduled: yup.boolean().required(),
   subject: yup.string().required(),
   senderMail: yup.string().notRequired(),
