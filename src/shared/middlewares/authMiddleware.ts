@@ -9,7 +9,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
   try {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
-    if (token == null) throw Error('Invalid Request');
+    if (token === null) throw Error('Invalid Request');
     const payload: UserPayload = await verifyJwt(token);
     req.user = payload;
     next();

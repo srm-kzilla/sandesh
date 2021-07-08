@@ -1,13 +1,17 @@
 import express from 'express';
-
 import config from './config';
 import Loaders from './loaders';
 import Logger from './loaders/logger';
+import { intializeScheduler, startScheduler } from './shared/scheduler';
 
 async function startServer() {
   const app = express();
 
   await Loaders({ expressApp: app });
+
+  await intializeScheduler();
+
+  await startScheduler();
 
   app
     .listen(config.port, () => {
