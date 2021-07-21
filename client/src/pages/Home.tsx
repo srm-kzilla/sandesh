@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Register, Login } from './Modal';
-import { HeroArt } from '../../assets/icons';
+import { Login, Register } from '../components/Modals';
+import { HeroArt } from '../assets/icons';
 // import * as Unicons from '@iconscout/react-unicons';
-import { AuthContext } from '../../store/authContext';
+import { AuthContext } from '../store/authContext';
+import { ActionButton } from '../components';
 
 const Home = () => {
   const [authModal, setAuthModal] = useState<'HIDDEN' | 'REGISTER' | 'LOGIN'>('HIDDEN');
@@ -37,21 +38,19 @@ const Home = () => {
                 </button>
               </div>
             ) : (
-              <button
+              <ActionButton
                 className="actionBtn"
-                onClick={() => {
-                  setAuthModal('LOGIN');
-                }}
-              >
-                Let Me in
-              </button>
+                Title={<div>Let me in</div>}
+                Type={authModal === 'REGISTER' ? Register : Login}
+                showModal={authModal}
+                setShowModal={setAuthModal}
+                Heading={authModal === 'REGISTER' ? 'Register' : 'Login'}
+              />
             )}
           </article>
           <HeroArt className=" w-72 h-auto md:min-w-xs my-8 md:w-2/5 md:ml-8" />
         </section>
       </div>
-      {authModal === 'REGISTER' && <Register showModal={authModal} setShowModal={setAuthModal} />}
-      {authModal === 'LOGIN' && <Login showModal={authModal} setShowModal={setAuthModal} />}
     </>
   );
 };

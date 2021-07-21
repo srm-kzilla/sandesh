@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import './styles/index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import AuthContextProvider from "./store/authContext";
+import AuthContextProvider from './store/authContext';
 
 ReactDOM.render(
   <AuthContextProvider>
     <App />
   </AuthContextProvider>,
-  document.getElementById("root")
+  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

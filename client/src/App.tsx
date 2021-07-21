@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import { HomePage, KeysPage, SendsPage } from './pages';
+import { HomePage, KeysPage, SendsPage, MailingListsPage } from './pages';
 import { AuthContext } from './store/authContext';
 
 import { ToastContainer } from 'react-toastify';
@@ -20,6 +20,9 @@ function App() {
           </Route>
           <Route exact path="/keys">
             {isAuth ? <KeysPage /> : <Redirect to="/" />}
+          </Route>
+          <Route exact path="/lists">
+            {isAuth ? <MailingListsPage /> : <Redirect to="/" />}
           </Route>
         </Switch>
       </Router>
