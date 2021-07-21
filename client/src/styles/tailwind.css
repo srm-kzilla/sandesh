@@ -39,12 +39,19 @@
     @apply px-4 py-1;
     @apply w-max;
     @apply focus:outline-none;
-    @apply transition-colors hover:bg-primary hover:text-white;
+    @apply transition-colors hover:bg-primary hover:text-white cursor-pointer;
   }
 
   .actionBtn:disabled {
     @apply text-primary;
     @apply bg-white;
+  }
+
+  .textInput {
+    @apply bg-lightGray rounded-xl;
+    @apply w-full placeholder-secondary;
+    @apply px-4 py-3 outline-none;
+    @apply my-2;
   }
 
   .toggleBtn {
@@ -78,16 +85,16 @@
     @apply hidden;
   }
 
-  td {
-    @apply py-5 px-1 bg-lightGray;
+  td.table-data {
+    @apply py-2 px-1 bg-lightGray;
     @apply break-words;
   }
 
-  td:first-child {
-    @apply md:rounded-l-2xl;
-    @apply pl-0 md:pl-5;
+  td.table-data:first-child {
+    @apply rounded-t-lg md:rounded-tr-none md:rounded-l-2xl md:rounded-bl-none;
+    @apply md:pl-5;
   }
-  td:last-child {
+  td.table-data:last-child {
     @apply md:rounded-r-2xl;
   }
 
@@ -146,5 +153,12 @@
     100% {
       transform: translate(24px, 0);
     }
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }

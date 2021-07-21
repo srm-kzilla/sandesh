@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 export const AuthContext = React.createContext({
   isAuth: false,
@@ -20,7 +20,8 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   };
 
   const login = (token: string) => {
-    localStorage.setItem('token', token);
+    const BearerToken = `Bearer ${token}`;
+    localStorage.setItem('token', BearerToken);
     setIsAuth(true);
   };
 
