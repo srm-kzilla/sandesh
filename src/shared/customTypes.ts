@@ -3,12 +3,14 @@ export type Campaign = {
   createdOn: string; // Date and time of creation
   createdBy: string; // Username of the creator
   mailingList: string; // Name of the mailing list associated with this campaign
-  startFrom: string; // Date and time when the campaign starts
+  startTime: string; // Date and time when the campaign starts
   scheduled: boolean; // True if campaign is scheduled.
   subject: string;
   senderMail: string;
   endAt: string; //Date and time when campaign ends
   fileName: string; //Name of the Template stored in templates folder
+  csvFileName: string; //Name of the CSV file stored in template folder
+  dynamic: boolean; // Indicates Wheather CSV is required or not
 };
 
 export type CustomMail = {
