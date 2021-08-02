@@ -2,7 +2,7 @@ import { Formik, Form, Field, FormikErrors, FormikTouched } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 import { postCampaigns, updateCampaign } from '../../utils/api';
-import { postFile } from '../../utils/uploadFile';
+import { postTemplate, postCsv } from '../../utils/uploadFile';
 import Loader from '../Loader';
 import { CampaignInput } from '../../utils/interfaces';
 import { toBackend, toFrontend } from '../../utils/FormatDate';
@@ -18,7 +18,7 @@ const formatDate = (data: CampaignInput) => {
 };
 
 const handleError = (
-  type: 'title' | 'mailingList' | 'start_date' | 'start_time' | 'scheduled' | 'subject' | 'senderMail',
+  type: 'title' | 'mailingList' | 'start_date' | 'start_time' | 'scheduled' | 'subject' | 'senderMail' | 'dynamic',
   errors: FormikErrors<CampaignInput>,
   touched: FormikTouched<CampaignInput>,
 ) => {
@@ -40,14 +40,24 @@ const CampaignModal = ({
     title: yup.string().required().trim(),
     mailingList: yup.string().required().trim(),
 
-    start_time: yup.string().required().trim(),
-    start_date: yup.string().required().trim(),
+    start_time: yup.string().when('scheduled', {
+      is: true,
+      then: yup.string().required(''),
+    }),
+    start_date: yup.string().when('scheduled', {
+      is: true,
+      then: yup.string().required(''),
+    }),
 
     scheduled: yup.boolean().required(),
+
     subject: yup.string().required(),
     senderMail: yup.string().notRequired(),
+
+    dynamic: yup.boolean().required(),
   });
-  const [file, setFile] = useState<any>();
+  const [template, setTemplate] = useState<any>();
+  const [csv, setCsv] = useState<any>();
 
   let createOrUpdate: React.MutableRefObject<'create' | 'update'> = useRef('create');
   useEffect(() => {
@@ -64,33 +74,43 @@ const CampaignModal = ({
           CampaignData
             ? {
                 ...CampaignData,
-                start_time: toFrontend(CampaignData.startTime).time,
-                start_date: '2021-' + toFrontend(CampaignData.startTime).date,
+                start_time: toFrontend(CampaignData.startTime, 'input').time,
+                start_date: toFrontend(CampaignData.startTime, 'input').date,
               }
             : {
                 title: '',
                 mailingList: '',
-                start_time: '',
-                start_date: '',
+                startTime: ' ',
                 scheduled: false,
                 subject: '',
                 senderMail: '',
                 fileName: '',
-                startTime: '',
+                csvFileName: ' ',
+                dynamic: false,
+
+                start_time: '',
+                start_date: '',
               }
         }
         onSubmit={async (data, { setSubmitting }) => {
           setSubmitting(true);
+          let formattedData: CampaignInput = data;
+          if (data.scheduled) formattedData = formatDate(data);
 
-          const formattedData: CampaignInput = formatDate(data);
-          let uploadFile: any;
+          let uploadTemplate: any;
+          let uploadCsv: any;
 
-          if (file) uploadFile = await postFile(file);
+          if (template) uploadTemplate = await postTemplate(template);
+          if (data.dynamic) uploadCsv = await postCsv(csv);
 
-          if (createOrUpdate.current === 'update' || uploadFile.success) {
-            if (file) {
-              data.fileName = uploadFile.data;
-              formattedData.fileName = uploadFile.data;
+          if (createOrUpdate.current === 'update' || uploadTemplate.success) {
+            if (template) {
+              data.fileName = uploadTemplate.data;
+              formattedData.fileName = uploadTemplate.data;
+            }
+            if (data.dynamic && csv) {
+              data.csvFileName = uploadCsv.data;
+              formattedData.csvFileName = uploadCsv.data;
             }
 
             let result: any;
@@ -122,17 +142,21 @@ const CampaignModal = ({
               <Field placeholder="mailingList" type="text" name="mailingList" className="textInput" />
               {handleError('mailingList', errors, touched)}
 
-              <Field placeholder="Start From" type="date" name="start_date" className="textInput cursor-pointer" />
-              {handleError('start_date', errors, touched)}
-
-              <Field placeholder="Start From" type="time" name="start_time" className="textInput cursor-pointer" />
-              {handleError('start_time', errors, touched)}
-
               <label className="flex items-center w-full cursor-pointer pl-2">
                 <Field placeholder="Scheduled" type="checkbox" name="scheduled" className="mr-4 my-4" />
                 {handleError('scheduled', errors, touched)}
                 <div>Scheduled</div>
               </label>
+
+              {values.scheduled && (
+                <Field placeholder="Start From" type="date" name="start_date" className="textInput cursor-pointer" />
+              )}
+              {handleError('start_date', errors, touched)}
+
+              {values.scheduled && (
+                <Field placeholder="Start From" type="time" name="start_time" className="textInput cursor-pointer" />
+              )}
+              {handleError('start_time', errors, touched)}
 
               <Field placeholder="Subject" type="text" name="subject" className="textInput" />
               {handleError('subject', errors, touched)}
@@ -144,11 +168,30 @@ const CampaignModal = ({
                 name="file"
                 onChange={e => {
                   if (e.target.files && e.target.files.length > 0) {
-                    setFile(e.target.files[0]);
+                    setTemplate(e.target.files[0]);
                   }
                 }}
                 className="textInput"
               />
+
+              <label className="flex items-center w-full cursor-pointer pl-2">
+                <Field placeholder="Scheduled" type="checkbox" name="dynamic" className="mr-4 my-4" />
+                {handleError('dynamic', errors, touched)}
+                <div>Dynamic</div>
+              </label>
+
+              {values.dynamic && (
+                <input
+                  type="file"
+                  name="csvFile"
+                  onChange={e => {
+                    if (e.target.files && e.target.files.length > 0) {
+                      setCsv(e.target.files[0]);
+                    }
+                  }}
+                  className="textInput"
+                />
+              )}
 
               <button disabled={isSubmitting} type="submit" className="actionBtn self-center mt-3">
                 {isSubmitting ? <Loader /> : `${CampaignData ? 'Update' : 'Create'} Campaign`}

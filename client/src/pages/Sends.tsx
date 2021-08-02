@@ -13,7 +13,8 @@ const Sends = () => {
     'subject',
     'sender Mail',
     'launch Status',
-    'file Name',
+    'dynamic',
+    // 'file Name',
   ];
   const fields = [
     'title',
@@ -23,7 +24,8 @@ const Sends = () => {
     'subject',
     'senderMail',
     'launchStatus',
-    'fileName',
+    'dynamic',
+    // 'fileName',
   ];
   const [apiResponse, setApiResponse] = useState<any>([]);
 

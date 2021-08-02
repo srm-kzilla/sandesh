@@ -130,8 +130,6 @@ export const updateMailingList = async (payload: {}): Promise<any> => {
 };
 
 export const deleteMailingLists = async (payload: {}): Promise<any> => {
-  console.log(payload);
-
   try {
     const res = await instance.delete('/mailingList', { data: payload });
     if (!res.data.success) {

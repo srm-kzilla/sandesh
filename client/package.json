@@ -8,12 +8,10 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.6.3",
-    "@types/multer": "^1.4.5",
     "autoprefixer": "10.x",
     "axios": "^0.21.1",
     "cross-env": "7.x",
     "formik": "^2.2.6",
-    "multer": "^1.4.2",
     "npm-run-all": "4.x",
     "postcss": "8.x",
     "postcss-cli": "8.x",
@@ -24,7 +22,8 @@
     "react-scripts": "4.0.2",
     "react-toastify": "^7.0.3",
     "tailwindcss": "2.x",
-    "typescript": "4.x"
+    "typescript": "4.x",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",

@@ -14,7 +14,7 @@ const Modal = (props: ModalProps) => {
   return (
     <div>
       <div className="bg-transparent fixed inset-0 flex justify-center z-50 w-screen">
-        <div className="z-50 text-base lg:text-lg relative dark:bg-darkGray my-auto bg-white min-h-80 rounded-xl p-4 mx-4 overflow-y-auto max-h-screen w-full max-w-lg">
+        <div className="z-50 text-base lg:text-lg relative dark:bg-darkGray my-auto bg-white min-h-80 rounded-xl p-4 mx-4 overflow-y-auto max-h-full w-full max-w-lg ">
           <div className="flex justify-between">
             <h3 className="text-3xl font-semibold capitalize">{props.Heading || props.Title}</h3>
             <span

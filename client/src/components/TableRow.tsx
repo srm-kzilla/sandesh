@@ -56,8 +56,10 @@ const MakeRows = (fields: string[], headings: string[], element: any) => {
           </span>
         ) : (
           <span>
-            {field === 'startTime'
-              ? toFrontend(element[field].toString()).date + ' ' + toFrontend(element[field].toString()).time
+            {field === 'startTime' && element.scheduled === true
+              ? toFrontend(element[field].toString(), 'display').date +
+                ' at ' +
+                toFrontend(element[field].toString(), 'display').time
               : element[field].toString()}
           </span>
         )}
