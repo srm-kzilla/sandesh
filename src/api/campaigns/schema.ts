@@ -9,6 +9,8 @@ const campaignSchema = {
   senderMail: yup.string().notRequired(),
   launchStatus: yup.boolean().default(false).notRequired(),
   fileName: yup.string().required(),
+  csvFileName: yup.string().default('NA').required(),
+  dynamic: yup.boolean().required(),
 };
 
 export const createCampaignSchema = new yup.ObjectSchema(campaignSchema);

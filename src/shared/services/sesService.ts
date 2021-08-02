@@ -29,8 +29,7 @@ export const sendMail = async (email: Array<string>, subject: string, body: stri
     Destination: {
       ToAddresses: [...email],
     },
-    // FromEmailAddress: `${senderEmail}@srmkzilla.net`,
-    FromEmailAddress: `${senderEmail}@gmail.com`,
+    FromEmailAddress: `${senderEmail}@srmkzilla.net`,
     ReplyToAddresses: replyToAddresses,
   };
   try {

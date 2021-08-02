@@ -4,15 +4,15 @@ import { join } from 'path';
 import LoggerInstance from '../loaders/logger';
 import database from '../loaders/database';
 import { sendMail } from './services/sesService';
-
+import csv from 'csvtojson';
+import { generateTemplateFromString } from './services/templateService';
 export var scheduledCampaigns = [];
 
 export const startScheduler = async () => {
   try {
-    scheduledCampaigns = scheduledCampaigns.map(campaignData => {
+    scheduledCampaigns.map(campaignData => {
       const scheduledTime = campaignData.startTime.split(' ');
       const [min, hour, day, mon, week] = scheduledTime;
-
       const task = schedule(`${min} ${hour} ${day} ${mon} ${week}`, async () => {
         const Body = readFileSync(join(__dirname, `./templates/${campaignData.fileName}`), 'utf-8');
 
@@ -20,7 +20,15 @@ export const startScheduler = async () => {
           .collection('mailingList')
           .findOne({ name: campaignData.mailingList });
 
-        await sendMail(mailingListData.emails, campaignData.subject, Body, campaignData.senderMail);
+        if (campaignData.dynamic == 'true') {
+          const jsonArray = await csv().fromFile(join(__dirname, `./templates/${campaignData.csvFileName}`));
+          await mailingListData.emails.map(async (email, i) => {
+            const updatedBody = generateTemplateFromString(Body, jsonArray[i]);
+            await sendMail([email], campaignData.subject, updatedBody, campaignData.senderMail);
+          });
+        } else {
+          await sendMail(mailingListData.emails, campaignData.subject, Body, campaignData.senderMail);
+        }
 
         await (await database())
           .collection('campaign')
@@ -38,7 +46,7 @@ export const startScheduler = async () => {
 export const intializeScheduler = async () => {
   try {
     const data = await (await database()).collection('campaign').find({ launchStatus: false }).toArray();
-    scheduledCampaigns = [...data];
+    if (data.length > 0) scheduledCampaigns = [...data];
   } catch (error) {
     LoggerInstance.error(error);
   }
