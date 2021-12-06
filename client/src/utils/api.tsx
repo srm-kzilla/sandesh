@@ -1,12 +1,16 @@
 import axios, { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
+
+const token = localStorage.getItem('token');
+
 export const instance: AxiosInstance = axios.create({
   baseURL: `/api`,
 
   headers: {
-    authorization: localStorage.getItem('token'),
+    authorization: token,
   },
 });
+
 export const handleRegister = async (payload: {}): Promise<any> => {
   try {
     const res = await instance.post('/user/register', payload);
@@ -52,14 +56,16 @@ export const fetchCampaigns = async (): Promise<any> => {
   }
 };
 
-export const postCampaigns = async (payload: {}): Promise<any> => {
+export const postCampaigns = async (payload: any): Promise<any> => {
   try {
+    console.log(payload);
+
     const res = await instance.post('/campaign/createCampaign', payload);
     if (!res.data.success) {
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
+  } catch (err: any) {
     handleError('Oops! Something went wrong.');
     return false;
   }
@@ -79,6 +85,8 @@ export const deleteCampaign = async (payload: {}): Promise<any> => {
 };
 export const updateCampaign = async (payload: {}): Promise<any> => {
   try {
+    console.log(payload);
+
     const res = await instance.put('/campaign', payload);
     if (!res.data.success) {
       handleError(res.data.message);
@@ -130,8 +138,6 @@ export const updateMailingList = async (payload: {}): Promise<any> => {
 };
 
 export const deleteMailingLists = async (payload: {}): Promise<any> => {
-  console.log(payload);
-
   try {
     const res = await instance.delete('/mailingList', { data: payload });
     if (!res.data.success) {

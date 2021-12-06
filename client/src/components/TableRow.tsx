@@ -5,14 +5,7 @@ import { toFrontend } from '../utils/FormatDate';
 import { CreateCampaign, YesNo } from './Modals';
 
 interface TableRowProps {
-  elements: {
-    id?: number;
-    title?: string;
-    mailingList: string;
-    startFrom?: string;
-    endAt?: string;
-    data?: any;
-  }[];
+  elements: any[];
   fields: string[];
   headings: string[];
   from: 'sends' | 'keys';
@@ -57,7 +50,11 @@ const MakeRows = (fields: string[], headings: string[], element: any) => {
         ) : (
           <span>
             {field === 'startTime'
-              ? toFrontend(element[field].toString()).date + ' ' + toFrontend(element[field].toString()).time
+              ? element.scheduled
+                ? toFrontend(element[field].toString(), 'display').date +
+                  ' at ' +
+                  toFrontend(element[field].toString(), 'display').time
+                : ''
               : element[field].toString()}
           </span>
         )}
@@ -89,19 +86,22 @@ const EditDeleteCampagin = (element: any, updateData: () => {}) => (
       />
     </td>
     <td>
-      <ActionButton
-        Type={CreateCampaign}
-        Title={
-          <div className="flex items-center">
-            <Unicons.UilEdit size={20} />
-            &nbsp;Edit
-          </div>
-        }
-        CampaignData={element}
-        Heading="Edit Campaign"
-        className="text-primary cursor-pointer px-2 box-content transition-all transform hover:-translate-y-1"
-        updateData={updateData}
-      />
+      {element.scheduled ? (
+        <ActionButton
+          Type={CreateCampaign}
+          Title={
+            <div className="flex items-center">
+              <Unicons.UilEdit size={20} />
+              &nbsp;Edit
+            </div>
+          }
+          CampaignData={element}
+          Heading="Edit Campaign"
+          className="text-primary cursor-pointer px-2 box-content transition-all transform hover:-translate-y-1"
+          updateData={updateData}
+          createOrUpdate="update"
+        />
+      ) : null}
     </td>
   </tr>
 );

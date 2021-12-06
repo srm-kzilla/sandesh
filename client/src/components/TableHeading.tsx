@@ -3,13 +3,16 @@ interface TableHeadingProps {
 }
 const TableHeading = ({ headings }: TableHeadingProps) => {
   return (
-    <tr className="md:table-row capitalize hidden text-left">
-      {headings.map((heading, id) => (
-        <th className="md:first:pl-6 pr-4" key={id}>
-          {heading}
-        </th>
-      ))}
-    </tr>
+    <>
+      <tr key="margin" className="h-10"></tr>
+      <tr className="md:table-row capitalize hidden text-left">
+        {headings.map((heading, id) => (
+          <th className=" pr-4 table-heading" key={id}>
+            {heading}
+          </th>
+        ))}
+      </tr>
+    </>
   );
 };
 export default TableHeading;

@@ -85,8 +85,12 @@
     @apply hidden;
   }
 
+  .table-heading:first-child {
+    padding-left: 1.25rem;
+  }
+
   td.table-data {
-    @apply py-2 px-1 bg-lightGray;
+    @apply py-4 px-1 bg-lightGray;
     @apply break-words;
   }
 
