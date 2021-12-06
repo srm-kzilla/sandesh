@@ -2,7 +2,7 @@
   "name": "server",
   "main": "build/index.js",
   "scripts": {
-    "start": "node build/index.js",
+    "start": "tsc && node build/index.js",
     "build": "tsc",
     "lint": "eslint . --ext .ts",
     "dev": "tsc-watch --onSuccess \"node ./build/index.js\""
