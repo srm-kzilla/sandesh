@@ -30,7 +30,7 @@ export const createCampaign = async (body: any, next: NextFunction) => {
     const mailList = await (await database()).collection('mailingList').findOne({ name: newCampaign.mailingList });
     if (mailList === null) throw Error('Mailing List is not Found');
 
-    if (body.scheduled == 'true') {
+    if (newCampaign.scheduled) {
       await (await database())
         .collection('campaign')
         .insertOne({ ...newCampaign, launchStatus: false, templateName: body.fileName, csvFileName: body.csvFileName });
@@ -41,7 +41,7 @@ export const createCampaign = async (body: any, next: NextFunction) => {
 
     const Body = readFileSync(join(__dirname, `../../shared/templates/${body.fileName}`), 'utf-8');
 
-    if (body.dynamic == 'true') {
+    if (newCampaign.dynamic) {
       const jsonArray = await csv().fromFile(join(__dirname, `../../shared/templates/${body.csvFileName}`));
 
       await mailList.emails.map(async (email, i) => {

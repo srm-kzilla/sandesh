@@ -20,7 +20,7 @@ export const startScheduler = async () => {
           .collection('mailingList')
           .findOne({ name: campaignData.mailingList });
 
-        if (campaignData.dynamic == 'true') {
+        if (campaignData.dynamic) {
           const jsonArray = await csv().fromFile(join(__dirname, `./templates/${campaignData.csvFileName}`));
           await mailingListData.emails.map(async (email, i) => {
             const updatedBody = generateTemplateFromString(Body, jsonArray[i]);
