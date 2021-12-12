@@ -22,6 +22,9 @@ interface ActionButtonProps {
 
   //update Data without reloading page
   updateData?: () => {};
+
+  //create or update in campaign and modal
+  createOrUpdate?: 'create' | 'update';
 }
 
 const ActionButton = (props: ActionButtonProps) => {

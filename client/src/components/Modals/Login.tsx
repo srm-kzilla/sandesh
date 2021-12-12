@@ -81,8 +81,9 @@ const Login = ({ setShowModal }: any) => {
                 <button disabled={isSubmitting} type="submit" className="actionBtn self-center mt-4">
                   {isSubmitting ? <Loader /> : 'Log In'}
                 </button>
-                <footer className="cursor-default text-center mt-2">
-                  Don't have an account?{' '}
+                {/* Un-comment to add register function */}
+                {/* <footer className="cursor-default text-center mt-2">
+                  Don't have an account?
                   <span
                     onClick={() => {
                       setShowModal('REGISTER');
@@ -91,7 +92,7 @@ const Login = ({ setShowModal }: any) => {
                   >
                     Register
                   </span>
-                </footer>
+                </footer> */}
               </Form>
             );
           }}

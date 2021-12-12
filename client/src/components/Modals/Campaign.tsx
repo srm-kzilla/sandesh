@@ -1,8 +1,8 @@
 import { Formik, Form, Field, FormikErrors, FormikTouched } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
-import { postCampaigns, updateCampaign } from '../../utils/api';
-import { postFile } from '../../utils/uploadFile';
+import { fetchMailingLists, postCampaigns, updateCampaign } from '../../utils/api';
+import { postTemplate, postCsv } from '../../utils/uploadFile';
 import Loader from '../Loader';
 import { CampaignInput } from '../../utils/interfaces';
 import { toBackend, toFrontend } from '../../utils/FormatDate';
@@ -18,7 +18,7 @@ const formatDate = (data: CampaignInput) => {
 };
 
 const handleError = (
-  type: 'title' | 'mailingList' | 'start_date' | 'start_time' | 'scheduled' | 'subject' | 'senderMail',
+  type: 'title' | 'mailingList' | 'start_date' | 'start_time' | 'scheduled' | 'subject' | 'senderMail' | 'dynamic',
   errors: FormikErrors<CampaignInput>,
   touched: FormikTouched<CampaignInput>,
 ) => {
@@ -31,71 +31,96 @@ const CampaignModal = ({
   CampaignData,
   setModal,
   updateData,
+  createOrUpdate,
 }: {
   CampaignData?: any;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
   updateData: () => {};
+  createOrUpdate: 'create' | 'update';
 }) => {
   const validationSchema = yup.object({
     title: yup.string().required().trim(),
     mailingList: yup.string().required().trim(),
 
-    start_time: yup.string().required().trim(),
-    start_date: yup.string().required().trim(),
+    start_time: yup.string().when('scheduled', {
+      is: true,
+      then: yup.string().required('start time is required'),
+    }),
+    start_date: yup.string().when('scheduled', {
+      is: true,
+      then: yup.string().required('start date is required'),
+    }),
 
     scheduled: yup.boolean().required(),
+
     subject: yup.string().required(),
     senderMail: yup.string().notRequired(),
-  });
-  const [file, setFile] = useState<any>();
 
-  let createOrUpdate: React.MutableRefObject<'create' | 'update'> = useRef('create');
+    dynamic: yup.boolean().required(),
+  });
+  const [template, setTemplate] = useState<any>();
+  const [csv, setCsv] = useState<any>();
+  const [mailingLists, setMailingLists] = useState<any>([]);
+  const currentDate = new Date();
+  const date = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+
   useEffect(() => {
-    if (CampaignData) {
-      createOrUpdate.current = 'update';
-    }
-  }, [CampaignData]);
+    (async function () {
+      const lists = await fetchMailingLists();
+      setMailingLists(await lists.data);
+      console.log(lists);
+    })();
+  }, []);
 
   return (
     <div className=" p-6 flex felx-row mx-auto">
       <Formik
         validationSchema={validationSchema}
         initialValues={
-          CampaignData
+          createOrUpdate === 'create'
             ? {
-                ...CampaignData,
-                start_time: toFrontend(CampaignData.startTime).time,
-                start_date: '2021-' + toFrontend(CampaignData.startTime).date,
-              }
-            : {
                 title: '',
                 mailingList: '',
-                start_time: '',
-                start_date: '',
+                startTime: ' ',
                 scheduled: false,
                 subject: '',
                 senderMail: '',
                 fileName: '',
-                startTime: '',
+                csvFileName: ' ',
+                dynamic: false,
+
+                start_time: '',
+                start_date: '',
               }
+            : { ...CampaignData! }
         }
         onSubmit={async (data, { setSubmitting }) => {
           setSubmitting(true);
+          let formattedData: CampaignInput = data as any;
+          if (data.scheduled) formattedData = formatDate(data as any);
 
-          const formattedData: CampaignInput = formatDate(data);
-          let uploadFile: any;
+          let uploadTemplate: any = { success: false };
+          let uploadCsv: any;
 
-          if (file) uploadFile = await postFile(file);
+          if (createOrUpdate == 'create' || template) uploadTemplate = await postTemplate(template);
+          if (data.dynamic && csv) uploadCsv = await postCsv(csv);
 
-          if (createOrUpdate.current === 'update' || uploadFile.success) {
-            if (file) {
-              data.fileName = uploadFile.data;
-              formattedData.fileName = uploadFile.data;
+          if (createOrUpdate === 'update' || uploadTemplate.success) {
+            if (template) {
+              data.fileName = uploadTemplate.data;
+              formattedData.fileName = uploadTemplate.data;
             }
+            if (data.dynamic && csv) {
+              data.csvFileName = uploadCsv.data;
+              formattedData.csvFileName = uploadCsv.data;
+            }
+
+            delete formattedData.start_time;
+            delete formattedData.start_date;
 
             let result: any;
 
-            if (createOrUpdate.current === 'create') result = await postCampaigns(formattedData);
+            if (createOrUpdate === 'create') result = await postCampaigns(formattedData);
             else {
               const id = CampaignData!._id;
               result = await updateCampaign({ id, ...formattedData });
@@ -119,36 +144,101 @@ const CampaignModal = ({
               <Field placeholder="Title" type="text" name="title" className="textInput" />
               {handleError('title', errors, touched)}
 
-              <Field placeholder="mailingList" type="text" name="mailingList" className="textInput" />
+              <div className="relative mt-4">
+                <select
+                  name="mailingList"
+                  onChange={handleChange}
+                  required
+                  className="selectInput bg-lightGray w-full rounded-xl placeholder-secondary px-4 py-3 outline-none"
+                >
+                  <option value={''}>Select MailingList</option>
+                  {mailingLists.map((list: any) => (
+                    <option value={list.name}>{list.name}</option>
+                  ))}
+                </select>
+              </div>
               {handleError('mailingList', errors, touched)}
-
-              <Field placeholder="Start From" type="date" name="start_date" className="textInput cursor-pointer" />
-              {handleError('start_date', errors, touched)}
-
-              <Field placeholder="Start From" type="time" name="start_time" className="textInput cursor-pointer" />
-              {handleError('start_time', errors, touched)}
 
               <label className="flex items-center w-full cursor-pointer pl-2">
                 <Field placeholder="Scheduled" type="checkbox" name="scheduled" className="mr-4 my-4" />
                 {handleError('scheduled', errors, touched)}
                 <div>Scheduled</div>
               </label>
+              {values.scheduled && (
+                <>
+                  <div className="flex flex-nowrap">
+                    <Field
+                      placeholder="Start From"
+                      type="date"
+                      name="start_date"
+                      className="textInput mr-2 cursor-pointer"
+                      min={date}
+                    />
+
+                    <Field
+                      placeholder="Start From"
+                      type="time"
+                      name="start_time"
+                      className="textInput cursor-pointer"
+                    />
+                  </div>
+                  <div className="flex w-full justify-around select-none text-gray-600">
+                    <span>MM/DD/YYYY</span>
+                    <span>hh:mm:(am/pm)</span>
+                  </div>
+                </>
+              )}
+              {handleError('start_date', errors, touched)}
+              {handleError('start_time', errors, touched)}
 
               <Field placeholder="Subject" type="text" name="subject" className="textInput" />
               {handleError('subject', errors, touched)}
 
-              <Field placeholder="Sender Mail" type="text" name="senderMail" className="textInput" />
+              {/* <Field placeholder="Sender Mail" type="text" name="senderMail" className="textInput" /> */}
+              <div className="relative mt-4">
+                <select
+                  name="senderMail"
+                  onChange={handleChange}
+                  required
+                  className="selectInput bg-lightGray w-1/2 rounded-xl placeholder-secondary px-4 py-3 outline-none"
+                >
+                  <option value="">Select Sender mail</option>
+                  <option value="sandesh.test">sandesh.test</option>
+                </select>
+                <span className="w-1/2 ml-4">@srmkzilla.net</span>
+              </div>
               {handleError('senderMail', errors, touched)}
               <input
                 type="file"
                 name="file"
+                accept=".html"
                 onChange={e => {
                   if (e.target.files && e.target.files.length > 0) {
-                    setFile(e.target.files[0]);
+                    setTemplate(e.target.files[0]);
                   }
                 }}
                 className="textInput"
               />
+
+              <label className="flex items-center w-full cursor-pointer pl-2">
+                <Field placeholder="Scheduled" type="checkbox" name="dynamic" className="mr-4 my-4" />
+                {handleError('dynamic', errors, touched)}
+                <div>Dynamic</div>
+              </label>
+
+              {values.dynamic && (
+                <input
+                  type="file"
+                  name="csvFile"
+                  accept=".csv"
+                  onChange={e => {
+                    if (e.target.files && e.target.files.length > 0) {
+                      setCsv(e.target.files[0]);
+                    }
+                  }}
+                  className="textInput"
+                />
+              )}
 
               <button disabled={isSubmitting} type="submit" className="actionBtn self-center mt-3">
                 {isSubmitting ? <Loader /> : `${CampaignData ? 'Update' : 'Create'} Campaign`}

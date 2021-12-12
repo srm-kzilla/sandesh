@@ -8,12 +8,10 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.6.3",
-    "@types/multer": "^1.4.5",
     "autoprefixer": "10.x",
     "axios": "^0.21.1",
     "cross-env": "7.x",
     "formik": "^2.2.6",
-    "multer": "^1.4.2",
     "npm-run-all": "4.x",
     "postcss": "8.x",
     "postcss-cli": "8.x",
@@ -34,12 +32,12 @@
     "@types/react-router-dom": "^5.1.7"
   },
   "scripts": {
-    "start": "run-p watch:tailwindcsss react-scripts:start",
+    "start": "run-p watch:tailwindcss react-scripts:start",
     "build": "run-s build:tailwindcsss react-scripts:build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:tailwindcsss": "cross-env NODE_ENV=production postcss src/styles/tailwind.css -o src/styles/index.css",
-    "watch:tailwindcsss": "cross-env NODE_ENV=development postcss src/styles/tailwind.css -o src/styles/index.css --watch",
+    "build:tailwindcss": "cross-env NODE_ENV=production postcss src/styles/tailwind.css -o src/styles/index.css",
+    "watch:tailwindcss": "cross-env NODE_ENV=development postcss src/styles/tailwind.css -o src/styles/index.css --watch",
     "react-scripts:start": "react-scripts start",
     "react-scripts:build": "react-scripts build"
   },

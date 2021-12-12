@@ -20,9 +20,27 @@ const MailingListCard = ({ id, name, description, emails, updateData }: MailingL
       <main className="flex-1 min-w-0">
         <h1 className="text-xl truncate font-bold">{name}</h1>
         <div className="truncate text-md">{description}</div>
-        <p className={`text-darkGray text-sm ${!expanded ? 'line-clamp-3' : ''}`}>{emails.join(', ')}</p>
+        {!expanded ? (
+          <p className={`text-darkGray text-sm line-clamp-3`}>{emails.join(', ')}</p>
+        ) : (
+          <div key={id + 'full list'} className="text-gray-700 text-sm grid grid-cols-1 md:grid-cols-3">
+            {emails.map((mail, id) => {
+              return (
+                <span>
+                  <span aria-hidden="true" className="text-darkGray select-none">
+                    {id + 1 > 9 ? id + 1 : '0' + (id + 1)})&nbsp;
+                  </span>
+                  {mail}
+                </span>
+              );
+            })}
+          </div>
+        )}
 
-        <span className="text-primary text-sm font-semibold cursor-pointer" onClick={() => setExpanded(!expanded)}>
+        <span
+          className="text-primary text-sm font-semibold cursor-pointer select-none"
+          onClick={() => setExpanded(!expanded)}
+        >
           {expanded ? 'Show Less' : 'Show More'}
         </span>
       </main>

@@ -12,16 +12,19 @@ interface ModalProps {
   updateData: () => {};
 }
 
-const formatEmails = (emailInput: string) => {
-  const re =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
+const formatEmails = (emailInput: string, emailList: string[]) => {
   let emailArray = emailInput.split(/[\n,]+/);
   emailArray.forEach((_, id) => {
     emailArray[id] = emailArray[id].trim();
   });
-  emailArray = emailArray.filter(email => re.test(email));
-  return emailArray;
+  const schema = yup.string().trim().required().email();
+  const rejectedEmails: string[] = [];
+  emailArray = emailArray.filter(email => {
+    const isValid = schema.isValidSync(email);
+    if (!isValid) rejectedEmails.push(email);
+    return isValid;
+  });
+  return [emailArray, rejectedEmails];
 };
 
 const handleError = (
@@ -44,12 +47,14 @@ const handleError = (
 
 const MailingList = ({ modal, setModal, MailingListData, updateData }: ModalProps) => {
   const [emailList, setEmailList] = useState<string[]>([]);
-
+  let emailInputEmpty: boolean = true;
   const updateList = (values: { emails: string[]; emailInput: string }) => {
-    const formattedEmails = formatEmails(values.emailInput);
-    setEmailList(ogValues => [...ogValues, ...formattedEmails]);
+    const formattedEmails = formatEmails(values.emailInput, emailList);
+    setEmailList(ogValues => [...ogValues, ...formattedEmails[0]]);
+
+    setEmailList(ogVlaues => ogVlaues.filter((email, index) => ogVlaues.indexOf(email) === index));
     values.emails = emailList;
-    values.emailInput = '';
+    values.emailInput = formattedEmails[1].toString();
   };
 
   let createOrUpdate = useRef('create');
@@ -64,7 +69,7 @@ const MailingList = ({ modal, setModal, MailingListData, updateData }: ModalProp
   const validationSchema = yup.object({
     name: yup.string().required('Name is Required').trim(), // Name to uniquely Identify mailing List
     emails: yup.array().of(yup.string().email()).required('Email array is Required'), //Array of Email
-    description: yup.string().required('Description is Requried').trim(), // String to define Mailing List
+    description: yup.string().required().trim(), // String to define Mailing List
   });
 
   return (
@@ -80,6 +85,11 @@ const MailingList = ({ modal, setModal, MailingListData, updateData }: ModalProp
           }}
           onSubmit={async (data, { setSubmitting }) => {
             setSubmitting(true);
+            emailInputEmpty = true;
+            if (data.emailInput) {
+              emailInputEmpty = false;
+              return;
+            }
             updateList(data);
             const formattedData: any = data;
             delete formattedData.emailList;
@@ -110,19 +120,33 @@ const MailingList = ({ modal, setModal, MailingListData, updateData }: ModalProp
 
                 <div className="w-full flex flex-col">
                   <Field as="textarea" name="emailInput" className="textInput" placeholder="Enter Emails" />
-                  <button type="button" className="actionBtn self-center my-4" onClick={() => updateList(values)}>
-                    Add
+                  {!emailInputEmpty && (
+                    <span className="text-red-500 font-medium text-sm ml-2 mb-1">Input must be empty</span>
+                  )}
+                  <button
+                    type="button"
+                    className="actionBtn self-center items-center my-4 flex flex-nowrap"
+                    onClick={() => updateList(values)}
+                  >
+                    Add to list <Unicons.UilArrowDown />
                   </button>
                 </div>
                 {handleError('emails', errors, touched)}
-                <div className="bg-lightGray rounded-md p-4 overflow-y-auto max-h-96">
+                <ul
+                  className="bg-lightGray rounded-md p-4 overflow-y-auto max-h-96 list-decimal"
+                  style={{ listStyle: 'decimal' }}
+                >
                   {emailList.map((email, idx) => {
                     return (
-                      <div key={idx} className="flex items-center mb-4">
+                      <li key={idx} className="flex items-center mb-4 justify-between">
+                        <div key={idx} className="w-max">
+                          <span className="text-sm select-none">{idx > 8 ? idx + 1 : '0' + (idx + 1)})&nbsp;</span>
+                          {email}
+                        </div>
                         <Unicons.UilTrash
                           key={idx + 'trashicon'}
                           size={16}
-                          className="mx-4 cursor-pointer"
+                          className="mx-4 cursor-pointer text-red-600"
                           onClick={(e: Event) => {
                             e.stopPropagation();
                             e.preventDefault();
@@ -132,13 +156,10 @@ const MailingList = ({ modal, setModal, MailingListData, updateData }: ModalProp
                             updateList(values);
                           }}
                         />
-                        <div key={idx} className="w-max">
-                          {email}
-                        </div>
-                      </div>
+                      </li>
                     );
                   })}
-                </div>
+                </ul>
                 <button disabled={isSubmitting} type="submit" className="actionBtn self-center mt-3">
                   {isSubmitting ? (
                     <Loader />

@@ -13,7 +13,8 @@ const Sends = () => {
     'subject',
     'sender Mail',
     'launch Status',
-    'file Name',
+    'dynamic',
+    // 'file Name',
   ];
   const fields = [
     'title',
@@ -23,7 +24,8 @@ const Sends = () => {
     'subject',
     'senderMail',
     'launchStatus',
-    'fileName',
+    'dynamic',
+    // 'fileName',
   ];
   const [apiResponse, setApiResponse] = useState<any>([]);
 
@@ -53,6 +55,7 @@ const Sends = () => {
           Type={CreateCampaign}
           Heading="Create Campaign"
           updateData={updateData}
+          createOrUpdate="create"
         />
       </div>
       <table className="w-full table-fixed">

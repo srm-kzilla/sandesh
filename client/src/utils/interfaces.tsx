@@ -7,6 +7,8 @@ export interface CampaignInput {
   scheduled: boolean;
   subject: string;
   senderMail: string;
+  dynamic: boolean;
 
   fileName?: string;
+  csvFileName?: string;
 }
