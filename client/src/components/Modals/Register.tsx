@@ -1,6 +1,6 @@
 import { Formik, Field, Form, FormikTouched, FormikErrors } from 'formik';
 import { useContext, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import * as yup from 'yup';
 
 import { AuthContext } from '../../store/authContext';
@@ -50,7 +50,7 @@ const handleError = (
 
 export const Register = ({ setShowModal }: any) => {
   const { login } = useContext(AuthContext);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -64,7 +64,7 @@ export const Register = ({ setShowModal }: any) => {
             const result = await handleRegister(data);
             if (result.success) {
               login(result.token as string);
-              history.push('/sends');
+              navigate('/sends');
             }
             setSubmitting(false);
           }}
