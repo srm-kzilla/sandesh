@@ -1,5 +1,6 @@
 import * as Unicons from '@iconscout/react-unicons';
 import { useEffect, useState } from 'react';
+import { KeyAnimation } from '../assets/icons';
 import { ActionButton, Layout, TableLayout } from '../components';
 import { CreateKey } from '../components/Modals';
 import { fetchKeys } from '../utils/api';
@@ -20,7 +21,7 @@ const Keys = () => {
     })();
   }, []);
   return (
-    <Layout>
+    <Layout background={KeyAnimation}>
       <div className="flex items-center lg:flex-row flex-col max-w-full justify-between">
         <header className="text-title my-4">Keys</header>
         <ActionButton
@@ -32,7 +33,7 @@ const Keys = () => {
             </div>
           }
           Type={CreateKey}
-          Heading="Create Key"
+          Heading="Create"
           updateData={updateData}
         />
       </div>

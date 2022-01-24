@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { ActionButton, Layout, TableLayout } from '../components';
 import { CreateCampaign } from '../components/Modals';
 import { fetchCampaigns } from '../utils/api';
+import { CampaignAnimation } from '../assets/icons';
 
 const Sends = () => {
   const headings = [
@@ -40,7 +41,7 @@ const Sends = () => {
     })();
   }, []);
   return (
-    <Layout>
+    <Layout background={CampaignAnimation}>
       <div className="flex items-center lg:flex-row flex-col max-w-full justify-between">
         <header className="text-title my-4">Sends</header>
         <ActionButton

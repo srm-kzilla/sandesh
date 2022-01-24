@@ -44,7 +44,7 @@ const Login = ({ setModal, updateData }: any) => {
                   placeholder="user"
                   type="user"
                   name="user"
-                  className="bg-lightGray w-full rounded-xl mt-4 placeholder-secondary px-4 py-3 outline-none"
+                  className={`textInput ${errors['user'] && touched['user'] ? 'border-2 border-red-600' : ''}`}
                 />
                 {handleError('user', errors, touched)}
 

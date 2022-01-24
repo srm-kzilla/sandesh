@@ -29,7 +29,7 @@ const Login = ({ setShowModal }: any) => {
   const navigate = useNavigate();
   const validationSchema = yup.object({
     email: yup.string().email('Not a valid email!').required('Email is required!'),
-    password: yup.string().required('Password is required!').min(6, 'Password is atleast 8 characters long!'),
+    password: yup.string().required('Password is required!').min(6, 'Password is atleast 6 characters long!'),
   });
 
   const [showPassword, setShowPassword] = useState(false);

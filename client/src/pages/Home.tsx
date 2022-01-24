@@ -1,8 +1,7 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Login, Register } from '../components/Modals';
-import { HeroArt } from '../assets/icons';
-// import * as Unicons from '@iconscout/react-unicons';
+import { HeroAnimation } from '../assets/icons';
 import { AuthContext } from '../store/authContext';
 import { ActionButton } from '../components';
 
@@ -17,7 +16,7 @@ const Home = () => {
           <article className="md:min-w-xs max-w-lg">
             <h1 className="logo text-primary mb-1 xxs:mb-2">Sandesh</h1>
             <h1 className="text-2xl xxs:text-3xl font-extrabold text-darkGray mb-2">
-              <div className="h-8 xxs:h-10 w-2 mr-2 -ml-3 -mb-1 bg-tertiary inline-block"></div>
+              <div className="h-8 xxs:h-10 w-2 mr-2  -mb-1 bg-tertiary inline-block"></div>
               The One Place to store your mails
             </h1>
             <div className="mb-4">
@@ -48,7 +47,7 @@ const Home = () => {
               />
             )}
           </article>
-          <HeroArt className=" w-72 h-auto md:min-w-xs my-8 md:w-2/5 md:ml-8" />
+          <HeroAnimation className="animated w-72 h-auto md:min-w-xs my-8 md:w-2/5 md:ml-8" />
         </section>
       </div>
     </>

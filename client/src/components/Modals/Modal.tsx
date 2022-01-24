@@ -14,10 +14,7 @@ interface ModalProps extends JSX.IntrinsicAttributes {
 const Modal = (props: ModalProps) => {
   return (
     <>
-      <dialog
-        open
-        className="fixed inset-0 z-50 bg-white rounded-xl p-4 mx-auto overflow-y-auto max-h-full w-full max-w-lg text-base"
-      >
+      <div className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl p-4 overflow-y-auto max-h-full w-full max-w-lg text-base">
         <div className="flex justify-between">
           <h3 className="text-3xl font-semibold capitalize">{props.Heading || props.Title}</h3>
           <span
@@ -33,7 +30,7 @@ const Modal = (props: ModalProps) => {
           </span>
         </div>
         <props.Type {...props} />
-      </dialog>
+      </div>
       <div className="opacity-75 fixed inset-0 z-30 bg-black"></div>
     </>
   );

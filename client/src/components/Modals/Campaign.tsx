@@ -2,6 +2,7 @@ import { Formik, Form, Field, FormikErrors, FormikTouched } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 import { fetchMailingLists, postCampaigns, updateCampaign } from '../../utils/api';
+import { toast } from 'react-toastify';
 import { postTemplate, postCsv } from '../../utils/uploadFile';
 import Loader from '../Loader';
 import { CampaignInput } from '../../utils/interfaces';
@@ -15,16 +16,6 @@ const formatDate = (data: CampaignInput) => {
   data.startTime = `${minute} ${hour} ${day_of_month} ${month} ${day_of_week}`;
 
   return data;
-};
-
-const handleError = (
-  type: 'title' | 'mailingList' | 'start_date' | 'start_time' | 'scheduled' | 'subject' | 'senderMail' | 'dynamic',
-  errors: FormikErrors<CampaignInput>,
-  touched: FormikTouched<CampaignInput>,
-) => {
-  if (touched[type] && errors[type]) {
-    return <span className="text-red-500 font-medium text-sm ml-2 mb-1">{errors[type]}</span>;
-  }
 };
 
 const CampaignModal = ({
@@ -44,16 +35,16 @@ const CampaignModal = ({
 
     start_time: yup.string().when('scheduled', {
       is: true,
-      then: yup.string().required('start time is required'),
+      then: yup.string().required('Start Time is Required'),
     }),
     start_date: yup.string().when('scheduled', {
       is: true,
-      then: yup.string().required('start date is required'),
+      then: yup.string().required('Start Date is Required'),
     }),
 
     scheduled: yup.boolean().required(),
 
-    subject: yup.string().required(),
+    subject: yup.string().required('Subject is Reuired'),
     senderMail: yup.string().notRequired(),
 
     dynamic: yup.boolean().required(),
@@ -64,10 +55,21 @@ const CampaignModal = ({
   const currentDate = new Date();
   const date = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
 
+  const handleError = (
+    type: 'title' | 'mailingList' | 'start_date' | 'start_time' | 'scheduled' | 'subject' | 'senderMail' | 'dynamic',
+    errors: FormikErrors<CampaignInput>,
+    touched: FormikTouched<CampaignInput>,
+  ) => {
+    if (touched[type] && errors[type]) {
+      return <span className="text-red-500 font-medium text-sm ml-2 mb-1 ">{errors[type]}</span>;
+    }
+  };
+
   useEffect(() => {
     (async function () {
       const lists = await fetchMailingLists();
       setMailingLists(await lists.data);
+      if ((await lists.data.length) === 0) toast.error('No mailing lists');
       console.log(lists);
     })();
   }, []);
@@ -141,10 +143,15 @@ const CampaignModal = ({
         {({ values, errors, touched, handleChange, isSubmitting }) => {
           return (
             <Form className="pb-6 pt-2 mx-auto flex flex-col w-11/12">
-              <Field placeholder="Title" type="text" name="title" className="textInput" />
+              <Field
+                placeholder="Title"
+                type="text"
+                name="title"
+                className={`textInput ${errors['title'] && touched['title'] ? 'border-2 border-red-600' : ''}`}
+              />
               {handleError('title', errors, touched)}
 
-              <div className="relative mt-4">
+              <div className="relative">
                 <select
                   name="mailingList"
                   onChange={handleChange}
@@ -159,11 +166,11 @@ const CampaignModal = ({
               </div>
               {handleError('mailingList', errors, touched)}
 
-              <label className="flex items-center w-full cursor-pointer pl-2">
-                <Field placeholder="Scheduled" type="checkbox" name="scheduled" className="mr-4 my-4" />
+              <div className="textInput flex items-center w-full cursor-pointer">
+                <Field placeholder="Scheduled" type="checkbox" name="scheduled" className="mr-4" />
                 {handleError('scheduled', errors, touched)}
                 <div>Scheduled</div>
-              </label>
+              </div>
               {values.scheduled && (
                 <>
                   <div className="flex flex-nowrap">
@@ -171,7 +178,9 @@ const CampaignModal = ({
                       placeholder="Start From"
                       type="date"
                       name="start_date"
-                      className="textInput mr-2 cursor-pointer"
+                      className={`textInput mr-2 cursor-pointer ${
+                        errors['start_date'] && touched['start_date'] ? 'border-2 border-red-600' : ''
+                      }`}
                       min={date}
                     />
 
@@ -179,7 +188,9 @@ const CampaignModal = ({
                       placeholder="Start From"
                       type="time"
                       name="start_time"
-                      className="textInput cursor-pointer"
+                      className={`textInput cursor-pointer ${
+                        errors['start_time'] && touched['start_time'] ? 'border-2 border-red-600' : ''
+                      }`}
                     />
                   </div>
                   <div className="flex w-full justify-around select-none text-gray-600">
@@ -191,11 +202,18 @@ const CampaignModal = ({
               {handleError('start_date', errors, touched)}
               {handleError('start_time', errors, touched)}
 
-              <Field placeholder="Subject" type="text" name="subject" className="textInput" />
+              <Field
+                placeholder="Subject"
+                type="text"
+                name="subject"
+                className={`textInput cursor-pointer ${
+                  errors['subject'] && touched['subject'] ? 'border-2 border-red-600' : ''
+                }`}
+              />
               {handleError('subject', errors, touched)}
 
               {/* <Field placeholder="Sender Mail" type="text" name="senderMail" className="textInput" /> */}
-              <div className="relative mt-4">
+              <div className="relative">
                 <select
                   name="senderMail"
                   onChange={handleChange}
@@ -220,8 +238,8 @@ const CampaignModal = ({
                 className="textInput"
               />
 
-              <label className="flex items-center w-full cursor-pointer pl-2">
-                <Field placeholder="Scheduled" type="checkbox" name="dynamic" className="mr-4 my-4" />
+              <label className="textInput flex items-center w-full cursor-pointer">
+                <Field placeholder="Scheduled" type="checkbox" name="dynamic" className="mr-4" />
                 {handleError('dynamic', errors, touched)}
                 <div>Dynamic</div>
               </label>
@@ -243,6 +261,7 @@ const CampaignModal = ({
               <button disabled={isSubmitting} type="submit" className="actionBtn self-center mt-3">
                 {isSubmitting ? <Loader /> : `${CampaignData ? 'Update' : 'Create'} Campaign`}
               </button>
+              {console.log(errors)}
             </Form>
           );
         }}
