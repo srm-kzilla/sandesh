@@ -7,7 +7,7 @@ export const instance: AxiosInstance = axios.create({
   baseURL: `/api`,
 
   headers: {
-    authorization: token,
+    authorization: token as string,
   },
 });
 

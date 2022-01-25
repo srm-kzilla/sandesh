@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { MailingListAnimation } from '../assets/icons';
 import { ActionButton, Layout } from '../components';
 import MailingListCard from '../components/MailingListCard';
 import { MailingList } from '../components/Modals';
@@ -70,17 +71,18 @@ const MailingLists = () => {
     })();
   }, []);
   return (
-    <Layout>
+    <Layout background={MailingListAnimation}>
       <div className="flex justify-between items-center lg:flex-row flex-col w-full">
         <header className="my-4">
           <span className="text-title">Mailing Lists</span>
         </header>
         <ActionButton
-          className="actionBtn md:mr-10"
+          className="actionBtn"
           Title={<div> Add mailing List </div>}
           Type={MailingList}
-          Heading="Create Mailing List"
+          Heading="Create"
           updateData={updateData}
+          createOrUpdate={'create'}
         />
       </div>
       <>

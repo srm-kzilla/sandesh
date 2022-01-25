@@ -1,6 +1,6 @@
 import { Formik, Field, Form, FormikTouched, FormikErrors } from 'formik';
 import { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { AuthContext } from '../../store/authContext';
 import { handleLogin } from '../../utils/api';
@@ -26,10 +26,10 @@ const handleError = (
 
 const Login = ({ setShowModal }: any) => {
   const { login } = useContext(AuthContext);
-  const history = useHistory();
+  const navigate = useNavigate();
   const validationSchema = yup.object({
     email: yup.string().email('Not a valid email!').required('Email is required!'),
-    password: yup.string().required('Password is required!').min(6, 'Password is atleast 8 characters long!'),
+    password: yup.string().required('Password is required!').min(6, 'Password is atleast 6 characters long!'),
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -44,7 +44,7 @@ const Login = ({ setShowModal }: any) => {
             const result = await handleLogin(data);
             if (result.success) {
               login(result.token as string);
-              history.push('/sends');
+              navigate('/sends');
             }
             setSubmitting(false);
           }}

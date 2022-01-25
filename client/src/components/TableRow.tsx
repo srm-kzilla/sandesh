@@ -19,7 +19,7 @@ const TableRow = ({ elements, fields, headings, from, updateData }: TableRowProp
         return (
           <>
             <tr key={element._id + 'blank'} className="h-5"></tr>
-            <tr key={element._id} className={`grid  grid-cols-1 md:table-row mx-auto pt-5`}>
+            <tr key={element._id} className={`table-row-custom grid grid-cols-1 md:table-row mx-auto pt-5`}>
               {MakeRows(fields, headings, element)}
             </tr>
             {from === 'sends' ? EditDeleteCampagin(element, updateData!) : null}
@@ -66,7 +66,7 @@ const MakeRows = (fields: string[], headings: string[], element: any) => {
 const EditDeleteCampagin = (element: any, updateData: () => {}) => (
   <tr
     key={element._id + 'actions'}
-    className="flex items-center bg-lightGray rounded-b-lg md:w-max md:rounded-b-2xl py-2 md:p-2 text-sm"
+    className="flex items-center bg-lightGray rounded-b-lg md:w-max md:rounded-b-2xl py-2 md:p-2 text-sm z-10"
   >
     <td>
       <ActionButton
@@ -80,7 +80,7 @@ const EditDeleteCampagin = (element: any, updateData: () => {}) => (
             &nbsp; Delete
           </div>
         }
-        Heading="Delete Campaign"
+        Heading="Delete"
         className="text-red-600 cursor-pointer px-2 box-content transition-all transform hover:-translate-y-1"
         updateData={updateData}
       />
@@ -96,7 +96,7 @@ const EditDeleteCampagin = (element: any, updateData: () => {}) => (
             </div>
           }
           CampaignData={element}
-          Heading="Edit Campaign"
+          Heading="Edit"
           className="text-primary cursor-pointer px-2 box-content transition-all transform hover:-translate-y-1"
           updateData={updateData}
           createOrUpdate="update"
@@ -109,7 +109,7 @@ const EditDeleteCampagin = (element: any, updateData: () => {}) => (
 const ToggleResetKey = (element: any, updateData: () => {}) => (
   <tr
     key={element._id + 'actions'}
-    className="flex items-center bg-lightGray rounded-b-lg md:w-max md:rounded-b-2xl py-2 md:p-2 text-sm"
+    className="flex items-center bg-lightGray rounded-b-lg md:w-max md:rounded-b-2xl py-2 md:p-2 text-sm z-10"
   >
     <td>
       <ActionButton

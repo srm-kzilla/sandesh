@@ -1,8 +1,9 @@
+import * as Unicons from '@iconscout/react-unicons';
 import { useEffect, useState } from 'react';
-import { ActionButton, Layout, TableHeading, TableRow } from '../components';
+import { ActionButton, Layout, TableLayout } from '../components';
 import { CreateCampaign } from '../components/Modals';
 import { fetchCampaigns } from '../utils/api';
-import * as Unicons from '@iconscout/react-unicons';
+import { CampaignAnimation } from '../assets/icons';
 
 const Sends = () => {
   const headings = [
@@ -40,12 +41,11 @@ const Sends = () => {
     })();
   }, []);
   return (
-    <Layout>
+    <Layout background={CampaignAnimation}>
       <div className="flex items-center lg:flex-row flex-col max-w-full justify-between">
         <header className="text-title my-4">Sends</header>
-        {/* <button className="max-w-screen-md justify-center actionBtn m-4">CMD+Shift+P</button> */}
         <ActionButton
-          className="actionBtn md:mr-10"
+          className="actionBtn"
           Title={
             <div className="flex">
               <Unicons.UilMegaphone />
@@ -58,14 +58,7 @@ const Sends = () => {
           createOrUpdate="create"
         />
       </div>
-      <table className="w-full table-fixed">
-        <thead>
-          <TableHeading headings={headings} />
-        </thead>
-        <tbody>
-          <TableRow elements={apiResponse} fields={fields} headings={headings} from="sends" updateData={updateData} />
-        </tbody>
-      </table>
+      <TableLayout headings={headings} elements={apiResponse} fields={fields} from="sends" updateData={updateData} />
     </Layout>
   );
 };

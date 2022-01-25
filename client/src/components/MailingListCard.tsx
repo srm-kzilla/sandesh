@@ -48,7 +48,7 @@ const MailingListCard = ({ id, name, description, emails, updateData }: MailingL
         <ActionButton
           Type={MailingList}
           Title={<Unicons.UilEnvelopeEdit size={24} />}
-          Heading="Edit Mailing List"
+          Heading="Edit"
           className="text-primary cursor-pointer p-2 mr-2 box-content transition-all transform hover:-translate-y-1"
           MailingListData={{ id, name, description, emails }}
           updateData={updateData}
@@ -59,7 +59,7 @@ const MailingListCard = ({ id, name, description, emails, updateData }: MailingL
           apiCall={deleteMailingLists}
           payload={{ id }}
           Title={<Unicons.UilTrashAlt size={24} />}
-          Heading="Delete Mailing List"
+          Heading="Delete"
           className="text-red-600 cursor-pointer p-2 box-content transition-all transform hover:-translate-y-1"
           MailingListData={{ id, name, description, emails }}
           updateData={updateData}

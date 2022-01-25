@@ -39,7 +39,7 @@
     @apply px-4 py-1;
     @apply w-max;
     @apply focus:outline-none;
-    @apply transition-colors hover:bg-primary hover:text-white cursor-pointer;
+    @apply transition-colors hover:bg-primary hover:text-white cursor-pointer duration-300;
   }
 
   .actionBtn:disabled {
@@ -51,7 +51,7 @@
     @apply bg-lightGray rounded-xl;
     @apply w-full placeholder-secondary;
     @apply px-4 py-3 outline-none;
-    @apply my-2;
+    @apply my-3;
   }
 
   .toggleBtn {
@@ -67,6 +67,7 @@
 
   .selectInput {
     @apply appearance-none cursor-pointer;
+    @apply my-3;
   }
 
   .selectInput:invalid {
@@ -102,7 +103,6 @@
     @apply md:rounded-r-2xl;
   }
 
-  /*COMPONENT LOADER STYLES */
   .compLoader {
     display: block;
     position: relative;

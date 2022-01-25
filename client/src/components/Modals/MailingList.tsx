@@ -10,6 +10,7 @@ interface ModalProps {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
   MailingListData?: { name: string; description: string; id: string; emails: string[] };
   updateData: () => {};
+  createOrUpdate: 'create' | 'update';
 }
 
 const formatEmails = (emailInput: string, emailList: string[]) => {
@@ -45,7 +46,7 @@ const handleError = (
   }
 };
 
-const MailingList = ({ modal, setModal, MailingListData, updateData }: ModalProps) => {
+const MailingList = ({ modal, setModal, MailingListData, updateData, createOrUpdate }: ModalProps) => {
   const [emailList, setEmailList] = useState<string[]>([]);
   let emailInputEmpty: boolean = true;
   const updateList = (values: { emails: string[]; emailInput: string }) => {
@@ -57,12 +58,10 @@ const MailingList = ({ modal, setModal, MailingListData, updateData }: ModalProp
     values.emailInput = formattedEmails[1].toString();
   };
 
-  let createOrUpdate = useRef('create');
-
   useEffect(() => {
     if (MailingListData) {
       setEmailList(MailingListData.emails);
-      createOrUpdate.current = 'update';
+      createOrUpdate = 'update';
     }
   }, [MailingListData]);
 
@@ -94,7 +93,7 @@ const MailingList = ({ modal, setModal, MailingListData, updateData }: ModalProp
             const formattedData: any = data;
             delete formattedData.emailList;
             let result: any;
-            if (createOrUpdate.current === 'create') {
+            if (createOrUpdate === 'create') {
               result = await postMailingList(formattedData);
             } else {
               const id = MailingListData!.id;
@@ -112,10 +111,20 @@ const MailingList = ({ modal, setModal, MailingListData, updateData }: ModalProp
             return (
               <Form className="pb-6 pt-2 mx-auto flex flex-col w-11/12">
                 {/* {MailingListData ? setEmailList(MailingListData.emails) : null} */}
-                <Field placeholder="Name" type="text" name="name" className="textInput" />
+                <Field
+                  placeholder="Name"
+                  type="text"
+                  name="name"
+                  className={`textInput ${errors['name'] && touched['name'] ? 'border-2 border-red-600' : ''}`}
+                />
                 {handleError('name', errors, touched)}
 
-                <Field placeholder="Description" type="text" name="description" className="textInput" />
+                <Field
+                  placeholder="Description"
+                  type="text"
+                  name="description"
+                  className={`textInput ${errors['name'] && touched['name'] ? 'border-2 border-red-600' : ''}`}
+                />
                 {handleError('description', errors, touched)}
 
                 <div className="w-full flex flex-col">
@@ -161,11 +170,7 @@ const MailingList = ({ modal, setModal, MailingListData, updateData }: ModalProp
                   })}
                 </ul>
                 <button disabled={isSubmitting} type="submit" className="actionBtn self-center mt-3">
-                  {isSubmitting ? (
-                    <Loader />
-                  ) : (
-                    `${createOrUpdate.current === 'create' ? 'create' : 'update'} Mailing List`
-                  )}
+                  {isSubmitting ? <Loader /> : `${createOrUpdate === 'create' ? 'create' : 'update'} Mailing List`}
                 </button>
               </Form>
             );
