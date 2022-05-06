@@ -41,9 +41,19 @@ Start the CLI
 $ yarn start
 ```
 
+Start the UI
+
+```
+$ cd client
+```
+
+```
+$ yarn start
+```
+
 ## Inside the box 📦
 
-Wondering what `Sandesh` can do? Here's a neat [wiki](https://github.com/srm-kzilla/springboard/wiki/Inside-the-box) to get you onboard!
+Wondering what `Sandesh` can do? Here's a neat [wiki](https://github.com/srm-kzilla/sandesh-mern) to get you onboard!
 
 ## License 📜
 
