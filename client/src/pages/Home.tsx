@@ -20,11 +20,17 @@ const Home = () => {
               The One Place to store your mails
             </h1>
             <div className="mb-4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-              ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-              fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-              mollit anim id est laborum.
+              <p>
+                Say sayonara to all those tedious nights spent in mailing. You can now send your "sandesh" at the click
+                of a button. Presenting to you, the coolest mailing bud that helps you select, sort and schedule mails
+                in a trice! And that's not even the best part yet! Sandesh helps you personalize your mailing lists and
+                get your mails sent in a jiffy.
+              </p>
+              <br />
+              <p>
+                This is your one-stop solution that makes mass mailing 100x easier. Get your sandesh home and wait for
+                things to get 100x sweeter!
+              </p>
             </div>
 
             {isAuth ? (
