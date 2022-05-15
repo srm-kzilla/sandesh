@@ -80,7 +80,7 @@ Please read `Contributing.md` for details on our code of conduct, and the proces
 
 ## Shout outs 💥
 
-A huge shout out to the amazing devs without home none of this would've been possible.
+A huge shout out to the amazing devs without whom none of this would've been possible.
 
 
 | <p align="center">![Aayushi Goenka](https://github.com/aayushi-goenka.png?size=128)<br>[Aayushi Goenka](https://github.com/aayushi-goenka)</p>  | <p align="center">![Devesh Teotia](https://github.com/deveshteotia12.png?size=128)<br>[Devesh Teotia](https://github.com/deveshteotia12)</p> | <p align="center">![Viraj Agarwal](https://github.com/agarwalviraj.png?size=128)<br>[Viraj Agarwal](https://github.com/agarwalviraj)</p>| <p align="center">![Snehil](https://github.com/SneakySensei.png?size=128)<br>[Snehil](https://github.com/SneakySensei)</p>
