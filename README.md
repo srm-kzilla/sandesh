@@ -1,8 +1,8 @@
 <div align="center">
-  <img alt="SRMKZILLA Logo" src="docs/srmkzilla_logo.png" height="56" />
+  <a href="https://srmkzilla.net"> <img alt="SRMKZILLA Logo" src="docs/srmkzilla_logo.png" height="56" /></a> 
 </div>
 <div align="center">
-  <img alt="Sandesh Logo" src="docs/logo.svg" height="56" />
+  <img alt="Sandesh Logo" src="./client/public/sandesh-logo.png" height="56" />
 </div>
 
 <br>
@@ -24,36 +24,51 @@ crafted with <span style="color: #8b0000;">&hearts;</span> by your friends on th
 ## Preview 📺
 
 <div align="center">
-  <img alt="Screenshot" src="docs/cover.png" />
+  <img alt="Screenshot" src="./client/public/sandesh-preview.png" />
 </div>
 
-## Installation 🔧
+# Installation 🔧
 
-Install dependencies and build the server
-
+## Install dependencies and build the server
+ 
 ```
 $ yarn && yarn build
 ```
 
-Start the CLI
+## Start the server
 
 ```
 $ yarn start
 ```
+## Start the dev server
 
-Start the UI
+```
+$ yarn dev
+```
+
+
+<br>
+<br>
+
+# Start the Client
+
+## Move into the client directory
 
 ```
 $ cd client
 ```
 
-```
-$ yarn start
-```
+## Install client dependencies and start the application
 
-## Inside the box 📦
 
-Wondering what `Sandesh` can do? Here's a neat [wiki](https://github.com/srm-kzilla/sandesh-mern) to get you onboard!
+```
+$ yarn && yarn start
+```
+## Note: You must add your own enviroment variables. Checkout the `env.example` and make a `.env` file before starting the application.
+<br>
+
+
+
 
 ## License 📜
 
@@ -65,9 +80,11 @@ Please read `Contributing.md` for details on our code of conduct, and the proces
 
 ## Shout outs 💥
 
-| <p align="center">![Name 1](github link)<br>[Name 1](img link)</p> | <p align="center">![Name 2](img link)<br>[Name 2](github link)</p> |
-| ------------------------------------------------------------------ | ------------------------------------------------------------------ |
+A huge shout out to the amazing devs without home none of this would've been possible.
 
+
+| <p align="center">![Aayushi Goenka](https://github.com/aayushi-goenka.png?size=128)<br>[Aayushi Goenka](https://github.com/aayushi-goenka)</p>  | <p align="center">![Devesh Teotia](https://github.com/deveshteotia12.png?size=128)<br>[Devesh Teotia](https://github.com/deveshteotia12)</p> | <p align="center">![Viraj Agarwal](https://github.com/agarwalviraj.png?size=128)<br>[Viraj Agarwal](https://github.com/agarwalviraj)</p>| <p align="center">![Snehil](https://github.com/SneakySensei.png?size=128)<br>[Snehil](https://github.com/SneakySensei)</p>
+| ----------- | ---------- |------ | ----- |
 ## Forking this repo 🚨
 
 Many people have contacted us asking if they can use this code for their own websites. The answer to that question is usually "yes", with attribution. There are some cases, such as using this code for a business or something that is greater than a personal project, that we may be less comfortable saying yes to. If in doubt, please don't hesitate to ask us.
