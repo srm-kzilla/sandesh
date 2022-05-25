@@ -6,7 +6,7 @@ module.exports = {
       watch: false,
     },
     {
-      script: 'cd client && yarn start',
+      script: 'cd client && serve -s build -p 5001',
       name: 'sandesh-client',
       watch: false,
     },
