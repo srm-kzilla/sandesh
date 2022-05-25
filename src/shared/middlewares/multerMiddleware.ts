@@ -21,7 +21,7 @@ const storageCSV = multer.diskStorage({
 
 export const upload = multer({
   limits: {
-    fileSize: 10000,
+    fileSize: 100000,
   },
   storage: storage,
   fileFilter(req, file, cb) {
@@ -34,7 +34,7 @@ export const upload = multer({
 
 export const uploadCSV = multer({
   limits: {
-    fileSize: 10000,
+    fileSize: 100000,
   },
   storage: storageCSV,
   fileFilter(req, file, cb) {

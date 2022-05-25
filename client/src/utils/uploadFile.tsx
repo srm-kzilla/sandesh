@@ -4,7 +4,7 @@ const instance: AxiosInstance = axios.create({
   baseURL: `https://sandesh-api.srmkzilla.net/api`,
 
   headers: {
-    'Content-Type': 'multipart/form-data',
+    'content-type': 'multipart/form-data',
     authorization: localStorage.getItem('token') as string,
   },
 });
