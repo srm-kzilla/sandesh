@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 const token = localStorage.getItem('token');
 
 export const instance: AxiosInstance = axios.create({
-  baseURL: `/api`,
+  baseURL: `https://sandesh-api.srmkzilla.net/api`,
 
   headers: {
     authorization: token as string,
