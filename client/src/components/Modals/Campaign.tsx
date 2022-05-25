@@ -222,6 +222,7 @@ const CampaignModal = ({
                 >
                   <option value="">Select Sender mail</option>
                   <option value="sandesh.test">sandesh.test</option>
+                  <option value="events">events</option>
                 </select>
                 <span className="w-1/2 ml-4">@srmkzilla.net</span>
               </div>

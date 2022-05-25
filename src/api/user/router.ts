@@ -6,7 +6,7 @@ import { userLoginSchema, userRegisterSchema } from './schema';
 const app = Router();
 export const userRouteHandler = () => {
   app.post('/login', requestValidation('body', userLoginSchema), userLoginHandler);
-  app.post('/register', requestValidation('body', userRegisterSchema), userRegisterHandler);
+  // app.post('/register', requestValidation('body', userRegisterSchema), userRegisterHandler);
   return app;
 };
 

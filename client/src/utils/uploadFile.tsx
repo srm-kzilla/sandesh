@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
 const instance: AxiosInstance = axios.create({
-  baseURL: `http://sandesh-api.srmkzilla.net/api`,
+  baseURL: `https://sandesh-api.srmkzilla.net/api`,
 
   headers: {
     'Content-Type': 'multipart/form-data',
