@@ -43,6 +43,7 @@ const Login = ({ setShowModal }: any) => {
           onSubmit={async (data, { setSubmitting }) => {
             const result = await handleLogin(data);
             if (result.success) {
+              console.log(result.token);
               login(result.token as string);
               navigate('/sends');
             }
