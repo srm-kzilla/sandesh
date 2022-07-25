@@ -31,7 +31,6 @@ export const handleRegister = async (payload: {}): Promise<any> => {
 
 export const handleLogin = async (payload: {}): Promise<any> => {
   try {
-    console.log(API_URL);
     const res = await instance.post('/user/login', payload);
     if (!res.data.success) {
       handleError(res.data.message);
