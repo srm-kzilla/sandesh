@@ -26,7 +26,7 @@ const MailingListCard = ({ id, name, description, emails, updateData }: MailingL
           <div key={id + 'full list'} className="text-gray-700 text-sm grid grid-cols-1 md:grid-cols-3">
             {emails.map((mail, id) => {
               return (
-                <span>
+                <span key={id}>
                   <span aria-hidden="true" className="text-darkGray select-none">
                     {id + 1 > 9 ? id + 1 : '0' + (id + 1)})&nbsp;
                   </span>
