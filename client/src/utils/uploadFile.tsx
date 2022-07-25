@@ -1,7 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
+import { API_URL } from './constants';
 const instance: AxiosInstance = axios.create({
-  baseURL: `https://sandesh-api.srmkzilla.net/api`,
+  baseURL: API_URL,
 
   headers: {
     'content-type': 'multipart/form-data',
@@ -14,7 +15,9 @@ export const postTemplate = async (payload: string): Promise<any> => {
     const formData = new FormData();
     const imagefile = payload;
     formData.append('template', imagefile);
-    const res = await instance.post('/campaign/uploadTemplate', formData);
+    const res = await instance.post('/campaign/uploadTemplate', formData, {
+      headers: { authorization: localStorage.getItem('token') as string },
+    });
     if (!res.data.success) {
       handleError(res.data.message);
     }
