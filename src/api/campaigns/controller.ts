@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import database from '../../loaders/database';
 import LoggerInstance from '../../loaders/logger';
-import { Campaign } from '../../shared/customTypes';
+import { Campaign, MailingList } from '../../shared/customTypes';
 import { getCurrentDateTime } from '../../shared/utilities';
 import { sendMail } from '../../shared/services/sesService';
 import { readFileSync } from 'fs';
@@ -11,6 +11,7 @@ import { scheduledCampaigns, startScheduler } from '../.././shared/scheduler';
 import { generateTemplateFromString } from '../../shared/services/templateService';
 import errorClass from '../../shared/error';
 import csv from 'csvtojson';
+import { emailBatchSize } from '../../shared/constants';
 
 export const fetchCampaigns = async (next: NextFunction) => {
   try {
@@ -27,7 +28,10 @@ export const createCampaign = async (body: any, next: NextFunction) => {
     newCampaign.createdOn = getCurrentDateTime();
     const databaseResponse = await (await database()).collection('campaign').findOne({ title: newCampaign.title });
     if (databaseResponse !== null) throw Error('Existing campaign with same title');
-    const mailList = await (await database()).collection('mailingList').findOne({ name: newCampaign.mailingList });
+    const mailList: MailingList = await (await database())
+      .collection('mailingList')
+      .findOne({ name: newCampaign.mailingList });
+
     if (mailList === null) throw Error('Mailing List is not Found');
 
     if (newCampaign.scheduled) {
@@ -53,7 +57,14 @@ export const createCampaign = async (body: any, next: NextFunction) => {
         }
       });
     } else {
-      await sendMail(mailList.emails, newCampaign.subject, Body, newCampaign.senderMail);
+      while (mailList.emails.length > 0) {
+        await sendMail(
+          mailList.emails.splice(0, emailBatchSize + 1),
+          newCampaign.subject,
+          Body,
+          newCampaign.senderMail,
+        );
+      }
     }
 
     await (await database())

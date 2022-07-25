@@ -11,3 +11,5 @@ export const userDesignations = [
 ];
 
 export const replyToAddresses = ['technical@srmkzilla.net'];
+
+export const emailBatchSize = 49;
