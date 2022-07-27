@@ -57,14 +57,13 @@ export const createCampaign = async (body: any, next: NextFunction) => {
         }
       });
     } else {
+      let mailArray = [];
       while (mailList.emails.length > 0) {
-        await sendMail(
-          mailList.emails.splice(0, emailBatchSize + 1),
-          newCampaign.subject,
-          Body,
-          newCampaign.senderMail,
+        mailArray.push(
+          sendMail(mailList.emails.splice(0, emailBatchSize + 1), newCampaign.subject, Body, newCampaign.senderMail),
         );
       }
+      await Promise.all(mailArray);
     }
 
     await (await database())
