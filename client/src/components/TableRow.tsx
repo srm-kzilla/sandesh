@@ -1,3 +1,4 @@
+import React from 'react';
 import * as Unicons from '@iconscout/react-unicons';
 import { ActionButton } from '.';
 import { deleteCampaign, deleteKey, resetKey, toggleKey } from '../utils/api';
@@ -17,14 +18,14 @@ const TableRow = ({ elements, fields, headings, from, updateData }: TableRowProp
     <>
       {elements.map((element: any) => {
         return (
-          <>
+          <React.Fragment key={element.id}>
             <tr key={element._id + 'blank'} className="h-5"></tr>
             <tr key={element._id} className={`table-row-custom grid grid-cols-1 md:table-row mx-auto pt-5`}>
               {MakeRows(fields, headings, element)}
             </tr>
             {from === 'sends' ? EditDeleteCampagin(element, updateData!) : null}
             {from === 'keys' ? ToggleResetKey(element, updateData!) : null}
-          </>
+          </React.Fragment>
         );
       })}
     </>

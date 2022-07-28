@@ -1,13 +1,12 @@
 import axios, { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
-
-const token = localStorage.getItem('token');
+import { API_URL, TOKEN } from './constants';
 
 export const instance: AxiosInstance = axios.create({
-  baseURL: `https://sandesh-api.srmkzilla.net/api`,
+  baseURL: API_URL,
 
   headers: {
-    authorization: token as string,
+    authorization: TOKEN,
   },
 });
 
