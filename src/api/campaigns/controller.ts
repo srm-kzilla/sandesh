@@ -12,6 +12,7 @@ import { generateTemplateFromString } from '../../shared/services/templateServic
 import errorClass from '../../shared/error';
 import csv from 'csvtojson';
 import { emailBatchSize } from '../../shared/constants';
+import { v4 as uuidv4 } from 'uuid';
 
 export const fetchCampaigns = async (next: NextFunction) => {
   try {
@@ -57,13 +58,28 @@ export const createCampaign = async (body: any, next: NextFunction) => {
         }
       });
     } else {
-      let mailArray = [];
+      let emailPromiseArray = [];
+      let emailBatchArray = [];
+      let failedEmailBatch = [];
+
       while (mailList.emails.length > 0) {
-        mailArray.push(
-          sendMail(mailList.emails.splice(0, emailBatchSize + 1), newCampaign.subject, Body, newCampaign.senderMail),
-        );
+        const emailBatch = mailList.emails.splice(0, emailBatchSize + 1);
+        emailBatchArray.push(emailBatch);
+        emailPromiseArray.push(sendMail(emailBatch, newCampaign.subject, Body, newCampaign.senderMail));
       }
-      await Promise.all(mailArray);
+
+      (await Promise.allSettled(emailPromiseArray)).forEach((result, index) => {
+        result['status'] == 'rejected' ? failedEmailBatch.push(emailBatchArray[index]) : null;
+      });
+
+      if (failedEmailBatch.length != 0) {
+        const uuid = uuidv4();
+        await (await database())
+          .collection('failedEmailBatch')
+          .insertOne({ uuid: uuid, emailBatch: failedEmailBatch, createdAt: Math.round(Date.now() / 1000) });
+        return { success: false, message: 'Some email batch were failed to send', uuid: uuid };
+      }
+      return { success: true, message: 'Campaign was created successfully' };
     }
 
     await (await database())

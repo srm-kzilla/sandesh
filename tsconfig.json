@@ -13,7 +13,8 @@
     "allowJs": true,
     "noEmit": false,
     "esModuleInterop": true,
-    "typeRoots": ["./src/shared/customTyping", "./node_modules/@types"]
+    "typeRoots": ["./src/shared/customTyping", "./node_modules/@types"],
+    "lib": ["ES2020.Promise"]
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules", "tests"]
