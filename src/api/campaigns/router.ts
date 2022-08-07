@@ -29,8 +29,8 @@ const fetchCampaignsHandler = async (req: Request, res: Response, next: NextFunc
 
 const createCampaignHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await createCampaign(req.body, next);
-    res.json({ success: true, message: 'Campaign was created successfully' });
+    const result = await createCampaign(req.body, next);
+    res.json(result);
   } catch (error) {
     next(new errorClass(error.message, 401));
   }
