@@ -1,6 +1,6 @@
 import winston from 'winston';
 import config from '../config';
-import MongoDB from 'winston-mongodb';
+import 'winston-mongodb';
 
 const transports = [];
 if (process.env.NODE_ENV !== 'development') {
