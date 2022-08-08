@@ -1,12 +1,11 @@
-import { useContext } from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { HomePage, KeysPage, SendsPage, MailingListsPage } from './pages';
-import { AuthContext } from './store/authContext';
+import { useAuth } from './store/authContext';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 function App() {
-  const { isAuth } = useContext(AuthContext);
+  const { isAuth } = useAuth();
   return (
     <>
       <Router>

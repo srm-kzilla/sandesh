@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 export const AuthContext = React.createContext({
   isAuth: false,
@@ -9,6 +9,10 @@ export const AuthContext = React.createContext({
 
 interface AuthContextProviderProps {
   children: React.ReactNode;
+}
+
+export const useAuth =()=>{
+  return useContext(AuthContext)
 }
 
 const AuthContextProvider = ({ children }: AuthContextProviderProps) => {

@@ -1,8 +1,8 @@
 import { Formik, Field, Form, FormikTouched, FormikErrors } from 'formik';
-import { useContext, useState } from 'react';
+import {  useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import { AuthContext } from '../../store/authContext';
+import { AuthContext, useAuth } from '../../store/authContext';
 import { handleLogin } from '../../utils/api';
 import { Loader } from '../../components';
 
@@ -25,7 +25,7 @@ const handleError = (
 };
 
 const Login = ({ setShowModal }: any) => {
-  const { login } = useContext(AuthContext);
+  const { login } = useAuth();
   const navigate = useNavigate();
   const validationSchema = yup.object({
     email: yup.string().email('Not a valid email!').required('Email is required!'),
