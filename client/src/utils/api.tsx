@@ -2,14 +2,8 @@ import axios, { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
 import { API_URL } from './constants';
 
-const token = localStorage.getItem('token');
-
 export const instance: AxiosInstance = axios.create({
   baseURL: API_URL,
-
-  headers: {
-    authorization: token as string,
-  },
 });
 
 export const handleRegister = async (payload: {}): Promise<any> => {
@@ -46,7 +40,7 @@ export const handleLogin = async (payload: {}): Promise<any> => {
 
 export const fetchCampaigns = async (): Promise<any> => {
   try {
-    const res = await instance.get('/campaign', { headers: { authorization: token as string } });
+    const res = await instance.get('/campaign');
     if (!res.data.success) {
       handleError(res.data.message);
     }
@@ -101,7 +95,7 @@ export const updateCampaign = async (payload: {}): Promise<any> => {
 
 export const fetchMailingLists = async (): Promise<any> => {
   try {
-    const res = await instance.get('/mailingList/getList', { headers: { authorization: token as string } });
+    const res = await instance.get('/mailingList/getList');
     if (!res.data.success) {
       handleError(res.data.message);
     }
@@ -153,7 +147,7 @@ export const deleteMailingLists = async (payload: {}): Promise<any> => {
 
 export const fetchKeys = async (): Promise<any> => {
   try {
-    const res = await instance.get('/key', { headers: { authorization: token as string } });
+    const res = await instance.get('/key');
     if (!res.data.success) {
       handleError(res.data.message);
     }

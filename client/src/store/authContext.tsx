@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { instance } from '../utils/api';
 
 export const AuthContext = React.createContext({
   isAuth: false,
@@ -11,9 +12,9 @@ interface AuthContextProviderProps {
   children: React.ReactNode;
 }
 
-export const useAuth =()=>{
-  return useContext(AuthContext)
-}
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
 
 const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [isAuth, setIsAuth] = useState<boolean>(localStorage.getItem('token') ? true : false);
@@ -26,9 +27,9 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const login = (token: string) => {
     const BearerToken = `Bearer ${token}`;
     localStorage.setItem('token', BearerToken);
+    instance.defaults.headers.common['Authorization'] = BearerToken;
     setIsAuth(true);
   };
-
   console.log('token checked');
 
   return <AuthContext.Provider value={{ isAuth, setIsAuth, login, signOut }}>{children}</AuthContext.Provider>;
