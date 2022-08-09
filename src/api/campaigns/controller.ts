@@ -12,7 +12,7 @@ import { generateTemplateFromString } from '../../shared/services/templateServic
 import errorClass from '../../shared/error';
 import csv from 'csvtojson';
 import { emailBatchSize } from '../../shared/constants';
-import { v4 as uuidv4 } from 'uuid';
+import { nanoid } from 'nanoid'
 
 export const fetchCampaigns = async (next: NextFunction) => {
   try {
@@ -73,11 +73,11 @@ export const createCampaign = async (body: any, next: NextFunction) => {
       });
 
       if (failedEmailBatch.length != 0) {
-        const uuid = uuidv4();
+        const uniqueID = nanoid();
         await (await database())
           .collection('failedEmailBatch')
-          .insertOne({ uuid: uuid, emailBatch: failedEmailBatch, createdAt: Math.round(Date.now() / 1000) });
-        return { success: false, message: 'Some email batch were failed to send', uuid: uuid };
+          .insertOne({ uniqueID: uniqueID, emailBatch: failedEmailBatch, createdAt: Math.round(Date.now() / 1000) });
+        return { success: false, message: 'Some email batch were failed to send', uniqueID: uniqueID };
       }
       return { success: true, message: 'Campaign was created successfully' };
     }
