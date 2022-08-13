@@ -1,13 +1,13 @@
-import { useContext, useState } from 'react';
+import {  useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Login, Register } from '../components/Modals';
 import { HeroAnimation } from '../assets/icons';
-import { AuthContext } from '../store/authContext';
+import { AuthContext, useAuth } from '../store/authContext';
 import { ActionButton } from '../components';
 
 const Home = () => {
   const [authModal, setAuthModal] = useState<'HIDDEN' | 'REGISTER' | 'LOGIN'>('HIDDEN');
-  const { isAuth, signOut } = useContext(AuthContext);
+  const { isAuth, signOut } = useAuth();
   return (
     // TODO CHANGE TO FLEX
     <>

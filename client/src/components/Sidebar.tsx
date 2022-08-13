@@ -39,10 +39,14 @@ const Sidebar = () => {
           />
         </Link>
         <span className="flex-1"></span>
-        <Unicons.UilUserCircle
-          size={28}
-          className="text-secondary cursor-pointer transition-all transform hover:scale-110"
-        />
+        <Link to="/profile">
+          <Unicons.UilUserCircle
+            size={28}
+            className={`${
+              location.pathname === '/lists' ? 'text-white' : 'text-secondary'
+            } text-secondary cursor-pointer transition-all transform hover:scale-110`}
+          />
+        </Link>
       </div>
     </nav>
   );

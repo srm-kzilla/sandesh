@@ -1,27 +1,20 @@
-import axios, { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
-import { API_URL, TOKEN } from './constants';
-const instance: AxiosInstance = axios.create({
-  baseURL: API_URL,
-
-  headers: {
-    'content-type': 'multipart/form-data',
-    authorization: TOKEN,
-  },
-});
+import { instance } from './api';
 
 export const postTemplate = async (payload: string): Promise<any> => {
   try {
     const formData = new FormData();
     const imagefile = payload;
     formData.append('template', imagefile);
-    const res = await instance.post('/campaign/uploadTemplate', formData);
+    const res = await instance.post('/campaign/uploadTemplate', formData, {
+      headers: { 'content-type': 'multipart/form-data' },
+    });
     if (!res.data.success) {
       handleError(res.data.message);
     }
     return res.data;
   } catch (err) {
-    handleError('Oops! Something went wrong.');
+    handleError('Oops! Something went wrong.', err);
     return false;
   }
 };
@@ -31,17 +24,20 @@ export const postCsv = async (payload: string): Promise<any> => {
     const formData = new FormData();
     const imagefile = payload;
     formData.append('template', imagefile);
-    const res = await instance.post('/campaign/uploadCsv', formData);
+    const res = await instance.post('/campaign/uploadCsv', formData, {
+      headers: { 'content-type': 'multipart/form-data' },
+    });
     if (!res.data.success) {
       handleError(res.data.message);
     }
     return res.data;
   } catch (err) {
-    handleError('Oops! Something went wrong.');
+    handleError('Oops! Something went wrong.', err);
     return false;
   }
 };
 
-const handleError = (msg: string) => {
+const handleError = (msg: string, err?: any) => {
   toast.error(msg);
+  console.log({ err });
 };

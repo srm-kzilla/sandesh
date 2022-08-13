@@ -1,9 +1,9 @@
 import { Formik, Field, Form, FormikTouched, FormikErrors } from 'formik';
-import { useContext, useState } from 'react';
+import {  useState } from 'react';
 import { useNavigate } from 'react-router';
 import * as yup from 'yup';
 
-import { AuthContext } from '../../store/authContext';
+import { AuthContext, useAuth } from '../../store/authContext';
 import { handleRegister } from '../../utils/api';
 import { Loader } from '../../components';
 
@@ -49,7 +49,7 @@ const handleError = (
 };
 
 export const Register = ({ setShowModal }: any) => {
-  const { login } = useContext(AuthContext);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
