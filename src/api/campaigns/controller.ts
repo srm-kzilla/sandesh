@@ -61,7 +61,6 @@ export const createCampaign = async (body: any, next: NextFunction) => {
       let emailPromiseArray = [];
       let emailBatchArray = [];
       let failedEmailBatch = [];
-      let successEmailBatch = [];
 
       while (mailList.emails.length > 0) {
         const emailBatch = mailList.emails.splice(0, emailBatchSize + 1);
@@ -71,8 +70,18 @@ export const createCampaign = async (body: any, next: NextFunction) => {
 
       (await Promise.allSettled(emailPromiseArray)).forEach((result, index) => {
         result['status'] == 'rejected'
-          ? failedEmailBatch.push(emailBatchArray[index])
-          : successEmailBatch.push(emailBatchArray[index]);
+          ? () => {
+              LoggerInstance.log({ level: 'error', label: 'Email Failed', message: emailBatchArray[index] });
+              failedEmailBatch.push(emailBatchArray[index]);
+            }
+          : () => {
+              LoggerInstance.log({
+                level: 'info',
+                label: 'Email Successful',
+                message: 'Email sent successfully',
+                defaultMeta: { email: emailBatchArray[index] },
+              });
+            };
       });
 
       if (failedEmailBatch.length != 0) {
@@ -80,10 +89,8 @@ export const createCampaign = async (body: any, next: NextFunction) => {
         await (await database())
           .collection('failedEmailBatch')
           .insertOne({ uuid: uuid, emailBatch: failedEmailBatch, createdAt: Math.round(Date.now() / 1000) });
-        LoggerInstance.error('Failed Emails:', failedEmailBatch);
         return { success: false, message: 'Some email batch were failed to send', uuid: uuid };
       }
-      LoggerInstance.info('Success Emails:', successEmailBatch);
       return { success: true, message: 'Campaign was created successfully' };
     }
 
