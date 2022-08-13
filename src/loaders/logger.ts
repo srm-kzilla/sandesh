@@ -1,13 +1,33 @@
 import winston from 'winston';
 import config from '../config';
+import 'winston-mongodb';
 
 const transports = [];
 if (process.env.NODE_ENV !== 'development') {
   transports.push(new winston.transports.Console());
+  transports.push(
+    new winston.transports.MongoDB({
+      level: config.logs.level,
+      db: config.databaseURL,
+      collection: 'logs',
+      options: { useUnifiedTopology: true },
+    }),
+  );
 } else {
   transports.push(
     new winston.transports.Console({
       format: winston.format.combine(winston.format.cli(), winston.format.splat()),
+    }),
+  );
+  transports.push(
+    new winston.transports.MongoDB({
+      level: config.logs.level,
+      db: config.databaseURL,
+      collection: 'logs',
+      options: {
+        useUnifiedTopology: true,
+        format: winston.format.combine(winston.format.cli(), winston.format.splat()),
+      },
     }),
   );
 }

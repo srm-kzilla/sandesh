@@ -12,6 +12,7 @@ import { generateTemplateFromString } from '../../shared/services/templateServic
 import errorClass from '../../shared/error';
 import csv from 'csvtojson';
 import { emailBatchSize } from '../../shared/constants';
+import { nanoid } from 'nanoid'
 
 export const fetchCampaigns = async (next: NextFunction) => {
   try {
@@ -57,13 +58,40 @@ export const createCampaign = async (body: any, next: NextFunction) => {
         }
       });
     } else {
-      let mailArray = [];
+      let emailPromiseArray = [];
+      let emailBatchArray = [];
+      let failedEmailBatch = [];
+
       while (mailList.emails.length > 0) {
-        mailArray.push(
-          sendMail(mailList.emails.splice(0, emailBatchSize + 1), newCampaign.subject, Body, newCampaign.senderMail),
-        );
+        const emailBatch = mailList.emails.splice(0, emailBatchSize + 1);
+        emailBatchArray.push(emailBatch);
+        emailPromiseArray.push(sendMail(emailBatch, newCampaign.subject, Body, newCampaign.senderMail));
       }
-      await Promise.all(mailArray);
+
+      (await Promise.allSettled(emailPromiseArray)).forEach((result, index) => {
+        result['status'] == 'rejected'
+          ? () => {
+              LoggerInstance.log({ level: 'error', label: 'Email Failed', message: emailBatchArray[index] });
+              failedEmailBatch.push(emailBatchArray[index]);
+            }
+          : () => {
+              LoggerInstance.log({
+                level: 'info',
+                label: 'Email Successful',
+                message: 'Email sent successfully',
+                defaultMeta: { email: emailBatchArray[index] },
+              });
+            };
+      });
+
+      if (failedEmailBatch.length != 0) {
+        const uniqueID = nanoid();
+        await (await database())
+          .collection('failedEmailBatch')
+          .insertOne({ uniqueID: uniqueID, emailBatch: failedEmailBatch, createdAt: Math.round(Date.now() / 1000) });
+        return { success: false, message: 'Some email batch were failed to send', uniqueID: uniqueID };
+      }
+      return { success: true, message: 'Campaign was created successfully' };
     }
 
     await (await database())
