@@ -61,6 +61,7 @@ export const createCampaign = async (body: any, next: NextFunction) => {
       let emailPromiseArray = [];
       let emailBatchArray = [];
       let failedEmailBatch = [];
+      let successEmailBatch = [];
 
       while (mailList.emails.length > 0) {
         const emailBatch = mailList.emails.splice(0, emailBatchSize + 1);
@@ -68,19 +69,9 @@ export const createCampaign = async (body: any, next: NextFunction) => {
         emailPromiseArray.push(sendMail(emailBatch, newCampaign.subject, Body, newCampaign.senderMail));
       }
       (await Promise.allSettled(emailPromiseArray)).forEach((result, index) => {
-        const FailedLog = () => {
-          MailLogger.log({ level: 'error', label: 'Email Failed', message: emailBatchArray[index] });
-          failedEmailBatch.push(emailBatchArray[index]);
-        };
-        const SuccessLog = () => {
-          MailLogger.log({
-            level: 'info',
-            label: 'Email Successful',
-            message: 'Email sent successfully',
-            meta: { email: emailBatchArray[index] },
-          });
-        };
-        result['status'] == 'rejected' ? FailedLog() : SuccessLog();
+        result['status'] == 'rejected'
+          ? failedEmailBatch.push(emailBatchArray[index])
+          : successEmailBatch.push(emailBatchArray[index]);
       });
 
       if (failedEmailBatch.length != 0) {
@@ -88,8 +79,10 @@ export const createCampaign = async (body: any, next: NextFunction) => {
         await (await database())
           .collection('failedEmailBatch')
           .insertOne({ uniqueID: uniqueID, emailBatch: failedEmailBatch, createdAt: Math.round(Date.now() / 1000) });
+        MailLogger(failedEmailBatch, false);
         return { success: false, message: 'Some email batch were failed to send', uniqueID: uniqueID };
       }
+      MailLogger(successEmailBatch, true);
       await (await database())
         .collection('campaign')
         .insertOne({ ...newCampaign, launchStatus: true, templateName: body.fileName, csvFileName: body.csvFileName });
