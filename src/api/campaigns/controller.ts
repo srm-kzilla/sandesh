@@ -77,7 +77,7 @@ export const createCampaign = async (body: any, next: NextFunction) => {
       if (failedEmailBatch.length != 0) {
         const uniqueID = nanoid();
         await (await database())
-          .collection('failedEmailBatch')
+          .collection('failedEmails')
           .insertOne({ uniqueID: uniqueID, emailBatch: failedEmailBatch, createdAt: Math.round(Date.now() / 1000) });
         MailLogger(failedEmailBatch, false);
         return { success: false, message: 'Some email batch were failed to send', uniqueID: uniqueID };
