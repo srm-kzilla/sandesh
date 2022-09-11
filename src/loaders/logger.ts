@@ -1,33 +1,15 @@
 import winston from 'winston';
 import config from '../config';
 import 'winston-mongodb';
+import database from './database';
 
 const transports = [];
 if (process.env.NODE_ENV !== 'development') {
   transports.push(new winston.transports.Console());
-  transports.push(
-    new winston.transports.MongoDB({
-      level: config.logs.level,
-      db: config.databaseURL,
-      collection: 'logs',
-      options: { useUnifiedTopology: true },
-    }),
-  );
 } else {
   transports.push(
     new winston.transports.Console({
       format: winston.format.combine(winston.format.cli(), winston.format.splat()),
-    }),
-  );
-  transports.push(
-    new winston.transports.MongoDB({
-      level: config.logs.level,
-      db: config.databaseURL,
-      collection: 'logs',
-      options: {
-        useUnifiedTopology: true,
-        format: winston.format.combine(winston.format.cli(), winston.format.splat()),
-      },
     }),
   );
 }
@@ -45,5 +27,20 @@ const LoggerInstance = winston.createLogger({
   ),
   transports,
 });
+
+export const MailLogger = async (email: string[], success: boolean) => {
+  if (!success) {
+    //Failed Emails
+    await (await database())
+      .collection('mailLogs')
+      .insertOne({ email: email, message: 'Email failed', success: false });
+    return LoggerInstance.info('Emails failed to send');
+  }
+  //Success Emails
+  await (await database())
+    .collection('mailLogs')
+    .insertOne({ email: email, message: 'Email successfully sent', success: true });
+  return LoggerInstance.info('Emails sent successfully');
+};
 
 export default LoggerInstance;

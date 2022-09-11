@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import database from '../../loaders/database';
-import LoggerInstance from '../../loaders/logger';
+import LoggerInstance, { MailLogger } from '../../loaders/logger';
 import { Campaign, MailingList } from '../../shared/customTypes';
 import { getCurrentDateTime } from '../../shared/utilities';
 import { sendMail } from '../../shared/services/sesService';
@@ -12,7 +12,7 @@ import { generateTemplateFromString } from '../../shared/services/templateServic
 import errorClass from '../../shared/error';
 import csv from 'csvtojson';
 import { emailBatchSize } from '../../shared/constants';
-import { nanoid } from 'nanoid'
+import { nanoid } from 'nanoid';
 
 export const fetchCampaigns = async (next: NextFunction) => {
   try {
@@ -61,42 +61,33 @@ export const createCampaign = async (body: any, next: NextFunction) => {
       let emailPromiseArray = [];
       let emailBatchArray = [];
       let failedEmailBatch = [];
+      let successEmailBatch = [];
 
       while (mailList.emails.length > 0) {
         const emailBatch = mailList.emails.splice(0, emailBatchSize + 1);
         emailBatchArray.push(emailBatch);
         emailPromiseArray.push(sendMail(emailBatch, newCampaign.subject, Body, newCampaign.senderMail));
       }
-
       (await Promise.allSettled(emailPromiseArray)).forEach((result, index) => {
         result['status'] == 'rejected'
-          ? () => {
-              LoggerInstance.log({ level: 'error', label: 'Email Failed', message: emailBatchArray[index] });
-              failedEmailBatch.push(emailBatchArray[index]);
-            }
-          : () => {
-              LoggerInstance.log({
-                level: 'info',
-                label: 'Email Successful',
-                message: 'Email sent successfully',
-                defaultMeta: { email: emailBatchArray[index] },
-              });
-            };
+          ? failedEmailBatch.push(emailBatchArray[index])
+          : successEmailBatch.push(emailBatchArray[index]);
       });
 
       if (failedEmailBatch.length != 0) {
         const uniqueID = nanoid();
         await (await database())
-          .collection('failedEmailBatch')
+          .collection('failedEmails')
           .insertOne({ uniqueID: uniqueID, emailBatch: failedEmailBatch, createdAt: Math.round(Date.now() / 1000) });
+        MailLogger(failedEmailBatch, false);
         return { success: false, message: 'Some email batch were failed to send', uniqueID: uniqueID };
       }
+      MailLogger(successEmailBatch, true);
+      await (await database())
+        .collection('campaign')
+        .insertOne({ ...newCampaign, launchStatus: true, templateName: body.fileName, csvFileName: body.csvFileName });
       return { success: true, message: 'Campaign was created successfully' };
     }
-
-    await (await database())
-      .collection('campaign')
-      .insertOne({ ...newCampaign, launchStatus: true, templateName: body.fileName, csvFileName: body.csvFileName });
   } catch (error) {
     LoggerInstance.error(error);
     next(new errorClass('Error in Creating Campaign', 501));
