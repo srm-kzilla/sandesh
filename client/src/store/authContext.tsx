@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { instance } from '../utils/api';
 
 export const AuthContext = React.createContext({
   isAuth: false,
@@ -27,7 +26,6 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const login = (token: string) => {
     const BearerToken = `Bearer ${token}`;
     localStorage.setItem('token', BearerToken);
-    instance.defaults.headers.common['Authorization'] = BearerToken;
     setIsAuth(true);
   };
   console.log('token checked');

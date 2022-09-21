@@ -6,6 +6,12 @@ export const instance: AxiosInstance = axios.create({
   baseURL: API_URL,
 });
 
+instance.interceptors.request.use((config)=> {
+  const token = localStorage.getItem('token');
+  config.headers!.Authorization = token || '';
+  return config;
+});
+
 export const handleRegister = async (payload: {}): Promise<any> => {
   try {
     const res = await instance.post('/user/register', payload);
