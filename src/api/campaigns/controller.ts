@@ -17,9 +17,9 @@ import { nanoid } from 'nanoid';
 export const fetchCampaigns = async (next: NextFunction) => {
   try {
     return await (await database()).collection('campaign').find({}).toArray();
-  } catch (error) {
+  } catch (error : any) {
     LoggerInstance.error(error);
-    next(new errorClass('Error in getting Campaign Data', 501));
+    next(new errorClass(error.message || 'Error in getting Campaign Data', error.code || 501));
   }
 };
 
@@ -53,7 +53,7 @@ export const createCampaign = async (body: any, next: NextFunction) => {
         try {
           const updatedBody = generateTemplateFromString(Body, jsonArray[i]);
           await sendMail([email], newCampaign.subject, updatedBody, newCampaign.senderMail);
-        } catch (error) {
+        } catch (error : any) {
           throw Error('Error in Generating Template');
         }
       });
@@ -88,9 +88,9 @@ export const createCampaign = async (body: any, next: NextFunction) => {
         .insertOne({ ...newCampaign, launchStatus: true, templateName: body.fileName, csvFileName: body.csvFileName });
       return { success: true, message: 'Campaign was created successfully' };
     }
-  } catch (error) {
+  } catch (error : any) {
     LoggerInstance.error(error);
-    next(new errorClass('Error in Creating Campaign', 501));
+    next(new errorClass(error.message ||'Error in Creating Campaign', error.code || 501));
   }
 };
 
@@ -105,9 +105,9 @@ export const updateCampaign = async (body: any, next: NextFunction) => {
     await (await database())
       .collection('campaign')
       .replaceOne({ _id: new ObjectId(id) }, { ...newCampaign, _id: new ObjectId(id) });
-  } catch (error) {
+  } catch (error : any) {
     LoggerInstance.error(error);
-    next(new errorClass('Error in Updating Campaign', 501));
+    next(new errorClass(error.message ||'Error in Updating Campaign', error.code || 501));
   }
 };
 
@@ -120,8 +120,8 @@ export const deleteCampaign = async (property: string, next: NextFunction) => {
     await (await database())
       .collection('campaign')
       .deleteOne({ $or: [{ title: property }, { _id: new ObjectId(property) }] });
-  } catch (error) {
+  } catch (error : any) {
     LoggerInstance.error(error);
-    next(new errorClass('Error in Deleting Campaign', 501));
+    next(new errorClass(error.message ||'Error in Deleting Campaign', error.code || 501));
   }
 };

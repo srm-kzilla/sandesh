@@ -26,7 +26,7 @@ export const generateKey = async (user: string): Promise<string> => {
 
     await (await database()).collection('keys').insertOne(newKey);
     return keyString;
-  } catch (error) {
+  } catch (error: any) {
     LoggerInstance.error(error);
     if (error.message === 'User already exists') throw { code: 409, message: 'User already exists' };
     throw Error('Error-' + error.message);
@@ -38,7 +38,7 @@ export const toggleKey = async (_id: string, isEnabled: boolean): Promise<void> 
     await (await database())
       .collection('keys')
       .updateOne({ _id: new ObjectId(_id) }, { $set: { isEnabled: isEnabled } });
-  } catch (error) {
+  } catch (error: any) {
     LoggerInstance.error(error);
     throw Error('Error-' + error.message);
   }
@@ -50,7 +50,7 @@ export const resetKey = async (_id: string): Promise<string> => {
     const key = encryptData(newKeyString);
     await (await database()).collection('keys').updateOne({ _id: new ObjectId(_id) }, { $set: { key } });
     return newKeyString;
-  } catch (error) {
+  } catch (error: any) {
     LoggerInstance.error(error);
     throw Error('Error-' + error.message);
   }
@@ -60,7 +60,7 @@ export const fetchKeys = async (): Promise<Key[]> => {
   try {
     const allKeys = await (await database()).collection('keys').find({}).toArray();
     return allKeys.map(decryptKey);
-  } catch (error) {
+  } catch (error: any) {
     LoggerInstance.error(error);
     throw Error('Error-' + error.message);
   }
@@ -70,7 +70,7 @@ export const deleteKey = async (_id: string): Promise<void> => {
     const key = await (await database()).collection('keys').findOne({ _id: new ObjectId(_id) });
     if (!key) throw Error('Key does not exist');
     else await (await database()).collection('keys').findOneAndDelete({ _id: new ObjectId(_id) });
-  } catch (error) {
+  } catch (error: any) {
     LoggerInstance.error(error);
     if (error.message === 'Key does not exist') throw { code: 404, message: 'Key does not exist' };
     throw Error('Error-' + error.message);
