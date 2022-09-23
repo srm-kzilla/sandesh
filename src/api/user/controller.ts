@@ -22,7 +22,7 @@ export const createUser = async (
       password: await hash(password, 14),
     };
     await (await database()).collection('user').insertOne(newUser);
-  } catch (error) {
+  } catch (error: any) {
     LoggerInstance.error(error);
     if (error.message === 'User already exists') throw { code: 409, message: 'User already exists in the database' };
     throw { code: 500, message: error.message };
@@ -35,7 +35,7 @@ export const userLogin = async (email: string, password: string) => {
     if (databaseResponse === null) throw Error('User does not exist');
     if (!(await compare(password, databaseResponse.password))) throw Error('Invalid credentials');
     return await signJwt({ email: email, name: databaseResponse.name });
-  } catch (error) {
+  } catch (error: any) {
     LoggerInstance.error(error);
     throw { code: 403, message: 'User is not authorized' };
   }

@@ -6,7 +6,7 @@ export const instance: AxiosInstance = axios.create({
   baseURL: API_URL,
 });
 
-instance.interceptors.request.use((config)=> {
+instance.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
   config.headers!.Authorization = token || '';
   return config;
@@ -25,8 +25,8 @@ export const handleRegister = async (payload: {}): Promise<any> => {
       }
       return loginRes.data;
     }
-  } catch (err) {
-    handleError('Oops! Something went wrong.');
+  } catch (err: any) {
+    handleError(err.message);
     return false;
   }
 };
@@ -38,8 +38,8 @@ export const handleLogin = async (payload: {}): Promise<any> => {
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
-    handleError('Oops! Something went wrong.');
+  } catch (err: any) {
+    handleError(err.message);
     return false;
   }
 };
@@ -51,8 +51,8 @@ export const fetchCampaigns = async (): Promise<any> => {
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
-    handleError('Oops! Something went wrong.');
+  } catch (err: any) {
+    handleError(err.message);
     return false;
   }
 };
@@ -67,7 +67,7 @@ export const postCampaigns = async (payload: any): Promise<any> => {
     }
     return res.data;
   } catch (err: any) {
-    handleError('Oops! Something went wrong.');
+    handleError(err.message);
     return false;
   }
 };
@@ -79,8 +79,8 @@ export const deleteCampaign = async (payload: {}): Promise<any> => {
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
-    handleError('Oops! Something went wrong.');
+  } catch (err: any) {
+    handleError(err.message);
     return false;
   }
 };
@@ -93,8 +93,8 @@ export const updateCampaign = async (payload: {}): Promise<any> => {
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
-    handleError('Oops! Something went wrong.');
+  } catch (err: any) {
+    handleError(err.message);
     return false;
   }
 };
@@ -106,8 +106,8 @@ export const fetchMailingLists = async (): Promise<any> => {
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
-    handleError('Oops! Something went wrong.');
+  } catch (err: any) {
+    handleError(err.message);
     return false;
   }
 };
@@ -119,8 +119,8 @@ export const postMailingList = async (payload: {}): Promise<any> => {
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
-    handleError('Oops! Something went wrong.');
+  } catch (err: any) {
+    handleError(err.message);
     return false;
   }
 };
@@ -132,8 +132,8 @@ export const updateMailingList = async (payload: {}): Promise<any> => {
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
-    handleError('Oops! Something went wrong.');
+  } catch (err: any) {
+    handleError(err.message);
     return false;
   }
 };
@@ -145,8 +145,8 @@ export const deleteMailingLists = async (payload: {}): Promise<any> => {
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
-    handleError('Oops! Something went wrong.');
+  } catch (err: any) {
+    handleError(err.message);
     return false;
   }
 };
@@ -158,8 +158,8 @@ export const fetchKeys = async (): Promise<any> => {
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
-    handleError('Oops! Something went wrong.');
+  } catch (err: any) {
+    handleError(err.message);
     return false;
   }
 };
@@ -171,8 +171,8 @@ export const postKey = async (payload: {}): Promise<any> => {
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
-    handleError('Oops! Something went wrong.');
+  } catch (err: any) {
+    handleError(err.message);
     return false;
   }
 };
@@ -184,8 +184,8 @@ export const deleteKey = async (payload: {}): Promise<any> => {
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
-    handleError('Oops! Something went wrong.');
+  } catch (err: any) {
+    handleError(err.message);
     return false;
   }
 };
@@ -196,8 +196,8 @@ export const resetKey = async (payload: string): Promise<any> => {
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
-    handleError('Oops! Something went wrong.');
+  } catch (err: any) {
+    handleError(err.message);
     return false;
   }
 };
@@ -209,8 +209,8 @@ export const toggleKey = async (payload: { _id: string; isEnabled: boolean }): P
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
-    handleError('Oops! Something went wrong.');
+  } catch (err: any) {
+    handleError(err.message);
     return false;
   }
 };

@@ -13,8 +13,8 @@ export const postTemplate = async (payload: string): Promise<any> => {
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
-    handleError('Oops! Something went wrong.', err);
+  } catch (err: any) {
+    handleError(err.message, err);
     return false;
   }
 };
@@ -31,8 +31,8 @@ export const postCsv = async (payload: string): Promise<any> => {
       handleError(res.data.message);
     }
     return res.data;
-  } catch (err) {
-    handleError('Oops! Something went wrong.', err);
+  } catch (err: any) {
+    handleError(err.message, err);
     return false;
   }
 };

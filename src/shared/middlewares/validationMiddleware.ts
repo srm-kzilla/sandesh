@@ -17,7 +17,7 @@ export function requestValidation(location: RequestLocation, schema: yup.AnyObje
     try {
       await schema.validate(_location);
       next();
-    } catch (err) {
+    } catch (err: any) {
       next(new errorClass(err.message, 500));
     }
   };

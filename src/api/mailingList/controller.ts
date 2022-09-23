@@ -14,18 +14,18 @@ export const createMailingList = async (obj, next: NextFunction) => {
     const result = await (await database()).collection('mailingList').findOne({ name: mailingList.name });
     if (result) next(new errorClass('Name Already Exists', 501));
     await (await database()).collection('mailingList').insertOne(mailingList);
-  } catch (error) {
+  } catch (error : any) {
     LoggerInstance.error(error);
-    next(new errorClass('Error in Creating New Mailing List', 501));
+    next(new errorClass(error.message ||'Error in Creating New Mailing List', error.code || 501));
   }
 };
 
 export const getMailingList = async (next: NextFunction) => {
   try {
     return await (await database()).collection('mailingList').find({}).toArray();
-  } catch (error) {
+  } catch (error : any) {
     LoggerInstance.error(error);
-    next(new errorClass('Error in Fetching the Mailing Lists', 501));
+    next(new errorClass(error.message ||'Error in Fetching the Mailing Lists', error.code || 501));
   }
 };
 
@@ -36,9 +36,9 @@ export const updateMailingList = async (obj, next: NextFunction) => {
     await (await database())
       .collection('mailingList')
       .replaceOne({ _id: new ObjectId(id) }, { _id: new ObjectId(id), ...mailingList });
-  } catch (error) {
+  } catch (error : any) {
     LoggerInstance.error(error);
-    next(new errorClass('Error in Updating the Mailing List', 501));
+    next(new errorClass(error.message ||'Error in Updating the Mailing List', error.code || 501));
   }
 };
 
@@ -47,8 +47,8 @@ export const deleteMailingList = async (id: string, next: NextFunction) => {
     const obj = await (await database()).collection('mailingList').findOne({ _id: new ObjectId(id) });
     if (obj == null) throw Error('Mailing List does not exists');
     await (await database()).collection('mailingList').deleteOne({ _id: new ObjectId(id) });
-  } catch (error) {
+  } catch (error : any) {
     LoggerInstance.error(error);
-    next(new errorClass('Error in Deleting the mailing List', 501));
+    next(new errorClass(error.message ||'Error in Deleting the mailing List', error.code || 501));
   }
 };

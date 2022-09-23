@@ -90,7 +90,8 @@ const MailingList = ({ modal, setModal, MailingListData, updateData, createOrUpd
               return;
             }
             updateList(data);
-            const formattedData: any = data;
+            let formattedData: any = data;
+            formattedData = formattedData.name.replace(/\s+/g, ' ').trim();
             delete formattedData.emailList;
             let result: any;
             if (createOrUpdate === 'create') {

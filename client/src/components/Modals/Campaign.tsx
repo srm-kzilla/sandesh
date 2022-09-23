@@ -99,6 +99,7 @@ const CampaignModal = ({
         onSubmit={async (data, { setSubmitting }) => {
           setSubmitting(true);
           let formattedData: CampaignInput = data as any;
+          formattedData.title = formattedData.title.replace(/\s+/g, ' ').trim();
           if (data.scheduled) formattedData = formatDate(data as any);
 
           let uploadTemplate: any = { success: false };
